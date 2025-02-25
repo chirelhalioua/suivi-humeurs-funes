@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables CSS globales */
+:root {
+  --primary: #4caf50;
+  --primary-hover: #45a049;
+  --secondary: #2c1810;
+  --secondary-hover: #3d251b;
+  --background: #f4e4bc;
+}
+
+/* Transitions de page */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Classes d'utilitaires personnalisées */
+@layer components {
+  .btn {
+    @apply px-8 py-3 rounded-lg text-[16px] font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-hover;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-background hover:bg-secondary-hover;
+  }
+
+  .nav-link {
+    @apply hover:text-white transition-all duration-300 transform hover:scale-105;
+  }
+
+  .section-title {
+    @apply font-['Sora'] text-[36px] font-bold text-secondary text-center mb-16;
+  }
+}
+
+/* Animations avec délais */
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-600 {
+  animation-delay: 600ms;
+}
+
+/* Styles de base */
+body {
+  @apply font-inter bg-background text-secondary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-sora;
+}
