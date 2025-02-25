@@ -173,7 +173,7 @@ const fetchMoods = async () => {
     errorMessage.value = "";
 
     const response = await fetch(
-      "http://localhost:5000/api/humeurs",
+      "https://suivi-humeurs-back.onrender.com/api/humeurs",
     );
     if (!response.ok) throw new Error("Impossible de récupérer les humeurs");
 
