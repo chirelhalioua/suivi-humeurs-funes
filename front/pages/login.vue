@@ -135,7 +135,7 @@ const loginUser = async () => {
 
   try {
     isLoading.value = true;
-    const response = await axios.post(`${config.public.apiBase}/auth/login`, {
+    const response = await axios.post('https://suivi-humeurs-back.onrender.com/api/auth/login`, {
       email: email.value,
       password: password.value,
     });
@@ -172,7 +172,7 @@ const signInWithGoogle = async () => {
     const googleUser = await auth2.signIn();
     const id_token = googleUser.getAuthResponse().id_token;
 
-    const response = await axios.post(`${config.public.apiBase}/auth/google`, {
+    const response = await axios.post(`https://suivi-humeurs-back.onrender.com/api/auth/google`, {
       token: id_token,
     });
 
