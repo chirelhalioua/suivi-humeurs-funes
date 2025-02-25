@@ -365,6 +365,34 @@ onMounted(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+.concept-card::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(
+    45deg,
+    var(--primary-color),
+    #45a049,
+    #66bb6a,
+    var(--primary-color)
+  );
+  background-size: 400% 400%;
+  z-index: -1;
+  border-radius: 22px;
+  animation: gradientBorder 3s ease infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.concept-card:hover::before {
+  opacity: 1;
 }
 
 @media (min-width: 768px) {
@@ -388,10 +416,45 @@ onMounted(() => {
   font-size: clamp(2rem, 5vw, 2.5rem);
   margin-bottom: 1.25rem;
   transition: transform 0.3s ease;
+  display: inline-block;
+  animation: iconFloat 3s ease-in-out infinite;
 }
 
 .concept-card:hover .concept-icon {
-  transform: scale(1.2) rotate(10deg);
+  animation: iconBounce 0.8s cubic-bezier(0.36, 0, 0.66, -0.56) infinite
+    alternate;
+  transform: scale(1.2);
+}
+
+@keyframes iconFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes iconBounce {
+  0% {
+    transform: scale(1.2) translateY(0) rotate(0);
+  }
+  100% {
+    transform: scale(1.2) translateY(-8px) rotate(10deg);
+  }
+}
+
+@keyframes gradientBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .concept-number {
@@ -516,12 +579,34 @@ onMounted(() => {
     transform: none !important;
   }
 
+  .concept-card::before {
+    opacity: 0.5;
+    animation: gradientBorder 3s ease infinite;
+  }
+
   .concept-icon {
-    transform: none !important;
+    animation: iconFloat 3s ease-in-out infinite;
   }
 
   .cta-button:active {
     transform: scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .concept-card::before {
+    animation: none;
+    background: var(--primary-color);
+    opacity: 0;
+  }
+
+  .concept-icon {
+    animation: none;
+  }
+
+  .concept-card:hover .concept-icon {
+    animation: none;
+    transform: scale(1.1);
   }
 }
 
