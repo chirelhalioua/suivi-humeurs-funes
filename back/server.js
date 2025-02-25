@@ -30,7 +30,7 @@ const app = express();
 const corsOptions = {
   origin:
     process.env.NODE_ENV === "production"
-      ? ["http://localhost:3000/", "https://suivi-humeurs.vercel.app/"]
+      ? ["https://suivi-humeurs-funes.vercel.app/"]
       : "*", 
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
