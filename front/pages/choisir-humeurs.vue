@@ -68,7 +68,7 @@ const moodStatusMessage = ref(''); // Message à afficher si l'humeur est déjà
 // Charger les humeurs depuis l'API
 const fetchHumeurs = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/humeurs');
+    const response = await axios.get('https://suivi-humeurs-back.onrender.com/api/humeurs');
     humeurs.value = response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération des humeurs :', error);
