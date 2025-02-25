@@ -34,21 +34,23 @@
         <p class="section-subtitle">Exprimez vos humeurs avec Louis de Funès</p>
       </div>
 
-      <div class="concept-grid">
-        <div
-          v-for="(concept, index) in concepts"
-          :key="index"
-          class="concept-card"
-          :class="{ visible: isConceptVisible }"
-          :style="{ '--delay': `${index * 0.1}s` }"
-        >
-          <div class="concept-icon">{{ concept.icon }}</div>
-          <div class="concept-content">
-            <span class="concept-number">0{{ index + 1 }}</span>
-            <h3 class="concept-title">{{ concept.title }}</h3>
-            <p class="concept-description">{{ concept.description }}</p>
+      <div class="concept-container">
+        <div class="concept-grid">
+          <div
+            v-for="(concept, index) in concepts"
+            :key="index"
+            class="concept-card"
+            :class="{ visible: isConceptVisible }"
+            :style="{ '--delay': `${index * 0.1}s` }"
+          >
+            <div class="concept-icon">{{ concept.icon }}</div>
+            <div class="concept-content">
+              <span class="concept-number">0{{ index + 1 }}</span>
+              <h3 class="concept-title">{{ concept.title }}</h3>
+              <p class="concept-description">{{ concept.description }}</p>
+            </div>
+            <div class="concept-hover-effect"></div>
           </div>
-          <div class="concept-hover-effect"></div>
         </div>
       </div>
     </section>
@@ -173,7 +175,7 @@ const fetchMoods = async () => {
     errorMessage.value = "";
 
     const response = await fetch(
-      'https://suivi-humeurs-back.onrender.com/api/humeurs',
+      "https://suivi-humeurs-back.onrender.com/api/humeurs",
     );
     if (!response.ok) throw new Error("Impossible de récupérer les humeurs");
 
@@ -248,6 +250,7 @@ onMounted(() => {
   background-attachment: fixed;
   color: white;
   overflow: hidden;
+  padding: 1rem;
 }
 
 .hero-section::before {
@@ -262,11 +265,11 @@ onMounted(() => {
   z-index: 2;
   text-align: center;
   max-width: 800px;
-  padding: 0 20px;
+  width: 100%;
 }
 
 .hero-title {
-  font-size: 4rem;
+  font-size: clamp(2rem, 5vw, 4rem);
   font-weight: 800;
   margin-bottom: 1.5rem;
   line-height: 1.2;
@@ -276,7 +279,7 @@ onMounted(() => {
 }
 
 .hero-description {
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 3vw, 1.5rem);
   margin-bottom: 2rem;
   opacity: 0;
   transform: translateY(30px);
@@ -287,12 +290,12 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 15px 30px;
+  padding: clamp(12px, 2vw, 15px) clamp(20px, 4vw, 30px);
   background: var(--primary-color);
   color: white;
   border: none;
   border-radius: 50px;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-timing);
@@ -307,52 +310,20 @@ onMounted(() => {
   box-shadow: 0 6px 12px rgba(76, 175, 80, 0.2);
 }
 
-.button-icon {
-  transition: transform var(--transition-timing);
-}
-
-.cta-button:hover .button-icon {
-  transform: translateX(5px);
-}
-
-/* Scroll Indicator */
-.scroll-indicator {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  animation: fadeIn 1s ease forwards 1s;
-}
-
-.mouse {
-  width: 30px;
-  height: 50px;
-  border: 2px solid white;
-  border-radius: 15px;
-  position: relative;
-}
-
-.wheel {
-  width: 4px;
-  height: 8px;
-  background: white;
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 2px;
-  animation: scroll 1.5s infinite;
-}
-
 /* Concept Section */
 .concept-section {
-  padding: 100px 20px;
+  padding: clamp(3rem, 8vw, 100px) 1rem;
+}
+
+.concept-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: clamp(2rem, 6vw, 60px);
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.6s ease;
@@ -364,29 +335,26 @@ onMounted(() => {
 }
 
 .section-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
   color: var(--text-color);
   margin-bottom: 1rem;
 }
 
 .section-subtitle {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
   color: rgba(44, 24, 16, 0.7);
 }
 
-/*concept*/
 .concept-grid {
-  display: flex;
-  justify-content: space-between;
-  gap: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(1.5rem, 4vw, 2rem);
+  width: 100%;
 }
 
 .concept-card {
-  width: 23%;
   background: white;
-  padding: 30px;
+  padding: clamp(1.5rem, 4vw, 2rem);
   border-radius: 20px;
   position: relative;
   overflow: hidden;
@@ -394,6 +362,21 @@ onMounted(() => {
   transform: translateY(30px);
   transition: all 0.6s ease;
   transition-delay: var(--delay);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .concept-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .concept-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .concept-card.visible {
@@ -402,8 +385,8 @@ onMounted(() => {
 }
 
 .concept-icon {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  margin-bottom: 1.25rem;
   transition: transform 0.3s ease;
 }
 
@@ -412,50 +395,49 @@ onMounted(() => {
 }
 
 .concept-number {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
   font-weight: 700;
   color: var(--primary-color);
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 
 .concept-title {
-  font-size: 1.8rem;
+  font-size: clamp(1.25rem, 3vw, 1.8rem);
   font-weight: 700;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 
 .concept-description {
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 2vw, 1rem);
   color: rgba(44, 24, 16, 0.7);
-}
-
-.concept-hover-effect {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.concept-card:hover .concept-hover-effect {
-  opacity: 1;
+  flex-grow: 1;
 }
 
 /* Mood Section */
 .mood-section {
-  padding: 100px 20px;
+  padding: clamp(3rem, 8vw, 100px) 1rem;
   background: white;
 }
 
 .mood-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(1.5rem, 4vw, 2rem);
+  max-width: 1400px;
   margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .mood-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .mood-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .mood-card {
@@ -467,6 +449,7 @@ onMounted(() => {
   transform: translateY(30px);
   transition: all 0.6s ease;
   transition-delay: var(--delay);
+  height: 100%;
 }
 
 .mood-grid.visible .mood-card {
@@ -507,83 +490,39 @@ onMounted(() => {
 }
 
 .mood-content {
-  padding: 20px;
+  padding: clamp(1rem, 3vw, 1.5rem);
 }
 
 .mood-title {
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
   color: var(--text-color);
-  margin-bottom: 10px;
+  margin-bottom: 0.75rem;
 }
 
 .mood-subtitle {
   color: rgba(44, 24, 16, 0.7);
-  margin-bottom: 10px;
+  margin-bottom: 0.75rem;
+  font-size: clamp(0.875rem, 2vw, 1rem);
 }
 
 .mood-film {
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 1.8vw, 0.9rem);
   color: rgba(44, 24, 16, 0.6);
 }
 
-.film-label {
-  font-weight: 600;
-}
+/* Touch Interactions */
+@media (hover: none) {
+  .concept-card {
+    transform: none !important;
+  }
 
-/* Loading State */
-.loading-state {
-  text-align: center;
-  padding: 40px;
-}
+  .concept-icon {
+    transform: none !important;
+  }
 
-.loading-spinner {
-  margin-bottom: 20px;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid var(--primary-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto;
-}
-
-/* Error State */
-.error-state {
-  text-align: center;
-  padding: 40px;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.error-icon {
-  width: 50px;
-  height: 50px;
-  background: #ff4444;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  margin: 0 auto 20px;
-}
-
-.retry-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.retry-button:hover {
-  background: var(--primary-dark);
+  .cta-button:active {
+    transform: scale(0.98);
+  }
 }
 
 /* Animations */
@@ -598,27 +537,6 @@ onMounted(() => {
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes scroll {
-  0% {
-    transform: translate(-50%, 0);
-  }
-  50% {
-    transform: translate(-50%, 10px);
-  }
-  100% {
-    transform: translate(-50%, 0);
-  }
-}
-
 @keyframes shimmer {
   0% {
     background-position: -200% 0;
@@ -628,30 +546,54 @@ onMounted(() => {
   }
 }
 
+/* Loading and Error States */
+.loading-state,
+.error-state {
+  padding: clamp(2rem, 5vw, 3rem);
+  text-align: center;
+}
+
+.loading-spinner {
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+}
+
+.spinner {
+  width: clamp(30px, 8vw, 40px);
+  height: clamp(30px, 8vw, 40px);
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-/* Media Queries */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
+}
 
-  .hero-description {
-    font-size: 1.2rem;
-  }
-
-  .section-title {
-    font-size: 2rem;
-  }
-
-  .concept-grid,
-  .mood-grid {
-    grid-template-columns: 1fr;
-    padding: 0 10px;
-  }
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 </style>
