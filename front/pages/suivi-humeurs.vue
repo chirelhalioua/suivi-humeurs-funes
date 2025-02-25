@@ -261,7 +261,7 @@ const fetchMoodData = async () => {
 
     // Récupérer les humeurs
     const moodsResponse = await axios.get(
-      `http://localhost:5000/api/humeurs_utilisateurs/${userResponse.data._id}`,
+      `https://suivi-humeurs-back.onrender.com/api/humeurs_utilisateurs/${userResponse.data._id}`,
       { headers: { Authorization: `Bearer ${token}` } },
     );
 
@@ -272,7 +272,7 @@ const fetchMoodData = async () => {
     // Traiter les données
     for (const entry of moodsResponse.data) {
       const moodDetails = await axios.get(
-        `http://localhost:5000/api/humeurs/${entry.humeurId}`,
+        `https://suivi-humeurs-back.onrender.com/api/humeurs/${entry.humeurId}`,
       );
 
       const dayIndex = new Date(entry.date).getDay();
