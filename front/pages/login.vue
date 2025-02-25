@@ -135,7 +135,7 @@ const loginUser = async () => {
 
   try {
     isLoading.value = true;
-    const response = await axios.post('https://suivi-humeurs-back.onrender.com/api/auth/login`, {
+    const response = await axios.post('https://suivi-humeurs-back.onrender.com/api/auth/login', {
       email: email.value,
       password: password.value,
     });
