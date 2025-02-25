@@ -192,7 +192,7 @@ const registerUser = async () => {
   try {
     isLoading.value = true;
     const response = await axios.post(
-      "http://localhost:5000/api/auth/register",
+      "https://suivi-humeurs-back.onrender.com/api/auth/register",
       {
         name: nom.value,
         email: email.value,
