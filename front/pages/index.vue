@@ -1,126 +1,3 @@
-<template>
-  <div class="home-page">
-    <!-- Hero Section -->
-    <section class="hero-section" ref="heroSection">
-      <div class="hero-content">
-        <h1 class="hero-title">Suis tes humeurs avec Louis de Funès</h1>
-        <p class="hero-description">
-          Exprimez vos émotions à travers les expressions légendaires de Louis
-          de Funès
-        </p>
-        <button
-          class="cta-button"
-          @click="goToRegister"
-          :disabled="isNavigating"
-        >
-          <span class="button-text">{{
-            isNavigating ? "Chargement..." : "Commencer l'aventure"
-          }}</span>
-          <span class="button-icon">→</span>
-        </button>
-      </div>
-      <div class="scroll-indicator">
-        <div class="mouse">
-          <div class="wheel"></div>
-        </div>
-        <div class="arrow"></div>
-      </div>
-    </section>
-
-    <!-- Concept Section -->
-    <section class="concept-section" ref="conceptSection">
-      <div class="section-header" :class="{ visible: isConceptVisible }">
-        <h2 class="section-title">Le Concept</h2>
-        <p class="section-subtitle">Exprimez vos humeurs avec Louis de Funès</p>
-      </div>
-
-      <div class="concept-container">
-        <div class="concept-grid">
-          <article
-            v-for="(concept, index) in concepts"
-            :key="index"
-            class="concept-card relative p-6 bg-white rounded-[20px] transition-all duration-300"
-            :class="{ 'border-animation': hoveredCard === index }"
-            @mouseenter="hoveredCard = index"
-            @mouseleave="hoveredCard = null"
-          >
-            <div class="flex flex-col items-start gap-4 relative z-[1]">
-              <div class="w-full flex justify-between items-center">
-                <span
-                  class="text-4xl transition-transform duration-300"
-                  :class="{ 'transform scale-110': hoveredCard === index }"
-                  role="img"
-                  :aria-label="concept.title"
-                >
-                  {{ concept.icon }}
-                </span>
-                <span class="text-[48px] font-bold text-[#4CAF50]/20">
-                  0{{ index + 1 }}
-                </span>
-              </div>
-              <h3 class="text-xl font-semibold text-[#2C1810]">
-                {{ concept.title }}
-              </h3>
-              <p class="text-[#2C1810]/80">{{ concept.description }}</p>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Mood Preview Section -->
-    <section class="mood-section" ref="moodSection">
-      <div class="section-header" :class="{ visible: isMoodVisible }">
-        <h2 class="section-title">Aperçu des Humeurs</h2>
-      </div>
-
-      <!-- Loading State -->
-      <div v-if="isLoading" class="loading-state">
-        <div class="loading-spinner">
-          <div class="spinner"></div>
-        </div>
-        <p>Chargement des humeurs...</p>
-      </div>
-
-      <!-- Error State -->
-      <div v-else-if="errorMessage" class="error-state">
-        <div class="error-icon">!</div>
-        <p>{{ errorMessage }}</p>
-        <button @click="fetchMoods" class="retry-button">Réessayer</button>
-      </div>
-
-      <!-- Moods Grid -->
-      <div v-else class="mood-grid" :class="{ visible: isMoodVisible }">
-        <div
-          v-for="(mood, index) in moods"
-          :key="mood._id"
-          class="mood-card"
-          :style="{ '--delay': `${index * 0.1}s` }"
-        >
-          <div class="mood-image-wrapper">
-            <div class="image-placeholder" v-if="!mood.imageLoaded"></div>
-            <img
-              :src="mood.image"
-              :alt="mood.title"
-              class="mood-image"
-              :class="{ loaded: mood.imageLoaded }"
-              @load="mood.imageLoaded = true"
-            />
-          </div>
-          <div class="mood-content">
-            <h3 class="mood-title">{{ mood.title }}</h3>
-            <p class="mood-subtitle">{{ mood.subtitle }}</p>
-            <p class="mood-film">
-              <span class="film-label">Film :</span>
-              {{ mood.film }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 
@@ -131,9 +8,7 @@ const errorMessage = ref("");
 const moods = ref([]);
 const hoveredCard = ref(null);
 
-// Intersection Observer refs
-const conceptSection = ref(null);
-const moodSection = ref(null);
+// Section visibility state
 const isConceptVisible = ref(false);
 const isMoodVisible = ref(false);
 
@@ -162,26 +37,6 @@ const concepts = [
   },
 ];
 
-// Intersection Observer setup
-const createObserver = (element, callback) => {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          callback(true);
-        }
-      });
-    },
-    { threshold: 0.2 }
-  );
-
-  if (element.value) {
-    observer.observe(element.value);
-  }
-
-  return observer;
-};
-
 // API calls
 const fetchMoods = async () => {
   try {
@@ -209,6 +64,30 @@ const fetchMoods = async () => {
   }
 };
 
+// Scroll listener to show sections
+const checkSectionVisibility = () => {
+  const conceptSection = document.querySelector(".concept-section");
+  const moodSection = document.querySelector(".mood-section");
+
+  const conceptInView =
+    conceptSection && conceptSection.getBoundingClientRect().top < window.innerHeight;
+  const moodInView =
+    moodSection && moodSection.getBoundingClientRect().top < window.innerHeight;
+
+  isConceptVisible.value = conceptInView;
+  isMoodVisible.value = moodInView;
+};
+
+// Scroll event listener
+onMounted(() => {
+  window.addEventListener("scroll", checkSectionVisibility);
+  fetchMoods();
+});
+
+// Cleanup event listener
+onUnmounted(() => {
+  window.removeEventListener("scroll", checkSectionVisibility);
+});
 
 // Navigation
 const goToRegister = async () => {
@@ -219,24 +98,6 @@ const goToRegister = async () => {
     isNavigating.value = false;
   }
 };
-
-// Lifecycle hooks
-onMounted(() => {
-  console.log("Tentative de récupération des humeurs...");
-  fetchMoods();
-});
-
-
-  const observers = [
-    createObserver(conceptSection, (visible) => (isConceptVisible.value = visible)),
-    createObserver(moodSection, (visible) => (isMoodVisible.value = visible)),
-  ];
-  
-onUnmounted(() => {
-  observers.forEach((observer) => {
-    if (observer) observer.disconnect();
-  });
-});
 </script>
 
 <style scoped>
