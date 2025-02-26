@@ -28,40 +28,45 @@
     </section>
 
     <!-- Concept Section -->
-    <section
-    class="flex flex-col items-center justify-center min-h-screen w-screen bg-[#F4E4BC] font-[Inter] p-8"
-  >
-    <div class="max-w-[1200px] w-full">
-      <h2 class="text-[32px] font-bold text-center text-[#2C1810] mb-12">
-        Le Concept
-      </h2>
-      <div class="grid grid-cols-4 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-6">
-        <article
-          v-for="(concept, index) in concepts"
-          :key="index"
-          class="concept-card relative p-6 bg-white rounded-[20px] transition-all duration-300"
-          :class="{ 'border-animation': hoveredCard === index }"
-          @mouseenter="hoveredCard = index"
-          @mouseleave="hoveredCard = null"
-        >
-          <div class="flex flex-col items-start gap-4 relative z-[1]">
-            <span
-              class="text-4xl transition-transform duration-300"
-              :class="{ 'transform scale-110': hoveredCard === index }"
-              role="img"
-              :aria-label="concept.title"
-            >
-              {{ concept.icon }}
-            </span>
-            <h3 class="text-xl font-semibold text-[#2C1810]">
-              {{ concept.title }}
-            </h3>
-            <p class="text-[#2C1810]/80">{{ concept.description }}</p>
-          </div>
-        </article>
+    <section class="concept-section" ref="conceptSection">
+      <div class="section-header" :class="{ visible: isConceptVisible }">
+        <h2 class="section-title">Le Concept</h2>
+        <p class="section-subtitle">Exprimez vos humeurs avec Louis de Funès</p>
       </div>
-    </div>
-  </section>
+
+      <div class="concept-container">
+        <div class="concept-grid">
+          <article
+            v-for="(concept, index) in concepts"
+            :key="index"
+            class="concept-card relative p-6 bg-white rounded-[20px] transition-all duration-300"
+            :class="{ 'border-animation': hoveredCard === index }"
+            @mouseenter="hoveredCard = index"
+            @mouseleave="hoveredCard = null"
+          >
+            <div class="flex flex-col items-start gap-4 relative z-[1]">
+              <div class="w-full flex justify-between items-center">
+                <span
+                  class="text-4xl transition-transform duration-300"
+                  :class="{ 'transform scale-110': hoveredCard === index }"
+                  role="img"
+                  :aria-label="concept.title"
+                >
+                  {{ concept.icon }}
+                </span>
+                <span class="text-[48px] font-bold text-[#4CAF50]/20">
+                  0{{ index + 1 }}
+                </span>
+              </div>
+              <h3 class="text-xl font-semibold text-[#2C1810]">
+                {{ concept.title }}
+              </h3>
+              <p class="text-[#2C1810]/80">{{ concept.description }}</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
     <!-- Mood Preview Section -->
     <section class="mood-section" ref="moodSection">
@@ -90,7 +95,7 @@
           v-for="(mood, index) in moods"
           :key="mood._id"
           class="mood-card"
-          :style="{ '--delay': ${index * 0.1}s }"
+          :style="{ '--delay': `${index * 0.1}s` }"
         >
           <div class="mood-image-wrapper">
             <div class="image-placeholder" v-if="!mood.imageLoaded"></div>
@@ -124,6 +129,7 @@ const isNavigating = ref(false);
 const isLoading = ref(true);
 const errorMessage = ref("");
 const moods = ref([]);
+const hoveredCard = ref(null);
 
 // Intersection Observer refs
 const conceptSection = ref(null);
@@ -166,7 +172,7 @@ const createObserver = (element, callback) => {
         }
       });
     },
-    { threshold: 0.2 },
+    { threshold: 0.2 }
   );
 
   if (element.value) {
@@ -183,7 +189,7 @@ const fetchMoods = async () => {
     errorMessage.value = "";
 
     const response = await fetch(
-      "https://suivi-humeurs-back.onrender.com/api/humeurs",
+      "https://suivi-humeurs-back.onrender.com/api/humeurs"
     );
     if (!response.ok) throw new Error("Impossible de récupérer les humeurs");
 
@@ -215,10 +221,7 @@ onMounted(() => {
   fetchMoods();
 
   const observers = [
-    createObserver(
-      conceptSection,
-      (visible) => (isConceptVisible.value = visible),
-    ),
+    createObserver(conceptSection, (visible) => (isConceptVisible.value = visible)),
     createObserver(moodSection, (visible) => (isMoodVisible.value = visible)),
   ];
 
@@ -319,19 +322,53 @@ onMounted(() => {
 }
 
 /* Concept Section */
+.concept-section {
+  padding: clamp(3rem, 8vw, 100px) 1rem;
+}
+
+.concept-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: clamp(2rem, 6vw, 60px);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.section-header.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: rgba(44, 24, 16, 0.7);
+}
+
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(1.5rem, 4vw, 2rem);
+  width: 100%;
+}
 
 .concept-card {
   border: 2px solid transparent;
 }
 
 .border-animation {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    #4caf50,
-    #45a049,
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, #4caf50, #45a049, transparent);
   background-size: 200% 100%;
   animation: borderFlow 2s linear infinite;
 }
@@ -354,23 +391,6 @@ onMounted(() => {
   }
 }
 
-/* Accessibility Improvements */
-@media (prefers-reduced-motion: reduce) {
-  .border-animation {
-    animation: none;
-  }
-
-  .concept-card {
-    transition: none;
-  }
-}
-
-/* Focus styles for keyboard navigation */
-.concept-card:focus-visible {
-  outline: 3px solid #4caf50;
-  outline-offset: 2px;
-}
-
 @media (min-width: 768px) {
   .concept-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -381,75 +401,6 @@ onMounted(() => {
   .concept-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-}
-
-.concept-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.concept-icon {
-  font-size: clamp(2rem, 5vw, 2.5rem);
-  margin-bottom: 1.25rem;
-  transition: transform 0.3s ease;
-  display: inline-block;
-  animation: iconFloat 3s ease-in-out infinite;
-}
-
-.concept-card:hover .concept-icon {
-  animation: iconBounce 0.8s cubic-bezier(0.36, 0, 0.66, -0.56) infinite
-    alternate;
-  transform: scale(1.2);
-}
-
-@keyframes iconFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes iconBounce {
-  0% {
-    transform: scale(1.2) translateY(0) rotate(0);
-  }
-  100% {
-    transform: scale(1.2) translateY(-8px) rotate(10deg);
-  }
-}
-
-@keyframes gradientBorder {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.concept-number {
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 1rem;
-}
-
-.concept-title {
-  font-size: clamp(1.25rem, 3vw, 1.8rem);
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
-.concept-description {
-  font-size: clamp(0.875rem, 2vw, 1rem);
-  color: rgba(44, 24, 16, 0.7);
-  flex-grow: 1;
 }
 
 /* Mood Section */
@@ -465,18 +416,6 @@ onMounted(() => {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 1rem;
-}
-
-@media (min-width: 768px) {
-  .mood-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .mood-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
 }
 
 .mood-card {
@@ -547,43 +486,6 @@ onMounted(() => {
 .mood-film {
   font-size: clamp(0.8rem, 1.8vw, 0.9rem);
   color: rgba(44, 24, 16, 0.6);
-}
-
-/* Touch Interactions */
-@media (hover: none) {
-  .concept-card {
-    transform: none !important;
-  }
-
-  .concept-card::before {
-    opacity: 0.5;
-    animation: gradientBorder 3s ease infinite;
-  }
-
-  .concept-icon {
-    animation: iconFloat 3s ease-in-out infinite;
-  }
-
-  .cta-button:active {
-    transform: scale(0.98);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .concept-card::before {
-    animation: none;
-    background: var(--primary-color);
-    opacity: 0;
-  }
-
-  .concept-icon {
-    animation: none;
-  }
-
-  .concept-card:hover .concept-icon {
-    animation: none;
-    transform: scale(1.1);
-  }
 }
 
 /* Animations */
