@@ -198,13 +198,17 @@ const fetchMoods = async () => {
       ...mood,
       imageLoaded: false,
     }));
+
+    console.log("Humeurs chargées:", moods.value); // Vérifier les données reçues
   } catch (error) {
     errorMessage.value =
       "Une erreur est survenue lors du chargement des humeurs.";
+    console.error(error);
   } finally {
     isLoading.value = false;
   }
 };
+
 
 // Navigation
 const goToRegister = async () => {
