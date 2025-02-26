@@ -345,54 +345,38 @@ onMounted(() => {
   color: rgba(44, 24, 16, 0.7);
 }
 
-.concept-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-  gap: clamp(1.5rem, 4vw, 2rem);
-  width: 100%;
-}
-
 .concept-card {
-  background: white;
-  padding: clamp(1.5rem, 4vw, 2rem);
-  border-radius: 20px;
-  position: relative;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s ease;
-  transition-delay: var(--delay);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  border: 3px solid transparent;
-  background-clip: padding-box;
+  border: 2px solid transparent;
 }
 
-.concept-card::before {
+.border-animation {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #4caf50,
+    #45a049,
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: borderFlow 2s linear infinite;
+}
+
+.border-animation::before {
   content: "";
   position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  background: linear-gradient(
-    45deg,
-    var(--primary-color),
-    #45a049,
-    #66bb6a,
-    var(--primary-color)
-  );
-  background-size: 400% 400%;
-  z-index: -1;
-  border-radius: 22px;
-  animation: gradientBorder 3s ease infinite;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  inset: 0;
+  background: white;
+  margin: 2px;
+  border-radius: 18px;
 }
 
-.concept-card:hover::before {
-  opacity: 1;
+@keyframes borderFlow {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 @media (min-width: 768px) {
