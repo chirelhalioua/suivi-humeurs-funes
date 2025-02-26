@@ -8,18 +8,16 @@ const listEndpoints = require("express-list-endpoints");
 const humeursRoutes = require("./routes/humeursRoutes");
 const authRoutes = require("./routes/authRoutes");
 const humeursUserRoute = require("./routes/humeursUser");
-const authMiddleware = require("./middleware/authMiddleware");  // Import du middleware d'authentification
-const { getUserProfile } = require("./controllers/authController");  // Import du contrôleur pour obtenir le profil
-
+const authMiddleware = require("./middleware/authMiddleware");  
+const { getUserProfile } = require("./controllers/authController");  
 
 // Charger les variables d'environnement
 dotenv.config();
-console.log("MONGO_URI:", process.env.MONGODB_URI);
-
+console.log("🔍 MONGO_URI:", process.env.MONGODB_URI);
 
 // Vérification des variables d'environnement
 if (!process.env.MONGODB_URI) {
-  console.error("Erreur : la variable d'environnement MONGO_URI n'est pas définie.");
+  console.error("❌ Erreur : la variable d'environnement MONGODB_URI n'est pas définie.");
   process.exit(1); // Arrête le serveur si MONGO_URI n'est pas défini
 }
 
@@ -28,45 +26,57 @@ const app = express();
 
 // Configuration dynamique de CORS
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === "production"
-      ? ["https://suivi-humeurs-funes.vercel.app"]
-      : "*", 
+  origin: process.env.NODE_ENV === "production"
+    ? "https://suivi-humeurs-funes.vercel.app"
+    : "*", 
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-app.use(cors());
+app.use(cors(corsOptions)); // Appliquer CORS
 
 // Middleware pour analyser les requêtes
-app.use(express.json()); // Analyse les requêtes avec un payload JSON
-app.use(express.urlencoded({ extended: true })); // Analyse les requêtes URL-encoded
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true })); 
 
-// Connexion à MongoDB
+// Connexion à MongoDB avec gestion d'erreur
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-
-
+  .then(() => console.log("✅ Connecté à MongoDB"))
+  .catch(err => {
+    console.error("❌ Erreur de connexion MongoDB :", err);
+    process.exit(1); 
+  });
 
 // Routes principales
 app.use("/api/auth", authRoutes);
-app.use("/api", humeursUserRoute);
-app.use("/api/humeurs", humeursRoutes);
+console.log("✅ Routes auth chargées");
 
-// Liste des routes disponibles
-console.log("Routes disponibles :");
-console.table(listEndpoints(app)); // Affichage des routes sous forme de table pour plus de lisibilité
+app.use("/api", humeursUserRoute);
+console.log("✅ Routes humeursUser chargées");
+
+app.use("/api/humeurs", humeursRoutes);
+console.log("✅ Routes humeurs chargées");
+
+// Route pour tester si le backend fonctionne
+app.get("/", (req, res) => {
+  res.send("✅ API opérationnelle !");
+});
 
 // Route protégée pour obtenir le profil de l'utilisateur connecté
 app.get("/api/profil", authMiddleware, getUserProfile);
 
+// Liste des routes disponibles
+console.log("📌 Routes disponibles :");
+console.table(listEndpoints(app));
+
 // Middleware global pour gérer les erreurs
 app.use((err, req, res, next) => {
-  console.error("Erreur détectée :", err.stack);
+  console.error("❌ Erreur détectée :", err.stack);
   res.status(500).json({ message: "Erreur interne du serveur." });
 });
 
 // Démarrage du serveur
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-  console.log(`Serveur démarré sur http://localhost:${port}`);
+  console.log(`🚀 Serveur démarré sur http://localhost:${port}`);
 });
