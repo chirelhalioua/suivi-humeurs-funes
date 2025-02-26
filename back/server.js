@@ -36,7 +36,7 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-app.use(cors(corsOptions)); // Appliquer CORS
+app.use(cors());
 
 // Middleware pour analyser les requêtes
 app.use(express.json()); // Analyse les requêtes avec un payload JSON
