@@ -231,9 +231,10 @@ onMounted(() => {
     createObserver(conceptSection, (visible) => (isConceptVisible.value = visible)),
     createObserver(moodSection, (visible) => (isMoodVisible.value = visible)),
   ];
-
-  onUnmounted(() => {
-    observers.forEach((observer) => observer?.disconnect());
+  
+onUnmounted(() => {
+  observers.forEach((observer) => {
+    if (observer) observer.disconnect();
   });
 });
 </script>
