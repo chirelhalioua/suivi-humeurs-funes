@@ -30,7 +30,7 @@ const app = express();
 const corsOptions = {
   origin:
     process.env.NODE_ENV === "production"
-      ? ["https://suivi-humeurs-funes.vercel.app/"]
+      ? ["https://suivi-humeurs-funes.vercel.app"]
       : "*", 
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
