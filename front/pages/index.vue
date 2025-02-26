@@ -172,12 +172,13 @@ const fetchMoods = async () => {
     if (!response.ok) throw new Error("Impossible de récupérer les humeurs");
 
     const data = await response.json();
+    console.log("Data reçues:", data); // Vérifiez les données ici
     moods.value = data.slice(0, 4).map((mood) => ({
       ...mood,
       imageLoaded: false,
     }));
 
-    console.log("Humeurs chargées:", moods.value); // Vérifier les données reçues
+    console.log("Humeurs chargées:", moods.value); // Vérifiez les données transformées ici
   } catch (error) {
     errorMessage.value =
       "Une erreur est survenue lors du chargement des humeurs.";
@@ -186,6 +187,7 @@ const fetchMoods = async () => {
     isLoading.value = false;
   }
 };
+
 
 // Scroll listener to show sections
 const checkSectionVisibility = () => {
@@ -420,7 +422,10 @@ const goToRegister = async () => {
   transition: all 0.6s ease;
   transition-delay: var(--delay);
   height: 100%;
+  border: 1px solid red; /* Bordure temporaire pour débogage */
 }
+
+
 
 .mood-grid.visible .mood-card {
   opacity: 1;
