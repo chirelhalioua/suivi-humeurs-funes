@@ -222,7 +222,10 @@ const goToRegister = async () => {
 
 // Lifecycle hooks
 onMounted(() => {
+  console.log("Tentative de récupération des humeurs...");
   fetchMoods();
+});
+
 
   const observers = [
     createObserver(conceptSection, (visible) => (isConceptVisible.value = visible)),
