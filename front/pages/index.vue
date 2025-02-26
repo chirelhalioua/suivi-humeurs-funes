@@ -319,39 +319,6 @@ onMounted(() => {
 }
 
 /* Concept Section */
-.concept-section {
-  padding: clamp(3rem, 8vw, 100px) 1rem;
-}
-
-.concept-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: clamp(2rem, 6vw, 60px);
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s ease;
-}
-
-.section-header.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.section-title {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  color: var(--text-color);
-  margin-bottom: 1rem;
-}
-
-.section-subtitle {
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  color: rgba(44, 24, 16, 0.7);
-}
 
 .concept-card {
   border: 2px solid transparent;
@@ -385,6 +352,23 @@ onMounted(() => {
   100% {
     background-position: -200% 0;
   }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  .border-animation {
+    animation: none;
+  }
+
+  .concept-card {
+    transition: none;
+  }
+}
+
+/* Focus styles for keyboard navigation */
+.concept-card:focus-visible {
+  outline: 3px solid #4caf50;
+  outline-offset: 2px;
 }
 
 @media (min-width: 768px) {
