@@ -28,32 +28,40 @@
     </section>
 
     <!-- Concept Section -->
-    <section class="concept-section" ref="conceptSection">
-      <div class="section-header" :class="{ visible: isConceptVisible }">
-        <h2 class="section-title">Le Concept</h2>
-        <p class="section-subtitle">Exprimez vos humeurs avec Louis de Funès</p>
-      </div>
-
-      <div class="concept-container">
-        <div class="concept-grid">
-          <div
-            v-for="(concept, index) in concepts"
-            :key="index"
-            class="concept-card"
-            :class="{ visible: isConceptVisible }"
-            :style="{ '--delay': `${index * 0.1}s` }"
-          >
-            <div class="concept-icon">{{ concept.icon }}</div>
-            <div class="concept-content">
-              <span class="concept-number">0{{ index + 1 }}</span>
-              <h3 class="concept-title">{{ concept.title }}</h3>
-              <p class="concept-description">{{ concept.description }}</p>
-            </div>
-            <div class="concept-hover-effect"></div>
+    <section
+    class="flex flex-col items-center justify-center min-h-screen w-screen bg-[#F4E4BC] font-[Inter] p-8"
+  >
+    <div class="max-w-[1200px] w-full">
+      <h2 class="text-[32px] font-bold text-center text-[#2C1810] mb-12">
+        Le Concept
+      </h2>
+      <div class="grid grid-cols-4 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-6">
+        <article
+          v-for="(concept, index) in concepts"
+          :key="index"
+          class="concept-card relative p-6 bg-white rounded-[20px] transition-all duration-300"
+          :class="{ 'border-animation': hoveredCard === index }"
+          @mouseenter="hoveredCard = index"
+          @mouseleave="hoveredCard = null"
+        >
+          <div class="flex flex-col items-start gap-4 relative z-[1]">
+            <span
+              class="text-4xl transition-transform duration-300"
+              :class="{ 'transform scale-110': hoveredCard === index }"
+              role="img"
+              :aria-label="concept.title"
+            >
+              {{ concept.icon }}
+            </span>
+            <h3 class="text-xl font-semibold text-[#2C1810]">
+              {{ concept.title }}
+            </h3>
+            <p class="text-[#2C1810]/80">{{ concept.description }}</p>
           </div>
-        </div>
+        </article>
       </div>
-    </section>
+    </div>
+  </section>
 
     <!-- Mood Preview Section -->
     <section class="mood-section" ref="moodSection">
