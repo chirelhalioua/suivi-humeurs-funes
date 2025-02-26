@@ -194,7 +194,7 @@ onMounted(() => {
   if (window.gapi) {
     window.gapi.load("auth2", () => {
       window.gapi.auth2.init({
-        client_id: "VOTRE_CLIENT_ID_GOOGLE", // Remplacez par votre client_id Google
+        client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com", 
       });
     });
   }
