@@ -162,16 +162,16 @@ const concepts = [
 
 // API calls
 const fetchMoods = async () => {
-  console.log("fetchMoods déclenché");
   try {
     isLoading.value = true;
     errorMessage.value = "";
 
-    const response = await fetch(
-      "https://suivi-humeurs-back.onrender.com/api/humeurs"
-    );
-    console.log("Statut de la réponse:", response.status);
-    console.log("Réponse OK:", response.ok);
+    const response = await fetch("https://suivi-humeurs-back.onrender.com/api/humeurs", {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
 
     if (!response.ok) throw new Error("Impossible de récupérer les humeurs");
 
@@ -182,15 +182,14 @@ const fetchMoods = async () => {
       imageLoaded: false,
     }));
 
-    console.log("Humeurs chargées:", moods.value);
   } catch (error) {
-    errorMessage.value =
-      "Une erreur est survenue lors du chargement des humeurs.";
-    console.error("Erreur attrapée:", error);
+    errorMessage.value = "Une erreur est survenue lors du chargement des humeurs.";
+    console.error(error);
   } finally {
     isLoading.value = false;
   }
 };
+
 
 
 
