@@ -105,7 +105,7 @@ const fetchUserProfile = async () => {
   }
 
   try {
-    const response = await axios.get("https://suivi-humeurs-back.onrender.com/api/auth/profile", {
+    const response = await axios.get("https://suivi-humeurs-funes.onrender.com/api/auth/profile", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -140,7 +140,7 @@ const deleteProfile = async () => {
   }
 
   try {
-    await axios.delete("https://suivi-humeurs-back.onrender.com/api/auth/profile", {
+    await axios.delete("https://suivi-humeurs-funes.onrender.com/api/auth/profile", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
