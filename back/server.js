@@ -26,9 +26,9 @@ const app = express();
 
 // Configuration dynamique de CORS
 const corsOptions = {
-  origin: process.env.NODE_ENV === "production"
+  origin: process.env.NODE_ENV === "production" 
     ? "https://suivi-humeurs-funes.vercel.app"
-    : "*", 
+    : "http://localhost:3000" ,  
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
