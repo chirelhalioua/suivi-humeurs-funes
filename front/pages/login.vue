@@ -150,10 +150,13 @@ const loginUser = async () => {
     router.push("/profil");  // Redirection vers la page de profil
 
   } catch (error) {
-    showMessage(
-      error.response?.data?.message || "Erreur lors de la connexion",
-      "error"
-    );
+  console.error('Erreur lors de la connexion', error); // Log détaillé de l'erreur
+  showMessage(
+    error.response?.data?.message || "Erreur lors de la connexion",
+    "error"
+  );
+}
+
   } finally {
     isLoading.value = false;
   }
