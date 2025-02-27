@@ -205,9 +205,11 @@ const checkSectionVisibility = () => {
 
 // Scroll event listener
 onMounted(() => {
+  console.log("onMounted déclenché"); // Pour voir si le composant est bien monté
   window.addEventListener("scroll", checkSectionVisibility);
   fetchMoods();
 });
+
 
 // Cleanup event listener
 onUnmounted(() => {
