@@ -27,10 +27,11 @@ const app = express();
 // Configuration dynamique de CORS
 const corsOptions = {
   origin: process.env.NODE_ENV === "production" 
-    ? "https://suivi-humeurs-funes.vercel.app"
-    : "http://localhost:3000" ,  
-  methods: ["GET", "POST", "PUT", "DELETE"],
+      ? "https://suivi-humeurs-funes.vercel.app" // Frontend en production
+      : "*", 
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true, // Si tu utilises des cookies ou tokens
 };
 
 app.use(cors(corsOptions)); // Appliquer CORS
@@ -38,6 +39,8 @@ app.use(cors(corsOptions)); // Appliquer CORS
 // Middleware pour analyser les requêtes
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
+
+app.options("*", cors(corsOptions));
 
 // Connexion à MongoDB avec gestion d'erreur
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
