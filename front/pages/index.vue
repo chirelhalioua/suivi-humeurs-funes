@@ -405,22 +405,27 @@ const goToRegister = async () => {
 
 /* Mood Section */
 .mood-section {
-  padding: clamp(3rem, 8vw, 100px) 1rem;
+  padding: 100px 20px;
   background: white;
 }
 
-.mood-card {
+.mood-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+  .mood-card {
   background: white;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: var(--card-shadow);
   opacity: 0;
-  transform: translateY(30px) scale(1);
-  transition: all 0.3s ease;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
   transition-delay: var(--delay);
-  height: 350px; /* Ajustez cette valeur selon vos besoins */
-  max-height: 400px; /* Si vous voulez limiter la taille maximale */
-  min-height: 250px; /* Pour éviter que les cartes soient trop petites */
   border: 2px solid #45a049;
 }
 
