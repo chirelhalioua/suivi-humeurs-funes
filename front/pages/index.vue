@@ -411,13 +411,13 @@ const goToRegister = async () => {
 
 .mood-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(4, 1fr); /* 4 colonnes fixes */
+  gap: 30px; /* Espacement entre les cartes */
   max-width: 1200px;
   margin: 0 auto;
 }
 
-  .mood-card {
+.mood-card {
   background: white;
   border-radius: 20px;
   overflow: hidden;
