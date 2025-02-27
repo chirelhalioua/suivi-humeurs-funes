@@ -162,6 +162,7 @@ const concepts = [
 
 // API calls
 const fetchMoods = async () => {
+  console.log("fetchMoods déclenché"); // Pour voir si la fonction est bien appelée
   try {
     isLoading.value = true;
     errorMessage.value = "";
