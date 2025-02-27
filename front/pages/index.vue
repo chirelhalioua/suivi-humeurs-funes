@@ -191,8 +191,6 @@ const fetchMoods = async () => {
 };
 
 
-
-
 // Scroll listener to show sections
 const checkSectionVisibility = () => {
   const conceptSection = document.querySelector(".concept-section");
@@ -492,6 +490,13 @@ const goToRegister = async () => {
   color: rgba(44, 24, 16, 0.6);
 }
 
+  @media (max-width: 768px) {
+  .mood-grid {
+    grid-template-columns: 1fr; /* 1 colonne pour les petits écrans */
+    gap: 20px; /* Espacement ajusté pour les écrans plus petits */
+  }
+}
+  
 /* Animations */
 @keyframes fadeInUp {
   from {
