@@ -418,7 +418,9 @@ const goToRegister = async () => {
   transform: translateY(30px) scale(1);
   transition: all 0.3s ease;
   transition-delay: var(--delay);
-  height: 100%;
+  height: 350px; /* Ajustez cette valeur selon vos besoins */
+  max-height: 400px; /* Si vous voulez limiter la taille maximale */
+  min-height: 250px; /* Pour éviter que les cartes soient trop petites */
   border: 2px solid #45a049;
 }
 
