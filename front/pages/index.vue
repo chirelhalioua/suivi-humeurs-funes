@@ -162,7 +162,7 @@ const concepts = [
 
 // API calls
 const fetchMoods = async () => {
-  console.log("fetchMoods déclenché"); // Pour voir si la fonction est bien appelée
+  console.log("fetchMoods déclenché");
   try {
     isLoading.value = true;
     errorMessage.value = "";
@@ -170,24 +170,28 @@ const fetchMoods = async () => {
     const response = await fetch(
       "https://suivi-humeurs-back.onrender.com/api/humeurs"
     );
+    console.log("Statut de la réponse:", response.status);
+    console.log("Réponse OK:", response.ok);
+
     if (!response.ok) throw new Error("Impossible de récupérer les humeurs");
 
     const data = await response.json();
-    console.log("Data reçues:", data); // Vérifiez les données ici
+    console.log("Data reçues:", data);
     moods.value = data.slice(0, 4).map((mood) => ({
       ...mood,
       imageLoaded: false,
     }));
 
-    console.log("Humeurs chargées:", moods.value); // Vérifiez les données transformées ici
+    console.log("Humeurs chargées:", moods.value);
   } catch (error) {
     errorMessage.value =
       "Une erreur est survenue lors du chargement des humeurs.";
-    console.error(error);
+    console.error("Erreur attrapée:", error);
   } finally {
     isLoading.value = false;
   }
 };
+
 
 
 // Scroll listener to show sections
