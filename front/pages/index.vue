@@ -409,33 +409,27 @@ const goToRegister = async () => {
   background: white;
 }
 
-.mood-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-  gap: clamp(1.5rem, 4vw, 2rem);
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
 .mood-card {
   background: white;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: var(--card-shadow);
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s ease;
+  transform: translateY(30px) scale(1);
+  transition: all 0.3s ease;
   transition-delay: var(--delay);
   height: 100%;
-  border: 2px solid  #45a049;
+  border: 2px solid #45a049;
 }
 
-
+.mood-card:hover {
+  transform: translateY(-10px) scale(1.05); /* Zoom + léger décalage vertical */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Effet d'ombre pour l'animation */
+}
 
 .mood-grid.visible .mood-card {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .mood-image-wrapper {
