@@ -255,13 +255,13 @@ const fetchMoodData = async () => {
     isLoading.value = true;
 
     // Récupérer l'ID utilisateur
-    const userResponse = await axios.get("http://localhost:5000/api/auth/me", {
+    const userResponse = await axios.get("https://suivi-humeurs-funes.onrender.com/api/auth/me", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
     // Récupérer les humeurs
     const moodsResponse = await axios.get(
-      `https://suivi-humeurs-back.onrender.com/api/humeurs_utilisateurs/${userResponse.data._id}`,
+      `https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userResponse.data._id}`,
       { headers: { Authorization: `Bearer ${token}` } },
     );
 
@@ -272,7 +272,7 @@ const fetchMoodData = async () => {
     // Traiter les données
     for (const entry of moodsResponse.data) {
       const moodDetails = await axios.get(
-        `https://suivi-humeurs-back.onrender.com/api/humeurs/${entry.humeurId}`,
+        `https://suivi-humeurs-funes.onrender.com/api/humeurs/${entry.humeurId}`,
       );
 
       const dayIndex = new Date(entry.date).getDay();
