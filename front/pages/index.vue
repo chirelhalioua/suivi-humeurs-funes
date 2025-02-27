@@ -428,7 +428,7 @@ const goToRegister = async () => {
   transition: all 0.6s ease;
   transition-delay: var(--delay);
   height: 100%;
-  border: 1px solid red; /* Bordure temporaire pour débogage */
+  border: 2px solid  #45a049;
 }
 
 
