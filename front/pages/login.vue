@@ -145,22 +145,36 @@ const loginUser = async () => {
     localStorage.setItem("userId", user._id);
 
     showMessage("Connexion réussie!", "success");
-
-    console.log("Redirection vers le profil...");  // Log de confirmation
-    router.push("/profil");  // Redirection vers la page de profil
+    router.push("/profil");
 
   } catch (error) {
-  console.error('Erreur lors de la connexion', error); // Log détaillé de l'erreur
-  showMessage(
-    error.response?.data?.message || "Erreur lors de la connexion",
-    "error"
-  );
-}
+    console.error('Erreur lors de la connexion', error);
 
+    if (!error.response) {
+      showMessage("Problème de connexion au serveur. Veuillez réessayer plus tard.", "error");
+    } else {
+      switch (error.response.status) {
+        case 400:
+          showMessage("Requête invalide. Vérifiez les informations saisies.", "error");
+          break;
+        case 401:
+          showMessage("Identifiants incorrects. Veuillez réessayer.", "error");
+          break;
+        case 403:
+          showMessage("Accès refusé. Contactez l'administrateur.", "error");
+          break;
+        case 500:
+          showMessage("Erreur serveur. Réessayez plus tard.", "error");
+          break;
+        default:
+          showMessage(error.response.data.message || "Une erreur inconnue est survenue.", "error");
+      }
+    }
   } finally {
     isLoading.value = false;
   }
 };
+
 
 // Connexion avec Google
 const signInWithGoogle = async () => {
