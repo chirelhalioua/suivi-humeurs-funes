@@ -176,24 +176,25 @@ const loginUser = async () => {
 };
 
 
-// Connexion avec Google
-const signInWithGoogle = async () => {
+// Connexion Google avec GIS
+const signInWithGoogle = () => {
+  google.accounts.id.initialize({
+    client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
+    callback: handleGoogleResponse,
+  });
+
+  google.accounts.id.prompt();
+};
+
+const handleGoogleResponse = async (response) => {
   try {
-    isLoading.value = true;
-    if (!window.gapi || !window.gapi.auth2) {
-      showMessage("Google API non chargé", "error");
-      return;
-    }
+    const { credential } = response;
 
-    const auth2 = window.gapi.auth2.getAuthInstance();
-    const googleUser = await auth2.signIn();
-    const id_token = googleUser.getAuthResponse().id_token;
-
-    const response = await axios.post(`https://suivi-humeurs-funes.onrender.com/api/auth/google`, {
-      token: id_token,
+    const res = await axios.post("https://suivi-humeurs-funes.onrender.com/api/auth/google", {
+      token: credential,
     });
 
-    const { token, user } = response.data;
+    const { token, user } = res.data;
     localStorage.setItem("authToken", token);
     localStorage.setItem("userId", user._id);
 
@@ -201,25 +202,17 @@ const signInWithGoogle = async () => {
     router.push("/profil");
   } catch (error) {
     showMessage("Erreur lors de la connexion avec Google", "error");
-  } finally {
-    isLoading.value = false;
   }
 };
 
-// Charger Google API au montage
 onMounted(() => {
-  if (window.gapi) {
-    window.gapi.load("auth2", () => {
-      window.gapi.auth2.init({
-        client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com", 
-      });
-    });
+  if (!window.google) {
+    showMessage("Google API non chargé", "error");
   }
 });
 
-// Ajouter le script Google API proprement
 useHead({
-  script: [{ src: "https://apis.google.com/js/platform.js", async: true, defer: true }],
+  script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true }],
 });
 </script>
 
