@@ -2,6 +2,10 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
+const { OAuth2Client } = require('google-auth-library');
+
+// Initialisation du client Google avec l'ID client défini dans les variables d'environnement
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Inscription d'un nouvel utilisateur
 const registerUser = async (req, res) => {
@@ -35,7 +39,6 @@ const registerUser = async (req, res) => {
   }
 };
 
-
 // Connexion d'un utilisateur
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -55,7 +58,6 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: 'Email ou mot de passe incorrect' });
     }
 
-    // Utilisation de la clé secrète de l'environnement pour signer le token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.status(200).json({ token });
@@ -65,7 +67,39 @@ const loginUser = async (req, res) => {
   }
 };
 
+// Authentification via Google (connexion et inscription)
+const googleAuth = async (req, res) => {
+  const { token } = req.body;
 
+  try {
+    // Vérifier le token Google
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+
+    // Rechercher un utilisateur existant avec l'email fourni par Google
+    let user = await User.findOne({ email: payload.email });
+    if (!user) {
+      // Si l'utilisateur n'existe pas, le créer
+      user = new User({
+        name: payload.name,
+        email: payload.email,
+        password: '', // Aucun mot de passe n'est requis pour une connexion Google
+        avatar: payload.picture // Si votre modèle User possède un champ "avatar"
+      });
+      await user.save();
+    }
+
+    // Générer un token JWT pour l'utilisateur
+    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.status(200).json({ token: jwtToken, user });
+  } catch (error) {
+    console.error("Erreur lors de l'authentification Google :", error);
+    res.status(400).json({ message: "Échec de l'authentification avec Google" });
+  }
+};
 
 // Récupérer tous les utilisateurs
 const getAllUsers = async (req, res) => {
@@ -84,14 +118,14 @@ const getAllUsers = async (req, res) => {
 // Récupérer le profil de l'utilisateur connecté
 const getUserProfile = async (req, res) => {
   try {
-    const userId = req.user.id; // L'ID de l'utilisateur est stocké dans req.user.id
-    const user = await User.findById(userId).select('-password'); // Récupère l'utilisateur sans le mot de passe
+    const userId = req.user.id;
+    const user = await User.findById(userId).select('-password');
 
     if (!user) {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
 
-    res.status(200).json({ user }); // Renvoie les informations de l'utilisateur
+    res.status(200).json({ user });
   } catch (error) {
     console.error('Erreur lors de la récupération du profil : ', error);
     res.status(500).json({ message: 'Erreur du serveur' });
@@ -110,7 +144,6 @@ const updateUserProfile = async (req, res) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
 
-    // Mise à jour des informations
     if (name) user.name = name;
     if (email) user.email = email;
     if (password) user.password = await bcrypt.hash(password, 10);
@@ -144,6 +177,7 @@ const deleteUserProfile = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  googleAuth,
   getAllUsers,
   getUserProfile,
   updateUserProfile,
