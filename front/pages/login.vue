@@ -206,10 +206,19 @@ const handleGoogleResponse = async (response) => {
 };
 
 onMounted(() => {
-  if (!window.google) {
+  if (window.google) {
+    google.accounts.id.initialize({
+      client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
+      callback: handleGoogleResponse,
+      auto_select: true, // "One Tap" sign-in
+    });
+
+    google.accounts.id.prompt();
+  } else {
     showMessage("Google API non chargé", "error");
   }
 });
+
 
 useHead({
   script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true }],
