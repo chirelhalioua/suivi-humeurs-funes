@@ -88,6 +88,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useHead } from '@vueuse/head';
 
 const nom = ref('');
 const email = ref('');
@@ -144,12 +145,16 @@ const registerUser = async () => {
 };
 
 const signInWithGoogle = () => {
-  google.accounts.id.initialize({
-    client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
-    callback: handleGoogleResponse,
-  });
+  if (window.google) {
+    google.accounts.id.initialize({
+      client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
+      callback: handleGoogleResponse,
+    });
 
-  google.accounts.id.prompt();
+    google.accounts.id.prompt();
+  } else {
+    showMessage("Google API non chargé", "error");
+  }
 };
 
 const handleGoogleResponse = async (response) => {
@@ -160,29 +165,46 @@ const handleGoogleResponse = async (response) => {
       token: credential,
     });
 
-    const { token, user } = res.data;
-    localStorage.setItem("authToken", token);
-    localStorage.setItem("userId", user._id);
+    if (res.status === 200) {
+      const { token, user } = res.data;
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("userId", user._id);
 
-    showMessage("Connexion réussie!", "success");
-    router.push("/profil");
+      showMessage("Connexion réussie!", "success");
+      router.push("/profil");
+    } else {
+      showMessage("Erreur lors de la connexion avec Google", "error");
+    }
   } catch (error) {
-    showMessage("Erreur lors de la connexion avec Google", "error");
+    console.error("Google Auth Error:", error.response?.data || error.message);
+    showMessage(error.response?.data.message || "Erreur lors de la connexion avec Google", "error");
   }
 };
 
 onMounted(() => {
-  if (window.google) {
-    google.accounts.id.initialize({
-      client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
-      callback: handleGoogleResponse,
-      auto_select: true, // "One Tap" sign-in
-    });
+  useHead({
+    script: [{
+      src: "https://accounts.google.com/gsi/client",
+      async: true,
+      defer: true,
+      onload: () => {
+        if (window.google) {
+          google.accounts.id.initialize({
+            client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
+            callback: handleGoogleResponse,
+            auto_select: true,
+          });
 
-    google.accounts.id.prompt();
-  } else {
-    showMessage("Google API non chargé", "error");
-  }
+          google.accounts.id.prompt();
+        } else {
+          showMessage("Google API non chargé", "error");
+        }
+      },
+      onerror: () => {
+        showMessage("Erreur de chargement de l'API Google", "error");
+      },
+    }],
+  });
 });
 </script>
 
