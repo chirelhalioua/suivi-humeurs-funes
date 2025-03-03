@@ -1,19 +1,30 @@
 <template>
-  <div class="login-page">
-    <div class="login-container">
-      <div class="login-content">
-        <h1 class="login-title">Connexion</h1>
-        <p class="login-subtitle">Bienvenue sur Les Humeurs à la Funès</p>
+  <div class="register-page">
+    <div class="register-container">
+      <div class="register-content">
+        <h1 class="register-title">Inscription</h1>
+        <p class="register-subtitle">Rejoignez Les Humeurs à la Funès</p>
 
+        <!-- Bouton Google -->
         <div class="social-login">
-          <button @click="signInWithGoogle" class="google-btn" aria-label="Continuer avec Google">
+          <button @click="signInWithGoogle" class="google-btn">
             <span>Continuer avec Google</span>
           </button>
         </div>
 
-        <div class="divider"><span>ou</span></div>
+        <div class="divider">
+          <span>ou</span>
+        </div>
 
-        <form @submit.prevent="loginUser" class="login-form">
+        <form @submit.prevent="registerUser" class="register-form">
+          <div class="form-group">
+            <label for="nom" class="form-label">Nom et Prénom</label>
+            <div class="input-container">
+              <i class="fas fa-user input-icon"></i>
+              <input v-model="nom" type="text" id="nom" class="form-input" placeholder="Votre nom complet" required />
+            </div>
+          </div>
+
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
             <div class="input-container">
@@ -27,18 +38,47 @@
             <div class="input-container">
               <i class="fas fa-lock input-icon"></i>
               <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" class="form-input" placeholder="Votre mot de passe" required />
-              <button type="button" @click="showPassword = !showPassword" class="password-toggle" aria-label="Afficher/Masquer le mot de passe">
+              <button type="button" class="password-toggle" @click="showPassword = !showPassword">
                 {{ showPassword ? '🙈' : '👁️' }}
               </button>
             </div>
           </div>
 
-          <button type="submit" class="submit-btn" :disabled="isLoading">{{ isLoading ? 'Connexion...' : 'Se connecter' }}</button>
+          <div class="form-group">
+            <label for="confirm-password" class="form-label">Confirmer le mot de passe</label>
+            <div class="input-container">
+              <i class="fas fa-lock input-icon"></i>
+              <input v-model="confirmPassword" :type="showConfirmPassword ? 'text' : 'password'" id="confirm-password" class="form-input" placeholder="Confirmez votre mot de passe" required />
+              <button type="button" class="password-toggle" @click="showConfirmPassword = !showConfirmPassword">
+                {{ showConfirmPassword ? '🙈' : '👁️' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group terms">
+            <label class="checkbox-container">
+              <input type="checkbox" v-model="acceptTerms" required />
+              <span class="checkmark"></span>
+              <span class="terms-text">J'accepte les <NuxtLink to="/terms" class="highlight-link">conditions d'utilisation</NuxtLink></span>
+            </label>
+          </div>
+
+          <button type="submit" class="submit-btn" :class="{ loading: isLoading }">
+            <span v-if="!isLoading">S'inscrire</span>
+            <span v-else class="loader"></span>
+          </button>
         </form>
 
-        <transition name="fade">
-          <div v-if="message" :class="['message', messageClass]" role="alert">{{ message }}</div>
-        </transition>
+        <Transition name="fade">
+          <div v-if="message" :class="['message', messageClass]">
+            <i :class="messageClass === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'"></i>
+            {{ message }}
+          </div>
+        </Transition>
+
+        <div class="login-link">
+          <p>Vous avez déjà un compte ? <NuxtLink to="/login" class="highlight-link">Connectez-vous ici</NuxtLink></p>
+        </div>
       </div>
     </div>
   </div>
@@ -48,44 +88,61 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { useHead } from '@vueuse/head';
 
+const nom = ref('');
 const email = ref('');
 const password = ref('');
-const showPassword = ref(false);
+const confirmPassword = ref('');
 const message = ref('');
 const messageClass = ref('');
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+const acceptTerms = ref(false);
 const isLoading = ref(false);
 const router = useRouter();
 
 const showMessage = (text, type) => {
   message.value = text;
   messageClass.value = type;
-  setTimeout(() => message.value = '', 5000);
+  setTimeout(() => {
+    message.value = '';
+  }, 5000);
 };
 
-const loginUser = async () => {
+const registerUser = async () => {
+  if (!acceptTerms.value) {
+    showMessage("Veuillez accepter les conditions d'utilisation", 'error');
+    return;
+  }
+
+  if (password.value !== confirmPassword.value) {
+    showMessage('Les mots de passe ne correspondent pas!', 'error');
+    return;
+  }
+
   try {
     isLoading.value = true;
-    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/login', {
+    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/register', {
+      name: nom.value,
       email: email.value,
-      password: password.value
+      password: password.value,
     });
 
-    if (response.status === 200 && response.data.token) {
-      localStorage.setItem('authToken', response.data.token);
-      router.push('/profil').then(() => message.value = '');
-    } else {
-      showMessage('Problème de connexion au serveur.', 'error');
-    }
+    showMessage('Inscription réussie! Vous allez être redirigé...', 'success');
+    setTimeout(() => {
+      router.push('/login');
+    }, 2000);
   } catch (error) {
-    showMessage(error.response?.data.message || 'Une erreur est survenue.', 'error');
+    if (error.response?.data?.message) {
+      showMessage(error.response.data.message, 'error');
+    } else {
+      showMessage("Une erreur est survenue lors de l'inscription", 'error');
+    }
   } finally {
     isLoading.value = false;
   }
 };
 
-// Connexion Google avec GIS
 const signInWithGoogle = () => {
   google.accounts.id.initialize({
     client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
@@ -127,14 +184,10 @@ onMounted(() => {
     showMessage("Google API non chargé", "error");
   }
 });
-
-useHead({
-  script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true }],
-});
 </script>
 
 <style scoped>
-.login-page {
+.register-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -143,20 +196,20 @@ useHead({
   padding: 20px;
 }
 
-.login-container {
+.register-container {
   width: 100%;
-  max-width: 440px;
+  max-width: 500px;
   background: white;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
-.login-content {
+.register-content {
   padding: 40px;
 }
 
-.login-title {
+.register-title {
   font-family: "Sora", sans-serif;
   font-size: 32px;
   font-weight: bold;
@@ -165,7 +218,7 @@ useHead({
   margin-bottom: 8px;
 }
 
-.login-subtitle {
+.register-subtitle {
   text-align: center;
   color: #666;
   margin-bottom: 32px;
@@ -249,24 +302,20 @@ useHead({
   padding: 4px;
 }
 
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+.terms {
+  margin: 24px 0;
 }
 
-.remember-me {
+.checkbox-container {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #666;
+  cursor: pointer;
 }
 
-.forgot-password {
-  color: #4caf50;
-  text-decoration: none;
+.terms-text {
   font-size: 14px;
+  color: #666;
 }
 
 .submit-btn {
@@ -280,7 +329,6 @@ useHead({
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
 }
 
 .submit-btn:hover {
@@ -324,7 +372,7 @@ useHead({
   color: #c62828;
 }
 
-.register-link {
+.login-link {
   text-align: center;
   margin-top: 24px;
   color: #666;
@@ -361,14 +409,16 @@ useHead({
 
 /* Media Queries */
 @media (max-width: 480px) {
-  .login-content {
+  .register-content {
     padding: 24px;
   }
 
-  .form-options {
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
+  .register-title {
+    font-size: 24px;
+  }
+
+  .form-input {
+    font-size: 14px;
   }
 }
 </style>
