@@ -1,9 +1,11 @@
+import { defineNuxtConfig } from 'nuxt/config'
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
   modules: [
     "@pinia/nuxt",
-    "@nuxtjs/tailwindcss",
+    "@nuxtjs/tailwindcss", // Ajout de TailwindCSS
   ],
 
   runtimeConfig: {
@@ -50,5 +52,12 @@ export default defineNuxtConfig({
 
   css: ["~/assets/css/main.css"],
 
+  build: {
+    transpile: ['@vueuse/head'],
+    rollupOptions: {
+      external: ['@vueuse/head']
+    }
+  },
+
   compatibilityDate: "2025-01-22",
-});
+})
