@@ -39,7 +39,7 @@
               <i class="fas fa-lock input-icon"></i>
               <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" class="form-input" placeholder="Votre mot de passe" required />
               <button type="button" class="password-toggle" @click="showPassword = !showPassword">
-                <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                {{ showPassword ? '🙈' : '👁️' }}
               </button>
             </div>
           </div>
@@ -50,7 +50,7 @@
               <i class="fas fa-lock input-icon"></i>
               <input v-model="confirmPassword" :type="showConfirmPassword ? 'text' : 'password'" id="confirm-password" class="form-input" placeholder="Confirmez votre mot de passe" required />
               <button type="button" class="password-toggle" @click="showConfirmPassword = !showConfirmPassword">
-                <i :class="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                {{ showConfirmPassword ? '🙈' : '👁️' }}
               </button>
             </div>
           </div>
@@ -87,6 +87,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const nom = ref('');
 const email = ref('');
@@ -98,6 +99,7 @@ const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const acceptTerms = ref(false);
 const isLoading = ref(false);
+const router = useRouter();
 
 const showMessage = (text, type) => {
   message.value = text;
@@ -128,7 +130,7 @@ const registerUser = async () => {
 
     showMessage('Inscription réussie! Vous allez être redirigé...', 'success');
     setTimeout(() => {
-      navigateTo('/login');
+      router.push('/login');
     }, 2000);
   } catch (error) {
     if (error.response?.data?.message) {
@@ -163,7 +165,7 @@ const handleGoogleResponse = async (response) => {
     localStorage.setItem("userId", user._id);
 
     showMessage("Connexion réussie!", "success");
-    navigateTo("/profil");
+    router.push("/profil");
   } catch (error) {
     showMessage("Erreur lors de la connexion avec Google", "error");
   }
