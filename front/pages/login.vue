@@ -79,21 +79,32 @@ const loginUser = async () => {
   }
 };
 
-const handleGoogleResponse = (response) => {
-  console.log('Google response:', response);
-  // Traitement de la réponse OAuth ici
+// Connexion Google avec GIS
+const signInWithGoogle = () => {
+  google.accounts.id.initialize({
+    client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
+    callback: handleGoogleResponse,
+  });
+
+  google.accounts.id.prompt();
 };
 
-const signInWithGoogle = () => {
-  if (window.google) {
-    google.accounts.id.initialize({
-      client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
-      callback: handleGoogleResponse,
-      auto_select: true, // "One Tap" sign-in
+const handleGoogleResponse = async (response) => {
+  try {
+    const { credential } = response;
+
+    const res = await axios.post("https://suivi-humeurs-funes.onrender.com/api/auth/google", {
+      token: credential,
     });
-    google.accounts.id.prompt();
-  } else {
-    showMessage("Google API non chargé", "error");
+
+    const { token, user } = res.data;
+    localStorage.setItem("authToken", token);
+    localStorage.setItem("userId", user._id);
+
+    showMessage("Connexion réussie!", "success");
+    router.push("/profil");
+  } catch (error) {
+    showMessage("Erreur lors de la connexion avec Google", "error");
   }
 };
 
@@ -102,13 +113,15 @@ onMounted(() => {
     google.accounts.id.initialize({
       client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
       callback: handleGoogleResponse,
-      auto_select: true,
+      auto_select: true, // "One Tap" sign-in
     });
+
     google.accounts.id.prompt();
   } else {
     showMessage("Google API non chargé", "error");
   }
 });
+
 
 useHead({
   script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true }],
