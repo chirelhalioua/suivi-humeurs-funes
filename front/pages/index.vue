@@ -1,230 +1,91 @@
 <template>
-  <div class="home-page">
-    <!-- Hero Section -->
-    <section class="hero-section" ref="heroSection">
-      <div class="hero-content">
-        <h1 class="hero-title">Suis tes humeurs avec Louis de Funès</h1>
-        <p class="hero-description">
-          Exprimez vos émotions à travers les expressions légendaires de Louis
-          de Funès
-        </p>
-        <button
-          class="cta-button"
-          @click="goToRegister"
-          :disabled="isNavigating"
-        >
-          <span class="button-text">{{
-            isNavigating ? "Chargement..." : "Commencer l'aventure"
-          }}</span>
-          <span class="button-icon">→</span>
-        </button>
-      </div>
-      <div class="scroll-indicator">
-        <div class="mouse">
-          <div class="wheel"></div>
+  <div class="login-page">
+    <div class="login-container">
+      <div class="login-content">
+        <h1 class="login-title">Connexion</h1>
+        <p class="login-subtitle">Bienvenue sur Les Humeurs à la Funès</p>
+
+        <div class="social-login">
+          <button @click="signInWithGoogle" class="google-btn">
+            <span>Continuer avec Google</span>
+          </button>
         </div>
-        <div class="arrow"></div>
-      </div>
-    </section>
 
-    <!-- Concept Section -->
-    <section class="concept-section" ref="conceptSection">
-      <div class="section-header" :class="{ visible: isConceptVisible }">
-        <h2 class="section-title">Le Concept</h2>
-        <p class="section-subtitle">Exprimez vos humeurs avec Louis de Funès</p>
-      </div>
+        <div class="divider"><span>ou</span></div>
 
-      <div class="concept-container">
-        <div class="concept-grid">
-          <article
-            v-for="(concept, index) in concepts"
-            :key="index"
-            class="concept-card relative p-6 bg-white rounded-[20px] transition-all duration-300"
-            :class="{ 'border-animation': hoveredCard === index }"
-            @mouseenter="hoveredCard = index"
-            @mouseleave="hoveredCard = null"
-          >
-            <div class="flex flex-col items-start gap-4 relative z-[1]">
-              <div class="w-full flex justify-between items-center">
-                <span
-                  class="text-4xl transition-transform duration-300"
-                  :class="{ 'transform scale-110': hoveredCard === index }"
-                  role="img"
-                  :aria-label="concept.title"
-                >
-                  {{ concept.icon }}
-                </span>
-                <span class="text-[48px] font-bold text-[#4CAF50]/20">
-                  0{{ index + 1 }}
-                </span>
-              </div>
-              <h3 class="text-xl font-semibold text-[#2C1810]">
-                {{ concept.title }}
-              </h3>
-              <p class="text-[#2C1810]/80">{{ concept.description }}</p>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Mood Preview Section -->
-    <section class="mood-section" ref="moodSection">
-      <div class="section-header" :class="{ visible: isMoodVisible }">
-        <h2 class="section-title">Aperçu des Humeurs</h2>
-      </div>
-
-      <!-- Loading State -->
-      <div v-if="isLoading" class="loading-state">
-        <div class="loading-spinner">
-          <div class="spinner"></div>
-        </div>
-        <p>Chargement des humeurs...</p>
-      </div>
-
-      <!-- Error State -->
-      <div v-else-if="errorMessage" class="error-state">
-        <div class="error-icon">!</div>
-        <p>{{ errorMessage }}</p>
-        <button @click="fetchMoods" class="retry-button">Réessayer</button>
-      </div>
-
-      <!-- Moods Grid -->
-      <div v-else class="mood-grid" :class="{ visible: isMoodVisible }">
-        <div
-          v-for="(mood, index) in moods"
-          :key="mood._id"
-          class="mood-card"
-          :style="{ '--delay': `${index * 0.1}s` }"
-        >
-          <div class="mood-image-wrapper">
-            <div class="image-placeholder" v-if="!mood.imageLoaded"></div>
-            <img
-              :src="mood.image"
-              :alt="mood.title"
-              class="mood-image"
-              :class="{ loaded: mood.imageLoaded }"
-              @load="mood.imageLoaded = true"
-            />
+        <form @submit.prevent="loginUser" class="login-form">
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input v-model="email" type="email" id="email" class="form-input" placeholder="Votre email" required />
           </div>
-          <div class="mood-content">
-            <h3 class="mood-title">{{ mood.title }}</h3>
-            <p class="mood-subtitle">{{ mood.subtitle }}</p>
-            <p class="mood-film">
-              <span class="film-label">Film :</span>
-              {{ mood.film }}
-            </p>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" class="form-input" placeholder="Votre mot de passe" required />
+            <button type="button" @click="showPassword = !showPassword" class="password-toggle">
+              {{ showPassword ? '🙈' : '👁️' }}
+            </button>
           </div>
-        </div>
+
+          <button type="submit" class="submit-btn" :disabled="isLoading">
+            <span v-if="!isLoading">Se connecter</span>
+            <span v-else class="loader"></span>
+          </button>
+        </form>
+
+        <transition name="fade">
+          <div v-if="message" :class="['message', messageClass]">{{ message }}</div>
+        </transition>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
 
-// State
-const isNavigating = ref(false);
-const isLoading = ref(true);
-const errorMessage = ref("");
-const moods = ref([]);
-const hoveredCard = ref(null);
+const email = ref("");
+const password = ref("");
+const message = ref("");
+const messageClass = ref("");
+const showPassword = ref(false);
+const isLoading = ref(false);
+const router = useRouter();
 
-// Section visibility state
-const isConceptVisible = ref(false);
-const isMoodVisible = ref(false);
+const showMessage = (text, type) => {
+  message.value = text;
+  messageClass.value = type;
+  setTimeout(() => (message.value = ""), 5000);
+};
 
-// Concepts data
-const concepts = [
-  {
-    title: "Exprimez-vous",
-    description:
-      "Exprimez facilement votre humeur à travers des images de Louis de Funès",
-    icon: "🎭",
-  },
-  {
-    title: "Suivez",
-    description: "Suivez votre humeur de façon journalière et hebdomadaire",
-    icon: "📊",
-  },
-  {
-    title: "Améliorez",
-    description: "Améliorez votre humeur grâce à des vidéos et citations",
-    icon: "⭐",
-  },
-  {
-    title: "Partagez",
-    description: "Partagez votre humeur avec votre entourage",
-    icon: "🤝",
-  },
-];
+const loginUser = async () => {
+  if (!email.value || !password.value) {
+    showMessage("Veuillez remplir tous les champs.", "error");
+    return;
+  }
 
-// API calls
-const fetchMoods = async () => {
   try {
     isLoading.value = true;
-    errorMessage.value = "";
+    const response = await axios.post("https://suivi-humeurs-funes.onrender.com/api/auth/login", {
+      email: email.value,
+      password: password.value,
+    }, { timeout: 10000 });
 
-    const response = await fetch("https://suivi-humeurs-funes.onrender.com/api/humeurs", {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
+    if (response.status === 200 && response.data.token) {
+      const { token, user } = response.data;
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("userId", user._id);
+      showMessage("Connexion réussie!", "success");
 
-    if (!response.ok) throw new Error("Impossible de récupérer les humeurs");
-
-    const data = await response.json();
-    console.log("Data reçues:", data);
-    moods.value = data.slice(0, 4).map((mood) => ({
-      ...mood,
-      imageLoaded: false,
-    }));
-
+      await router.push("/profil");
+      message.value = ""; // Nettoie le message après redirection
+    }
   } catch (error) {
-    errorMessage.value = "Une erreur est survenue lors du chargement des humeurs.";
-    console.error(error);
+    showMessage(error.response?.data.message || "Problème de connexion au serveur.", "error");
   } finally {
     isLoading.value = false;
-  }
-};
-
-
-// Scroll listener to show sections
-const checkSectionVisibility = () => {
-  const conceptSection = document.querySelector(".concept-section");
-  const moodSection = document.querySelector(".mood-section");
-
-  const conceptInView =
-    conceptSection && conceptSection.getBoundingClientRect().top < window.innerHeight;
-  const moodInView =
-    moodSection && moodSection.getBoundingClientRect().top < window.innerHeight;
-
-  isConceptVisible.value = conceptInView;
-  isMoodVisible.value = moodInView;
-};
-
-// Scroll event listener
-onMounted(() => {
-  console.log("onMounted déclenché"); // Pour voir si le composant est bien monté
-  window.addEventListener("scroll", checkSectionVisibility);
-  fetchMoods();
-});
-
-
-// Cleanup event listener
-onUnmounted(() => {
-  window.removeEventListener("scroll", checkSectionVisibility);
-});
-
-// Navigation
-const goToRegister = async () => {
-  isNavigating.value = true;
-  try {
-    await navigateTo("/register");
-  } finally {
-    isNavigating.value = false;
   }
 };
 </script>
