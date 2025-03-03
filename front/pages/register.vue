@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 const nom = ref('');
@@ -141,16 +141,48 @@ const registerUser = async () => {
   }
 };
 
-const signInWithGoogle = async () => {
+const signInWithGoogle = () => {
+  google.accounts.id.initialize({
+    client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
+    callback: handleGoogleResponse,
+  });
+
+  google.accounts.id.prompt();
+};
+
+const handleGoogleResponse = async (response) => {
   try {
-    const response = await axios.get('https://suivi-humeurs-funes.onrender.com/api/auth/google');
-    window.location.href = response.data.url;
+    const { credential } = response;
+
+    const res = await axios.post("https://suivi-humeurs-funes.onrender.com/api/auth/google", {
+      token: credential,
+    });
+
+    const { token, user } = res.data;
+    localStorage.setItem("authToken", token);
+    localStorage.setItem("userId", user._id);
+
+    showMessage("Connexion réussie!", "success");
+    navigateTo("/profil");
   } catch (error) {
-    showMessage("Une erreur est survenue lors de la connexion avec Google", 'error');
+    showMessage("Erreur lors de la connexion avec Google", "error");
   }
 };
-</script>
 
+onMounted(() => {
+  if (window.google) {
+    google.accounts.id.initialize({
+      client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
+      callback: handleGoogleResponse,
+      auto_select: true, // "One Tap" sign-in
+    });
+
+    google.accounts.id.prompt();
+  } else {
+    showMessage("Google API non chargé", "error");
+  }
+});
+</script>
 
 <style scoped>
 .register-page {
