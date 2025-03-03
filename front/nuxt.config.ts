@@ -5,12 +5,12 @@ export default defineNuxtConfig({
 
   modules: [
     "@pinia/nuxt",
-    "@nuxtjs/tailwindcss",
+    "@nuxtjs/tailwindcss", // Ajout de TailwindCSS
   ],
 
   runtimeConfig: {
     public: {
-      apiBase: "https://suivi-humeurs-back.onrender.com/api", 
+      apiBase: "https://suivi-humeurs-back.onrender.com/api", // Assurez-vous que c'est bien l'URL du backend
     },
   },
 
@@ -60,4 +60,4 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: "2025-01-22",
-});
+})
