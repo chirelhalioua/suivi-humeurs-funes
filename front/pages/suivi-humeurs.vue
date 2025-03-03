@@ -1,3 +1,233 @@
+<template>
+  <div class="mood-tracking-page">
+    <!-- Header avec navigation -->
+    <div class="tracking-header">
+      <h1>Suivi des Humeurs</h1>
+      <div class="view-toggle">
+        <button
+          :class="['toggle-btn', { active: view === 'daily' }]"
+          @click="changeView('daily')"
+        >
+          <i class="fas fa-calendar-day"></i>
+          Journalier
+        </button>
+        <button
+          :class="['toggle-btn', { active: view === 'weekly' }]"
+          @click="changeView('weekly')"
+        >
+          <i class="fas fa-calendar-week"></i>
+          Hebdomadaire
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div v-if="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement de vos humeurs...</p>
+    </div>
+
+    <div v-else>
+      <!-- Vue Journalière -->
+      <div v-if="view === 'daily'" class="daily-view">
+        <div class="date-selector">
+          <button class="nav-btn" @click="previousDay">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <div class="current-date">
+            <h2>{{ formatDate(selectedDate) }}</h2>
+            <p>{{ days[selectedDate.getDay()] }}</p>
+          </div>
+          <button
+            class="nav-btn"
+            @click="nextDay"
+            :disabled="isToday(selectedDate)"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="moods-container">
+          <!-- Humeur du Matin -->
+          <div class="mood-card morning">
+            <div class="time-label">
+              <i class="fas fa-sun"></i>
+              Matin
+            </div>
+            <div v-if="morningData[selectedDate.getDay()]" class="mood-content">
+              <div class="mood-image-container">
+                <img
+                  :src="morningData[selectedDate.getDay()].image"
+                  :alt="morningData[selectedDate.getDay()].title"
+                  class="mood-image"
+                />
+              </div>
+              <div class="mood-details">
+                <h3>{{ morningData[selectedDate.getDay()].title }}</h3>
+                <p>{{ morningData[selectedDate.getDay()].subtitle }}</p>
+              </div>
+            </div>
+            <div v-else class="mood-empty">
+              <i class="fas fa-cloud"></i>
+              <p>Pas d'humeur enregistrée</p>
+            </div>
+          </div>
+
+          <!-- Humeur du Soir -->
+          <div class="mood-card evening">
+            <div class="time-label">
+              <i class="fas fa-moon"></i>
+              Soir
+            </div>
+            <div v-if="eveningData[selectedDate.getDay()]" class="mood-content">
+              <div class="mood-image-container">
+                <img
+                  :src="eveningData[selectedDate.getDay()].image"
+                  :alt="eveningData[selectedDate.getDay()].title"
+                  class="mood-image"
+                />
+              </div>
+              <div class="mood-details">
+                <h3>{{ eveningData[selectedDate.getDay()].title }}</h3>
+                <p>{{ eveningData[selectedDate.getDay()].subtitle }}</p>
+              </div>
+            </div>
+            <div v-else class="mood-empty">
+              <i class="fas fa-cloud"></i>
+              <p>Pas d'humeur enregistrée</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, computed } from "vue";
+import axios from "axios";
+
+// État
+const view = ref("daily");
+const selectedDate = ref(new Date());
+const isLoading = ref(true);
+const morningData = ref([]);
+const eveningData = ref([]);
+
+// Constantes
+const days = [
+  "Dimanche",
+  "Lundi",
+  "Mardi",
+  "Mercredi",
+  "Jeudi",
+  "Vendredi",
+  "Samedi",
+];
+
+// Dates de la semaine
+const weekDates = computed(() => {
+  const dates = [];
+  const currentDate = new Date(selectedDate.value);
+  const firstDay = new Date(
+    currentDate.setDate(currentDate.getDate() - currentDate.getDay()),
+  );
+
+  for (let i = 0; i < 7; i++) {
+    dates.push(
+      new Date(
+        firstDay.getFullYear(),
+        firstDay.getMonth(),
+        firstDay.getDate() + i,
+      ),
+    );
+  }
+
+  return dates;
+});
+
+// Formatage des dates
+const formatDate = (date) => {
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+};
+
+const formatDateShort = (date) => {
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "short",
+  }).format(date);
+};
+
+// Vérification si la date est aujourd'hui
+const isToday = (date) => {
+  const today = new Date();
+  return date.toDateString() === today.toDateString();
+};
+
+// Navigation entre les jours
+const previousDay = () => {
+  selectedDate.value = new Date(
+    selectedDate.value.setDate(selectedDate.value.getDate() - 1),
+  );
+};
+
+const nextDay = () => {
+  if (!isToday(selectedDate.value)) {
+    selectedDate.value = new Date(
+      selectedDate.value.setDate(selectedDate.value.getDate() + 1),
+    );
+  }
+};
+
+// Récupérer les données d'humeur
+const fetchMoodData = async () => {
+  try {
+    const token = localStorage.getItem("authToken");  // Exemple avec localStorage
+
+    // Récupérer l'ID utilisateur
+    const userResponse = await axios.get("https://suivi-humeurs-funes.onrender.com/api/auth/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // Récupérer les humeurs
+    const moodsResponse = await axios.get(
+      `https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userResponse.data._id}`,
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+
+    // Réinitialiser les tableaux
+    morningData.value = Array(7).fill(null);
+    eveningData.value = Array(7).fill(null);
+
+    // Traiter les données
+    for (const entry of moodsResponse.data) {
+      const moodDetails = await axios.get(
+        `https://suivi-humeurs-funes.onrender.com/api/humeurs/${entry.humeurId}`,
+      );
+
+      const dayIndex = new Date(entry.date).getDay();
+
+      if (entry.timeOfDay === "morning") {
+        morningData.value[dayIndex] = moodDetails.data;
+      } else {
+        eveningData.value[dayIndex] = moodDetails.data;
+      }
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération des données:", error);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// Initialisation
+onMounted(fetchMoodData);
+</script>
+
 <style scoped>
 /* Variables */
 :root {
