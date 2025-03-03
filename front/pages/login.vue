@@ -15,21 +15,21 @@
 
         <form @submit.prevent="loginUser" class="login-form">
           <div class="form-group">
-            <label for="email">Email</label>
-            <input v-model="email" type="email" id="email" placeholder="Votre email" required />
+            <label for="email" class="form-label">Email</label>
+            <input v-model="email" type="email" id="email" class="form-input" placeholder="Votre email" required />
           </div>
 
           <div class="form-group">
-            <label for="password">Mot de passe</label>
+            <label for="password" class="form-label">Mot de passe</label>
             <div class="input-container">
-              <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" placeholder="Votre mot de passe" required />
-              <button type="button" @click="showPassword = !showPassword" aria-label="Afficher/Masquer le mot de passe">
+              <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" class="form-input" placeholder="Votre mot de passe" required />
+              <button type="button" @click="showPassword = !showPassword" class="password-toggle" aria-label="Afficher/Masquer le mot de passe">
                 {{ showPassword ? '🙈' : '👁️' }}
               </button>
             </div>
           </div>
 
-          <button type="submit" :disabled="isLoading">{{ isLoading ? 'Connexion...' : 'Se connecter' }}</button>
+          <button type="submit" class="submit-btn" :disabled="isLoading">{{ isLoading ? 'Connexion...' : 'Se connecter' }}</button>
         </form>
 
         <transition name="fade">
@@ -128,7 +128,6 @@ useHead({
   script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true }],
 });
 </script>
-
 
 <style scoped>
 .login-page {
