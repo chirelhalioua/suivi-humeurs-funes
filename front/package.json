@@ -9,8 +9,9 @@
     "postinstall": "npm install @vueuse/head @pinia/nuxt @nuxtjs/tailwindcss"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "@nuxtjs/axios": "^5.13.6",
-    "@nuxtjs/tailwindcss": "^6.0.0",
+    "@nuxtjs/tailwindcss": "^6.0.0", 
     "@vueuse/head": "^1.0.0",
     "@pinia/nuxt": "^0.4.5",
     "nuxt": "^3.15.2",
