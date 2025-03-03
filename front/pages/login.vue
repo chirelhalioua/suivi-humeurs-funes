@@ -85,60 +85,240 @@ const signInWithGoogle = () => {
 
 <style scoped>
 .login-page {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background: #f4e4bc;
+  background-color: #f4e4bc;
+  padding: 20px;
 }
 
 .login-container {
+  width: 100%;
+  max-width: 440px;
   background: white;
-  padding: 40px;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.login-content {
+  padding: 40px;
 }
 
 .login-title {
-  text-align: center;
+  font-family: "Sora", sans-serif;
   font-size: 32px;
+  font-weight: bold;
+  color: #2c1810;
+  text-align: center;
+  margin-bottom: 8px;
 }
 
-.social-login button,
-button[type='submit'] {
+.login-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 32px;
+}
+
+.social-login {
+  margin-bottom: 24px;
+}
+
+.google-btn {
   width: 100%;
   padding: 12px;
-  background: #4caf50;
-  color: white;
-  border: none;
+  background-color: white;
+  border: 2px solid #e0e0e0;
   border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
 }
 
-button[type='submit']:disabled {
-  background: #ccc;
+.google-btn:hover {
+  background-color: #f8f8f8;
+  border-color: #d0d0d0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.google-icon {
+  width: 24px;
+  height: 24px;
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
-input {
+.form-label {
+  display: block;
+  font-weight: 500;
+  color: #2c1810;
+  margin-bottom: 8px;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  color: #666;
+}
+
+.form-input {
   width: 100%;
-  padding: 12px;
+  padding: 12px 16px 12px 40px;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #4caf50;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+}
+
+.forgot-password {
+  color: #4caf50;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+.submit-btn.loading {
+  background-color: #45a049;
+  cursor: wait;
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+  display: inline-block;
 }
 
 .message {
-  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 12px;
   border-radius: 8px;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.message.success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
 }
 
 .message.error {
-  background: #ffebee;
+  background-color: #ffebee;
   color: #c62828;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 24px;
+  color: #666;
+}
+
+.highlight-link {
+  color: #4caf50;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.highlight-link:hover {
+  color: #45a049;
+  text-decoration: underline;
+}
+
+/* Animations */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Media Queries */
+@media (max-width: 480px) {
+  .login-content {
+    padding: 24px;
+  }
+
+  .form-options {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
 }
 </style>
