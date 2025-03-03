@@ -16,12 +16,16 @@
         <form @submit.prevent="loginUser" class="login-form">
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
-            <input v-model="email" type="email" id="email" class="form-input" placeholder="Votre email" required />
+            <div class="input-container">
+              <i class="fas fa-envelope input-icon"></i>
+              <input v-model="email" type="email" id="email" class="form-input" placeholder="Votre email" required />
+            </div>
           </div>
 
           <div class="form-group">
             <label for="password" class="form-label">Mot de passe</label>
             <div class="input-container">
+              <i class="fas fa-lock input-icon"></i>
               <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" class="form-input" placeholder="Votre mot de passe" required />
               <button type="button" @click="showPassword = !showPassword" class="password-toggle" aria-label="Afficher/Masquer le mot de passe">
                 {{ showPassword ? '🙈' : '👁️' }}
@@ -111,6 +115,12 @@ const handleGoogleResponse = async (response) => {
 };
 
 onMounted(() => {
+  useHead({
+    script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true, onload: initializeGoogleSignIn }],
+  });
+});
+
+const initializeGoogleSignIn = () => {
   if (window.google) {
     google.accounts.id.initialize({
       client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
@@ -122,11 +132,7 @@ onMounted(() => {
   } else {
     showMessage("Google API non chargé", "error");
   }
-});
-
-useHead({
-  script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true }],
-});
+};
 </script>
 
 <style scoped>
