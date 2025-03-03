@@ -16,22 +16,18 @@
         <form @submit.prevent="loginUser" class="login-form">
           <div class="form-group">
             <label for="email">Email</label>
-            <input v-model="email" type="email" id="email" placeholder="Votre email" required class="form-input" />
+            <input v-model="email" type="email" id="email" placeholder="Votre email" required />
           </div>
 
           <div class="form-group">
             <label for="password">Mot de passe</label>
-            <div class="input-container">
-              <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" placeholder="Votre mot de passe" required class="form-input" />
-              <button type="button" @click="showPassword = !showPassword" class="password-toggle">
-                {{ showPassword ? '🙈' : '👁️' }}
-              </button>
-            </div>
+            <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" placeholder="Votre mot de passe" required />
+            <button type="button" @click="showPassword = !showPassword">
+              {{ showPassword ? '🙈' : '👁️' }}
+            </button>
           </div>
 
-          <button type="submit" :disabled="isLoading" class="submit-btn">
-            {{ isLoading ? 'Connexion...' : 'Se connecter' }}
-          </button>
+          <button type="submit" :disabled="isLoading">{{ isLoading ? 'Connexion...' : 'Se connecter' }}</button>
         </form>
 
         <transition name="fade">
@@ -43,9 +39,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useHead } from '@vueuse/head';
 
 const email = ref('');
 const password = ref('');
@@ -58,7 +55,7 @@ const router = useRouter();
 const showMessage = (text, type) => {
   message.value = text;
   messageClass.value = type;
-  setTimeout(() => (message.value = ''), 5000);
+  setTimeout(() => message.value = '', 5000);
 };
 
 const loginUser = async () => {
@@ -66,12 +63,12 @@ const loginUser = async () => {
     isLoading.value = true;
     const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/login', {
       email: email.value,
-      password: password.value,
+      password: password.value
     });
 
     if (response.status === 200 && response.data.token) {
       localStorage.setItem('authToken', response.data.token);
-      router.push('/profil').then(() => (message.value = ''));
+      router.push('/profil').then(() => message.value = '');
     } else {
       showMessage('Problème de connexion au serveur.', 'error');
     }
@@ -82,9 +79,40 @@ const loginUser = async () => {
   }
 };
 
-const signInWithGoogle = () => {
-  console.log('Google sign-in');
+const handleGoogleResponse = (response) => {
+  console.log('Google response:', response);
+  // Traitement de la réponse OAuth ici
 };
+
+const signInWithGoogle = () => {
+  if (window.google) {
+    google.accounts.id.initialize({
+      client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
+      callback: handleGoogleResponse,
+      auto_select: true, // "One Tap" sign-in
+    });
+    google.accounts.id.prompt();
+  } else {
+    showMessage("Google API non chargé", "error");
+  }
+};
+
+onMounted(() => {
+  if (window.google) {
+    google.accounts.id.initialize({
+      client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
+      callback: handleGoogleResponse,
+      auto_select: true,
+    });
+    google.accounts.id.prompt();
+  } else {
+    showMessage("Google API non chargé", "error");
+  }
+});
+
+useHead({
+  script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true }],
+});
 </script>
 
 <style scoped>
@@ -111,6 +139,7 @@ const signInWithGoogle = () => {
 }
 
 .login-title {
+  font-family: "Sora", sans-serif;
   font-size: 32px;
   font-weight: bold;
   color: #2c1810;
@@ -137,30 +166,89 @@ const signInWithGoogle = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .google-btn:hover {
   background-color: #f8f8f8;
+  border-color: #d0d0d0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.google-icon {
+  width: 24px;
+  height: 24px;
 }
 
 .form-group {
   margin-bottom: 24px;
 }
 
+.form-label {
+  display: block;
+  font-weight: 500;
+  color: #2c1810;
+  margin-bottom: 8px;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  color: #666;
+}
+
 .form-input {
   width: 100%;
-  padding: 12px;
+  padding: 12px 16px 12px 40px;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #4caf50;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
 .password-toggle {
+  position: absolute;
+  right: 12px;
   background: none;
   border: none;
+  color: #666;
   cursor: pointer;
+  padding: 4px;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+}
+
+.forgot-password {
+  color: #4caf50;
+  text-decoration: none;
+  font-size: 14px;
 }
 
 .submit-btn {
@@ -174,9 +262,95 @@ const signInWithGoogle = () => {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
 }
 
 .submit-btn:hover {
   background-color: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+.submit-btn.loading {
+  background-color: #45a049;
+  cursor: wait;
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.message.success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.message.error {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 24px;
+  color: #666;
+}
+
+.highlight-link {
+  color: #4caf50;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.highlight-link:hover {
+  color: #45a049;
+  text-decoration: underline;
+}
+
+/* Animations */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Media Queries */
+@media (max-width: 480px) {
+  .login-content {
+    padding: 24px;
+  }
+
+  .form-options {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
 }
 </style>
