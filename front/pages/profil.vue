@@ -111,6 +111,7 @@ const fetchUserProfile = async () => {
 
     if (response.data?.user) {
       user.value = response.data.user;
+      console.log("Profil chargé:", user.value);
     } else {
       throw new Error("Profil non trouvé");
     }
@@ -160,11 +161,8 @@ onMounted(fetchUserProfile);
 :root {
   --primary-color: #4caf50;
   --danger-color: #dc3545;
-  --warning-color: #ffc107;
   --text-color: #2c1810;
   --bg-color: #f4e4bc;
-  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --transition: all 0.3s ease;
 }
 
 /* Page Layout */
@@ -177,115 +175,6 @@ onMounted(fetchUserProfile);
 .profile-container {
   max-width: 800px;
   margin: 0 auto;
-  animation: fadeIn 0.5s ease;
-}
-
-/* Profile Header */
-.profile-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.profile-avatar {
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(135deg, #4caf50, #45a049);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-  color: white;
-  margin: 0 auto 20px;
-  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
-}
-
-.profile-header h1 {
-  font-family: "Sora", sans-serif;
-  color: var(--text-color);
-  font-size: 2rem;
-  margin: 0;
-}
-
-/* Info Card */
-.info-card {
-  background: white;
-  border-radius: 16px;
-  padding: 30px;
-  margin-bottom: 30px;
-  box-shadow: var(--card-shadow);
-}
-
-.info-item {
-  display: flex;
-  align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.info-item:last-child {
-  border-bottom: none;
-}
-
-.info-item i {
-  font-size: 24px;
-  color: var(--primary-color);
-  width: 40px;
-}
-
-.info-content {
-  margin-left: 15px;
-}
-
-.info-content label {
-  font-size: 0.9rem;
-  color: #666;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.info-content p {
-  font-size: 1.1rem;
-  color: var(--text-color);
-  margin: 0;
-}
-
-/* Action Cards */
-.action-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.action-card {
-  background: white;
-  border: none;
-  border-radius: 16px;
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: var(--card-shadow);
-}
-
-.action-card i {
-  font-size: 32px;
-  color: var(--primary-color);
-}
-
-.action-card span {
-  font-size: 1.1rem;
-  color: var(--text-color);
-  font-weight: 500;
-}
-
-.action-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Account Actions */
@@ -307,7 +196,7 @@ onMounted(fetchUserProfile);
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
 }
 
 .logout-btn {
@@ -320,8 +209,9 @@ onMounted(fetchUserProfile);
 }
 
 .delete-btn {
-  background-color: #ff473a;
-  color: var(--danger-color);
+  background-color: var(--danger-color);
+  color: white;
+  display: flex;
 }
 
 .delete-btn:hover {
@@ -352,39 +242,9 @@ onMounted(fetchUserProfile);
   text-align: center;
 }
 
-.modal-icon {
-  font-size: 48px;
-  color: var(--warning-color);
-  margin-bottom: 20px;
-}
-
-.modal-content h2 {
-  color: var(--text-color);
-  margin-bottom: 15px;
-}
-
-.modal-content p {
-  color: #666;
-  margin-bottom: 25px;
-}
-
 .modal-actions {
   display: flex;
   gap: 15px;
-}
-
-.modal-actions button {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: var(--transition);
 }
 
 .cancel-btn {
@@ -397,61 +257,8 @@ onMounted(fetchUserProfile);
   color: white;
 }
 
-/* Loading State */
-.loading-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid var(--primary-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 20px;
-}
-
-/* Animations */
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.modal-enter-active,
-.modal-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.modal-enter-from,
-.modal-leave-to {
-  opacity: 0;
-}
-
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
-  .profile-container {
-    padding: 20px;
-  }
-
-  .action-cards {
-    grid-template-columns: 1fr;
-  }
-
   .modal-actions {
     flex-direction: column;
   }
