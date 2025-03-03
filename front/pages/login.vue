@@ -6,7 +6,7 @@
         <p class="login-subtitle">Bienvenue sur Les Humeurs à la Funès</p>
 
         <div class="social-login">
-          <button @click="signInWithGoogle" class="google-btn">
+          <button @click="signInWithGoogle" class="google-btn" aria-label="Continuer avec Google">
             <span>Continuer avec Google</span>
           </button>
         </div>
@@ -21,17 +21,19 @@
 
           <div class="form-group">
             <label for="password">Mot de passe</label>
-            <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" placeholder="Votre mot de passe" required />
-            <button type="button" @click="showPassword = !showPassword">
-              {{ showPassword ? '🙈' : '👁️' }}
-            </button>
+            <div class="input-container">
+              <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" placeholder="Votre mot de passe" required />
+              <button type="button" @click="showPassword = !showPassword" aria-label="Afficher/Masquer le mot de passe">
+                {{ showPassword ? '🙈' : '👁️' }}
+              </button>
+            </div>
           </div>
 
           <button type="submit" :disabled="isLoading">{{ isLoading ? 'Connexion...' : 'Se connecter' }}</button>
         </form>
 
         <transition name="fade">
-          <div v-if="message" :class="['message', messageClass]">{{ message }}</div>
+          <div v-if="message" :class="['message', messageClass]" role="alert">{{ message }}</div>
         </transition>
       </div>
     </div>
@@ -122,11 +124,11 @@ onMounted(() => {
   }
 });
 
-
 useHead({
   script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true }],
 });
 </script>
+
 
 <style scoped>
 .login-page {
