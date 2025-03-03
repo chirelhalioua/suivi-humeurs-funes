@@ -67,10 +67,7 @@
             <i class="fas fa-exclamation-triangle"></i>
           </div>
           <h2>Supprimer le profil ?</h2>
-          <p>
-            Cette action est irréversible. Toutes vos données seront
-            définitivement supprimées.
-          </p>
+          <p>Cette action est irréversible. Toutes vos données seront définitivement supprimées.</p>
           <div class="modal-actions">
             <button class="cancel-btn" @click="cancelDelete">
               <i class="fas fa-times"></i>
@@ -111,7 +108,6 @@ const fetchUserProfile = async () => {
 
     if (response.data?.user) {
       user.value = response.data.user;
-      console.log("Profil chargé:", user.value);
     } else {
       throw new Error("Profil non trouvé");
     }
@@ -157,15 +153,14 @@ onMounted(fetchUserProfile);
 </script>
 
 <style scoped>
-/* Variables */
 :root {
   --primary-color: #4caf50;
   --danger-color: #dc3545;
   --text-color: #2c1810;
   --bg-color: #f4e4bc;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Page Layout */
 .profile-page {
   min-height: 100vh;
   background-color: var(--bg-color);
@@ -177,7 +172,38 @@ onMounted(fetchUserProfile);
   margin: 0 auto;
 }
 
-/* Account Actions */
+.profile-header {
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  color: white;
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.action-cards {
+  display: flex;
+  gap: 15px;
+}
+
+.action-card {
+  flex: 1;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+  cursor: pointer;
+  text-align: center;
+}
+
 .account-actions {
   display: flex;
   flex-direction: column;
@@ -186,39 +212,26 @@ onMounted(fetchUserProfile);
 
 .logout-btn,
 .delete-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
   padding: 15px;
   border: none;
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logout-btn {
   background-color: #f8f9fa;
-  color: #666;
-}
-
-.logout-btn:hover {
-  background-color: #e9ecef;
 }
 
 .delete-btn {
   background-color: var(--danger-color);
   color: white;
-  display: flex;
 }
 
-.delete-btn:hover {
-  background-color: #f9837a;
-}
-
-/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -229,7 +242,6 @@ onMounted(fetchUserProfile);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
   z-index: 1000;
 }
 
@@ -237,8 +249,6 @@ onMounted(fetchUserProfile);
   background: white;
   border-radius: 16px;
   padding: 30px;
-  max-width: 400px;
-  width: 100%;
   text-align: center;
 }
 
@@ -249,18 +259,10 @@ onMounted(fetchUserProfile);
 
 .cancel-btn {
   background-color: #f8f9fa;
-  color: #666;
 }
 
 .confirm-btn {
   background-color: var(--danger-color);
   color: white;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .modal-actions {
-    flex-direction: column;
-  }
 }
 </style>
