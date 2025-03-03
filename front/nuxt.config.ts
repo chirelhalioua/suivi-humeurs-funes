@@ -10,7 +10,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: "https://suivi-humeurs-back.onrender.com/api", // Assurez-vous que c'est bien l'URL du backend
+      apiBase: "https://suivi-humeurs-back.onrender.com/api",
     },
   },
 
@@ -55,7 +55,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['@vueuse/head'],
     rollupOptions: {
-      external: ['@vueuse/head']
+      external: ['@vueuse/head', 'axios'] // Ajout de 'axios'
     }
   },
 
