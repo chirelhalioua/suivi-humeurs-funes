@@ -8,7 +8,9 @@ export default defineNuxtConfig({
     '@nuxt/content',
     "@nuxtjs/tailwindcss", // Ajout de TailwindCSS
   ],
-
+ content: {
+    // Options du module @nuxt/content
+ },
   runtimeConfig: {
     public: {
       apiBase: "https://suivi-humeurs-back.onrender.com/api",
