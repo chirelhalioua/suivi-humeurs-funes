@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="mood-tracking-page">
     <!-- Header avec navigation -->
     <div class="tracking-header">
@@ -99,10 +99,68 @@
           </div>
         </div>
       </div>
+
+      <!-- Vue Hebdomadaire -->
+      <div v-if="view === 'weekly'" class="weekly-view">
+        <div class="week-container">
+          <div
+            v-for="(date, index) in weekDates"
+            :key="index"
+            class="week-day"
+          >
+            <div class="date-info">
+              <h3>{{ formatDateShort(date) }}</h3>
+              <p>{{ days[date.getDay()] }}</p>
+            </div>
+
+            <!-- Humeur du Matin -->
+            <div class="mood-card morning">
+              <div v-if="morningData[index]" class="mood-content">
+                <div class="mood-image-container">
+                  <img
+                    :src="morningData[index].image"
+                    :alt="morningData[index].title"
+                    class="mood-image"
+                  />
+                </div>
+                <div class="mood-details">
+                  <h3>{{ morningData[index].title }}</h3>
+                  <p>{{ morningData[index].subtitle }}</p>
+                </div>
+              </div>
+              <div v-else class="mood-empty">
+                <i class="fas fa-cloud"></i>
+                <p>Pas d'humeur enregistrée</p>
+              </div>
+            </div>
+
+            <!-- Humeur du Soir -->
+            <div class="mood-card evening">
+              <div v-if="eveningData[index]" class="mood-content">
+                <div class="mood-image-container">
+                  <img
+                    :src="eveningData[index].image"
+                    :alt="eveningData[index].title"
+                    class="mood-image"
+                  />
+                </div>
+                <div class="mood-details">
+                  <h3>{{ eveningData[index].title }}</h3>
+                  <p>{{ eveningData[index].subtitle }}</p>
+                </div>
+              </div>
+              <div v-else class="mood-empty">
+                <i class="fas fa-cloud"></i>
+                <p>Pas d'humeur enregistrée</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</template>
-
+</template>        
+        
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
