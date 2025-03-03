@@ -5,8 +5,8 @@
         <h1 class="register-title">Inscription</h1>
         <p class="register-subtitle">Rejoignez Les Humeurs à la Funès</p>
 
-         <!-- Bouton Google -->
-         <div class="social-login">
+        <!-- Bouton Google -->
+        <div class="social-login">
           <button @click="signInWithGoogle" class="google-btn">
             <span>Continuer avec Google</span>
           </button>
@@ -17,138 +17,67 @@
         </div>
 
         <form @submit.prevent="registerUser" class="register-form">
-          <!-- Nom et Prénom -->
           <div class="form-group">
             <label for="nom" class="form-label">Nom et Prénom</label>
             <div class="input-container">
               <i class="fas fa-user input-icon"></i>
-              <input
-                v-model="nom"
-                type="text"
-                id="nom"
-                class="form-input"
-                placeholder="Votre nom complet"
-                required
-              />
+              <input v-model="nom" type="text" id="nom" class="form-input" placeholder="Votre nom complet" required />
             </div>
           </div>
 
-          <!-- Email -->
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
             <div class="input-container">
               <i class="fas fa-envelope input-icon"></i>
-              <input
-                v-model="email"
-                type="email"
-                id="email"
-                class="form-input"
-                placeholder="Votre email"
-                required
-              />
+              <input v-model="email" type="email" id="email" class="form-input" placeholder="Votre email" required />
             </div>
           </div>
 
-          <!-- Mot de passe -->
           <div class="form-group">
             <label for="password" class="form-label">Mot de passe</label>
             <div class="input-container">
               <i class="fas fa-lock input-icon"></i>
-              <input
-                v-model="password"
-                :type="showPassword ? 'text' : 'password'"
-                id="password"
-                class="form-input"
-                placeholder="Votre mot de passe"
-                required
-              />
-              <button
-                type="button"
-                class="password-toggle"
-                @click="showPassword = !showPassword"
-              >
-                <i
-                  :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"
-                ></i>
+              <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" class="form-input" placeholder="Votre mot de passe" required />
+              <button type="button" class="password-toggle" @click="showPassword = !showPassword">
+                <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
               </button>
             </div>
           </div>
 
-          <!-- Confirmation du mot de passe -->
           <div class="form-group">
-            <label for="confirm-password" class="form-label"
-              >Confirmer le mot de passe</label
-            >
+            <label for="confirm-password" class="form-label">Confirmer le mot de passe</label>
             <div class="input-container">
               <i class="fas fa-lock input-icon"></i>
-              <input
-                v-model="confirmPassword"
-                :type="showConfirmPassword ? 'text' : 'password'"
-                id="confirm-password"
-                class="form-input"
-                placeholder="Confirmez votre mot de passe"
-                required
-              />
-              <button
-                type="button"
-                class="password-toggle"
-                @click="showConfirmPassword = !showConfirmPassword"
-              >
-                <i
-                  :class="
-                    showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'
-                  "
-                ></i>
+              <input v-model="confirmPassword" :type="showConfirmPassword ? 'text' : 'password'" id="confirm-password" class="form-input" placeholder="Confirmez votre mot de passe" required />
+              <button type="button" class="password-toggle" @click="showConfirmPassword = !showConfirmPassword">
+                <i :class="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
               </button>
             </div>
           </div>
 
-          <!-- Conditions d'utilisation -->
           <div class="form-group terms">
             <label class="checkbox-container">
               <input type="checkbox" v-model="acceptTerms" required />
               <span class="checkmark"></span>
-              <span class="terms-text">
-                J'accepte les
-                <NuxtLink to="/terms" class="highlight-link"
-                  >conditions d'utilisation</NuxtLink
-                >
-              </span>
+              <span class="terms-text">J'accepte les <NuxtLink to="/terms" class="highlight-link">conditions d'utilisation</NuxtLink></span>
             </label>
           </div>
 
-          <button
-            type="submit"
-            class="submit-btn"
-            :class="{ loading: isLoading }"
-          >
+          <button type="submit" class="submit-btn" :class="{ loading: isLoading }">
             <span v-if="!isLoading">S'inscrire</span>
             <span v-else class="loader"></span>
           </button>
         </form>
 
-        <!-- Message de confirmation ou d'erreur -->
         <Transition name="fade">
           <div v-if="message" :class="['message', messageClass]">
-            <i
-              :class="
-                messageClass === 'success'
-                  ? 'fas fa-check-circle'
-                  : 'fas fa-exclamation-circle'
-              "
-            ></i>
+            <i :class="messageClass === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'"></i>
             {{ message }}
           </div>
         </Transition>
 
-        <!-- Lien vers la connexion -->
         <div class="login-link">
-          <p>
-            Vous avez déjà un compte ?
-            <NuxtLink to="/login" class="highlight-link">
-              Connectez-vous ici
-            </NuxtLink>
-          </p>
+          <p>Vous avez déjà un compte ? <NuxtLink to="/login" class="highlight-link">Connectez-vous ici</NuxtLink></p>
         </div>
       </div>
     </div>
@@ -156,15 +85,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import axios from "axios";
+import { ref } from 'vue';
+import axios from 'axios';
 
-const nom = ref("");
-const email = ref("");
-const password = ref("");
-const confirmPassword = ref("");
-const message = ref("");
-const messageClass = ref("");
+const nom = ref('');
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const message = ref('');
+const messageClass = ref('');
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const acceptTerms = ref(false);
@@ -174,49 +103,54 @@ const showMessage = (text, type) => {
   message.value = text;
   messageClass.value = type;
   setTimeout(() => {
-    message.value = "";
+    message.value = '';
   }, 5000);
 };
 
 const registerUser = async () => {
   if (!acceptTerms.value) {
-    showMessage("Veuillez accepter les conditions d'utilisation", "error");
+    showMessage("Veuillez accepter les conditions d'utilisation", 'error');
     return;
   }
 
   if (password.value !== confirmPassword.value) {
-    showMessage("Les mots de passe ne correspondent pas!", "error");
+    showMessage('Les mots de passe ne correspondent pas!', 'error');
     return;
   }
 
   try {
     isLoading.value = true;
-    const response = await axios.post(
-      "https://suivi-humeurs-funes.onrender.com/api/auth/register",
-      {
-        name: nom.value,
-        email: email.value,
-        password: password.value,
-      },
-    );
+    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/register', {
+      name: nom.value,
+      email: email.value,
+      password: password.value,
+    });
 
-    showMessage("Inscription réussie! Vous allez être redirigé...", "success");
-
-    // Redirection après 2 secondes
+    showMessage('Inscription réussie! Vous allez être redirigé...', 'success');
     setTimeout(() => {
-      navigateTo("/login");
+      navigateTo('/login');
     }, 2000);
   } catch (error) {
     if (error.response?.data?.message) {
-      showMessage(error.response.data.message, "error");
+      showMessage(error.response.data.message, 'error');
     } else {
-      showMessage("Une erreur est survenue lors de l'inscription", "error");
+      showMessage("Une erreur est survenue lors de l'inscription", 'error');
     }
   } finally {
     isLoading.value = false;
   }
 };
+
+const signInWithGoogle = async () => {
+  try {
+    const response = await axios.get('https://suivi-humeurs-funes.onrender.com/api/auth/google');
+    window.location.href = response.data.url;
+  } catch (error) {
+    showMessage("Une erreur est survenue lors de la connexion avec Google", 'error');
+  }
+};
 </script>
+
 
 <style scoped>
 .register-page {
