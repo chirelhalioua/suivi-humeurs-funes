@@ -6,12 +6,13 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "postinstall": "npm install @vueuse/head"
+    "postinstall": "npm install @vueuse/head @pinia/nuxt" // Ajout de cette ligne
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/tailwindcss": "^4.0.3",
     "@vueuse/head": "^1.0.0",
+    "@pinia/nuxt": "^0.4.5",  // Ajout de cette ligne
     "nuxt": "^3.0.0",
     "vue-router": "^4.0.12"
   },
