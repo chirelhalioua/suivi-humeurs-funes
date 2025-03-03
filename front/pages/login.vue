@@ -1,84 +1,40 @@
 <template>
-  <div class="register-page">
-    <div class="register-container">
-      <div class="register-content">
-        <h1 class="register-title">Inscription</h1>
-        <p class="register-subtitle">Rejoignez Les Humeurs à la Funès</p>
+  <div class="login-page">
+    <div class="login-container">
+      <div class="login-content">
+        <h1 class="login-title">Connexion</h1>
+        <p class="login-subtitle">Bienvenue sur Les Humeurs à la Funès</p>
 
-        <!-- Bouton Google -->
         <div class="social-login">
-          <button @click="signInWithGoogle" class="google-btn">
+          <button @click="signInWithGoogle" class="google-btn" aria-label="Continuer avec Google">
             <span>Continuer avec Google</span>
           </button>
         </div>
 
-        <div class="divider">
-          <span>ou</span>
-        </div>
+        <div class="divider"><span>ou</span></div>
 
-        <form @submit.prevent="registerUser" class="register-form">
-          <div class="form-group">
-            <label for="nom" class="form-label">Nom et Prénom</label>
-            <div class="input-container">
-              <i class="fas fa-user input-icon"></i>
-              <input v-model="nom" type="text" id="nom" class="form-input" placeholder="Votre nom complet" required />
-            </div>
-          </div>
-
+        <form @submit.prevent="loginUser" class="login-form">
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
-            <div class="input-container">
-              <i class="fas fa-envelope input-icon"></i>
-              <input v-model="email" type="email" id="email" class="form-input" placeholder="Votre email" required />
-            </div>
+            <input v-model="email" type="email" id="email" class="form-input" placeholder="Votre email" required />
           </div>
 
           <div class="form-group">
             <label for="password" class="form-label">Mot de passe</label>
             <div class="input-container">
-              <i class="fas fa-lock input-icon"></i>
               <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" class="form-input" placeholder="Votre mot de passe" required />
-              <button type="button" class="password-toggle" @click="showPassword = !showPassword">
+              <button type="button" @click="showPassword = !showPassword" class="password-toggle" aria-label="Afficher/Masquer le mot de passe">
                 {{ showPassword ? '🙈' : '👁️' }}
               </button>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="confirm-password" class="form-label">Confirmer le mot de passe</label>
-            <div class="input-container">
-              <i class="fas fa-lock input-icon"></i>
-              <input v-model="confirmPassword" :type="showConfirmPassword ? 'text' : 'password'" id="confirm-password" class="form-input" placeholder="Confirmez votre mot de passe" required />
-              <button type="button" class="password-toggle" @click="showConfirmPassword = !showConfirmPassword">
-                {{ showConfirmPassword ? '🙈' : '👁️' }}
-              </button>
-            </div>
-          </div>
-
-          <div class="form-group terms">
-            <label class="checkbox-container">
-              <input type="checkbox" v-model="acceptTerms" required />
-              <span class="checkmark"></span>
-              <span class="terms-text">J'accepte les <NuxtLink to="/terms" class="highlight-link">conditions d'utilisation</NuxtLink></span>
-            </label>
-          </div>
-
-          <button type="submit" class="submit-btn" :class="{ loading: isLoading }">
-            <span v-if="!isLoading">S'inscrire</span>
-            <span v-else class="loader"></span>
-          </button>
+          <button type="submit" class="submit-btn" :disabled="isLoading">{{ isLoading ? 'Connexion...' : 'Se connecter' }}</button>
         </form>
 
-        <Transition name="fade">
-          <div v-if="message" :class="['message', messageClass]">
-            <i :class="messageClass === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'"></i>
-            {{ message }}
-          </div>
-        </Transition>
-
-        <div class="login-link">
-          <p>Vous avez déjà un compte ? <NuxtLink to="/login" class="highlight-link">Connectez-vous ici</NuxtLink></p>
-        </div>
+        <transition name="fade">
+          <div v-if="message" :class="['message', messageClass]" role="alert">{{ message }}</div>
+        </transition>
       </div>
     </div>
   </div>
@@ -88,61 +44,44 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useHead } from '@vueuse/head';
 
-const nom = ref('');
 const email = ref('');
 const password = ref('');
-const confirmPassword = ref('');
+const showPassword = ref(false);
 const message = ref('');
 const messageClass = ref('');
-const showPassword = ref(false);
-const showConfirmPassword = ref(false);
-const acceptTerms = ref(false);
 const isLoading = ref(false);
 const router = useRouter();
 
 const showMessage = (text, type) => {
   message.value = text;
   messageClass.value = type;
-  setTimeout(() => {
-    message.value = '';
-  }, 5000);
+  setTimeout(() => message.value = '', 5000);
 };
 
-const registerUser = async () => {
-  if (!acceptTerms.value) {
-    showMessage("Veuillez accepter les conditions d'utilisation", 'error');
-    return;
-  }
-
-  if (password.value !== confirmPassword.value) {
-    showMessage('Les mots de passe ne correspondent pas!', 'error');
-    return;
-  }
-
+const loginUser = async () => {
   try {
     isLoading.value = true;
-    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/register', {
-      name: nom.value,
+    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/login', {
       email: email.value,
-      password: password.value,
+      password: password.value
     });
 
-    showMessage('Inscription réussie! Vous allez être redirigé...', 'success');
-    setTimeout(() => {
-      router.push('/login');
-    }, 2000);
-  } catch (error) {
-    if (error.response?.data?.message) {
-      showMessage(error.response.data.message, 'error');
+    if (response.status === 200 && response.data.token) {
+      localStorage.setItem('authToken', response.data.token);
+      router.push('/profil').then(() => message.value = '');
     } else {
-      showMessage("Une erreur est survenue lors de l'inscription", 'error');
+      showMessage('Problème de connexion au serveur.', 'error');
     }
+  } catch (error) {
+    showMessage(error.response?.data.message || 'Une erreur est survenue.', 'error');
   } finally {
     isLoading.value = false;
   }
 };
 
+// Connexion Google avec GIS
 const signInWithGoogle = () => {
   google.accounts.id.initialize({
     client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
@@ -184,10 +123,14 @@ onMounted(() => {
     showMessage("Google API non chargé", "error");
   }
 });
+
+useHead({
+  script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true }],
+});
 </script>
 
 <style scoped>
-.register-page {
+.login-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -196,20 +139,20 @@ onMounted(() => {
   padding: 20px;
 }
 
-.register-container {
+.login-container {
   width: 100%;
-  max-width: 500px;
+  max-width: 440px;
   background: white;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
-.register-content {
+.login-content {
   padding: 40px;
 }
 
-.register-title {
+.login-title {
   font-family: "Sora", sans-serif;
   font-size: 32px;
   font-weight: bold;
@@ -218,7 +161,7 @@ onMounted(() => {
   margin-bottom: 8px;
 }
 
-.register-subtitle {
+.login-subtitle {
   text-align: center;
   color: #666;
   margin-bottom: 32px;
@@ -302,20 +245,24 @@ onMounted(() => {
   padding: 4px;
 }
 
-.terms {
-  margin: 24px 0;
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
-.checkbox-container {
+.remember-me {
   display: flex;
   align-items: center;
   gap: 8px;
-  cursor: pointer;
+  color: #666;
 }
 
-.terms-text {
+.forgot-password {
+  color: #4caf50;
+  text-decoration: none;
   font-size: 14px;
-  color: #666;
 }
 
 .submit-btn {
@@ -329,6 +276,7 @@ onMounted(() => {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
 }
 
 .submit-btn:hover {
@@ -372,7 +320,7 @@ onMounted(() => {
   color: #c62828;
 }
 
-.login-link {
+.register-link {
   text-align: center;
   margin-top: 24px;
   color: #666;
@@ -409,16 +357,14 @@ onMounted(() => {
 
 /* Media Queries */
 @media (max-width: 480px) {
-  .register-content {
+  .login-content {
     padding: 24px;
   }
 
-  .register-title {
-    font-size: 24px;
-  }
-
-  .form-input {
-    font-size: 14px;
+  .form-options {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
   }
 }
 </style>
