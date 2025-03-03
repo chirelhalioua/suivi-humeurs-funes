@@ -138,21 +138,28 @@ const loginUser = async () => {
     const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/login', {
       email: email.value,
       password: password.value,
-    });
+    }, { timeout: 10000 }); // Timeout augmenté à 10s
 
-    const { token, user } = response.data;
-    localStorage.setItem("authToken", token);
-    localStorage.setItem("userId", user._id);
+    console.log('Réponse API :', response); // Pour voir la réponse dans la console
 
-    showMessage("Connexion réussie!", "success");
-    router.push("/profil");
+    if (response.status === 200 && response.data.token) {
+      const { token, user } = response.data;
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("userId", user._id);
 
-  } catch (error) {
-    console.error('Erreur lors de la connexion', error);
+      showMessage("Connexion réussie!", "success");
 
-    if (!error.response) {
-      showMessage("Problème de connexion au serveur. Veuillez réessayer plus tard.", "error");
+      // On nettoie le message d'erreur après la redirection
+      router.push("/profil").then(() => {
+        message.value = "";
+      });
     } else {
+      showMessage("Problème de connexion au serveur. Veuillez réessayer plus tard.", "error");
+    }
+  } catch (error) {
+    console.error('Erreur lors de la connexion :', error);
+
+    if (error.response) {
       switch (error.response.status) {
         case 400:
           showMessage("Requête invalide. Vérifiez les informations saisies.", "error");
@@ -169,6 +176,8 @@ const loginUser = async () => {
         default:
           showMessage(error.response.data.message || "Une erreur inconnue est survenue.", "error");
       }
+    } else {
+      showMessage("Problème de connexion au serveur. Veuillez réessayer plus tard.", "error");
     }
   } finally {
     isLoading.value = false;
