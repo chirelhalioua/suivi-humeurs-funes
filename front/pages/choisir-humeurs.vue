@@ -212,37 +212,33 @@ h1 {
 
 /* Boutons fléchés */
 .arrow-btn {
-  background: #4CAF50;
+  background: linear-gradient(145deg, #4CAF50, #45a049);
   color: #fff;
   border: none;
-  padding: 15px;
-  border-radius: 50%;
+  padding: 15px 20px;
+  border-radius: 50px; /* Plus arrondi */
   font-size: 24px;
+  font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s ease-in-out, transform 0.2s;
+  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .arrow-btn:hover {
   background: #45a049;
   transform: scale(1.1);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.arrow-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .arrow-btn:disabled {
   background: #ccc;
   cursor: not-allowed;
-}
-
-/* Boutons d'action */
-.choose-btn, .save-btn {
-  background: #4CAF50;
-  color: white;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 12px;
-  font-size: 18px;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: background 0.3s ease-in-out, transform 0.2s;
+  box-shadow: none;
 }
 
 .choose-btn:hover, .save-btn:hover {
