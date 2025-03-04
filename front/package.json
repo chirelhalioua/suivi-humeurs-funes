@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "nuxt dev",
-    "build": "npm install @nuxt/content && nuxt build",
+    "build": "npm install @nuxt/content@2 && nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "postinstall": "npm install @vueuse/head @pinia/nuxt @nuxtjs/tailwindcss"
