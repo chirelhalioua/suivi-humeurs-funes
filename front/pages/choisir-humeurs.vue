@@ -2,15 +2,6 @@
   <div class="choose-mood">
     <h1>🌈 Choisissez votre humeur</h1>
 
-    <!-- Message si l'humeur est déjà choisie -->
-    <div v-if="hasChosenMood" class="mood-status">
-      <p class="warning">{{ moodStatusMessage }}</p>
-    </div>
-
-    <!-- Message d'erreur visible -->
-    <div v-if="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
 
     <!-- Section principale de sélection d'humeur -->
     <div v-if="!hasChosenMood" class="moods-container">
@@ -49,6 +40,17 @@
       <textarea v-model="description" placeholder="📝 Décrivez votre humeur (optionnel)"></textarea>
       <button @click="saveMood" class="save-btn">💾 Enregistrer</button>
     </div>
+
+    <!-- Message si l'humeur est déjà choisie -->
+    <div v-if="hasChosenMood" class="mood-status">
+      <p class="warning">{{ moodStatusMessage }}</p>
+    </div>
+
+    <!-- Message d'erreur visible -->
+    <div v-if="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    
   </div>
 </template>
 
