@@ -37,6 +37,12 @@
       <button @click="chooseMood" :disabled="!canChooseMood || hasChosenMood" class="choose-btn">
         ✅ Choisir cette humeur
       </button>
+      
+      <!-- Afficher les horaires lorsque le bouton est désactivé -->
+      <p v-if="!canChooseMood" class="mood-hours">
+        Vous pouvez choisir votre humeur :
+        <br>Le matin de 6h à 12h et le soir de 17h à minuit.
+      </p>
     </div>
 
     <!-- Zone de description -->
@@ -272,5 +278,12 @@ textarea:focus {
 .no-mood {
   color: #777;
   font-size: 1.2rem;
+}
+
+/* Message des horaires */
+.mood-hours {
+  font-size: 1rem;
+  color: #777;
+  margin-top: 10px;
 }
 </style>
