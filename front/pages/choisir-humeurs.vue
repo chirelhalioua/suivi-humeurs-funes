@@ -32,11 +32,6 @@
       </button>
     </div>
 
-    <!-- Actions -->
-    <div v-if="!hasChosenMood" class="mood-actions">
-      <button @click="chooseMood" :disabled="!canChooseMood || hasChosenMood" class="choose-btn">
-        ✅ Choisir cette humeur
-      </button>
       
       <!-- Afficher les horaires lorsque le bouton est désactivé -->
       <p v-if="!canChooseMood" class="mood-hours">
@@ -50,7 +45,7 @@
         @click="chooseMood" 
         class="select-mood-btn"
       >
-        Sélectionner mon humeur
+        ✅ Choisir cette humeur
       </button>
     </div>
 
