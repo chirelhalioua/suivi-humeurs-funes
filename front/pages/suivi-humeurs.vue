@@ -289,7 +289,9 @@ const fetchMoodData = async () => {
   
 // Initialisation  
 onMounted(fetchMoodData);  
-</script>  <style scoped>  
+</script>  
+
+<style scoped>  
 /* Variables */  
 :root {  
   --primary-color: #4caf50;  
@@ -419,12 +421,12 @@ onMounted(fetchMoodData);
   gap: 30px;  
 }  
   
-.mood-card {  
-  background: white;  
-  border-radius: 20px;  
-  padding: 24px;  
-  box-shadow: var(--card-shadow);  
-}  
+.mood-card {
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0); /* Fond dégradé */
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+}
   
 .time-label {  
   display: flex;  
