@@ -12,8 +12,15 @@
     <h2>3. Responsabilité de l'utilisateur</h2>
     <p>En utilisant ce site, vous vous engagez à respecter les lois en vigueur et à ne pas publier de contenu offensant, diffamatoire ou illégal.</p>
 
-    <h2>4. Collecte de données</h2>
-    <p>Nous pouvons collecter certaines informations personnelles afin d'améliorer votre expérience. Ces données ne seront jamais partagées avec des tiers sans votre consentement.</p>
+    <h2>4. Collecte et utilisation des données</h2>
+    <p>Dans le cadre de l'utilisation de notre site <strong>Les humeurs à la Funès</strong>, nous collectons certaines données personnelles afin de vous offrir une expérience optimale et de permettre le suivi des humeurs. Les données collectées sont les suivantes :</p>
+    <ul>
+      <li>Nom</li>
+      <li>Prénom</li>
+      <li>Adresse e-mail</li>
+      <li>Humeurs journalières et hebdomadaires</li>
+    </ul>
+    <p>Ces informations sont strictement utilisées dans le but de suivre et d'afficher les humeurs, et ne seront en aucun cas utilisées à d'autres fins ni partagées avec des tiers sans votre consentement explicite.</p>
 
     <h2>5. Modification des conditions</h2>
     <p>Les présentes conditions peuvent être modifiées à tout moment. Nous vous encourageons à les consulter régulièrement.</p>
@@ -50,5 +57,14 @@ h2 {
 
 p {
   margin: 10px 0;
+}
+
+ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 5px;
 }
 </style>
