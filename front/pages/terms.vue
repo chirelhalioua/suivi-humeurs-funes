@@ -1,7 +1,7 @@
 <template>
   <div class="terms">
     <h1>Conditions d'utilisation</h1>
-    <p>Bienvenue sur <strong>Les humeurs à la Funès</strong> ! En utilisant notre site, vous acceptez pleinement et sans réserve les conditions d'utilisation suivantes.</p>
+    <p>Bienvenue sur <strong>Les Humeurs à la Funès</strong> ! En utilisant notre site, vous acceptez pleinement et sans réserve les conditions d'utilisation suivantes.</p>
 
     <h2>1. Objet du site</h2>
     <p>Ce site a pour vocation de suivre et partager les humeurs journalières et hebdomadaires, avec une touche d'humour inspirée par l'esprit de Louis de Funès.</p>
