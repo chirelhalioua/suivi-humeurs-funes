@@ -26,7 +26,7 @@
     <p>Les présentes conditions peuvent être modifiées à tout moment. Nous vous encourageons à les consulter régulièrement.</p>
 
     <h2>6. Contact</h2>
-    <p>Pour toute question concernant ces conditions d'utilisation, vous pouvez nous contacter à l'adresse suivante : contact@leshumeursfunès.fr</p>
+    <p>Pour toute question concernant ces conditions d'utilisation, vous pouvez nous contacter à l'adresse suivante : chirelhalioua@gmail.com</p>
   </div>
 </template>
 
