@@ -1,15 +1,14 @@
-## Les Humeurs à la Funès 
+## 🌈 Les Humeurs à la Funès 
 
-Bienvenue dans le repository **Les Humeurs à la Funes**. Ce projet est dédié à la collecte et au suivi des humeurs de façon journalière et hebdomadaire, avec l'originalité d'utiliser des images et des vidéos de Louis de Funès pour représenter ces humeurs.
+Bienvenue dans le repository **Les Humeurs à la Funes**. Ce projet est dédié à la collecte et au suivi des humeurs de façon journalière et hebdomadaire, avec l'originalité d'utiliser des images de Louis de Funès pour représenter ces humeurs.
 
  ## Fonctionnalités
 
-- **Suivi des humeurs** : Enregistrez et suivez vos humeurs au jour le jour et semaine par semaine.
+- **Suivi des humeurs** : Enregistrez et suivez vos humeurs de façon journalière et hebdomadaire. 
 - **Représentations humoristiques** : Louis de Funès illustre vos humeurs avec ses expressions et scènes cultes.
-- **Statistiques et graphiques** : Visualisez vos statistiques d'humeur sous forme de graphiques.
+- **Suivi des humeurs** : Suivez vos humeurs matin et soir par jour et par semaine. 
 - **Notifications de rappel** : Recevez des rappels pour enregistrer vos humeurs.
 - **Partage sur les réseaux sociaux** : Partagez vos humeurs et statistiques avec vos amis sur les réseaux sociaux.
-- **Recherche avancée** : Recherchez des humeurs par date ou par type d'humeur.
 
 ## Prérequis
 
