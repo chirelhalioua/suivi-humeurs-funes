@@ -15,14 +15,15 @@
       </button>
 
       <!-- Carte d'humeur avec design modernisé -->
-      <div class="mood-card" v-if="currentMood">
-        <img :src="currentMood.image" :alt="currentMood.title" />
-        <div class="mood-info">
-          <h3>{{ currentMood.title }}</h3>
-          <p>{{ currentMood.subtitle }}</p>
-          <p><strong>🎥 Film : </strong>{{ currentMood.film || "Non disponible" }}</p>
-        </div>
-      </div>
+<div class="mood-card" v-if="currentMood">
+  <img :src="currentMood.image" :alt="currentMood.title" />
+  <div class="mood-info">
+    <h3>{{ currentMood.title }}</h3>
+    <p>{{ currentMood.subtitle }}</p>
+    <p><strong>🎥 Film : </strong>{{ currentMood.film || "Non disponible" }}</p>
+  </div>
+</div> 
+
 
       <div v-else class="no-mood">Aucune humeur disponible</div>
 
@@ -31,6 +32,7 @@
         ▶
       </button>
     </div>
+        </div>
 
       
       <!-- Afficher les horaires lorsque le bouton est désactivé -->
