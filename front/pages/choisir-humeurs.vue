@@ -1,315 +1,349 @@
 <template>
-  <div class="choose-mood">
-    <h1>🌈 Choisissez votre humeur</h1>
-
-    <!-- Message si l'humeur est déjà choisie -->
-    <div v-if="hasChosenMood" class="mood-status">
-      <p class="warning">{{ moodStatusMessage }}</p>
-    </div>
-
-    <!-- Section principale de sélection d'humeur -->
-    <div v-if="!hasChosenMood" class="moods-container">
-      <!-- Flèche gauche -->
-      <button class="arrow-btn" @click="prevMood" :disabled="!canNavigate || hasChosenMood">
-        ◀
-      </button>
-
-      <!-- Carte d'humeur avec design modernisé -->
-<div class="mood-card" v-if="currentMood">
-  <img :src="currentMood.image" :alt="currentMood.title" />
-  <div class="mood-info">
-    <h3>{{ currentMood.title }}</h3>
-    <p>{{ currentMood.subtitle }}</p>
-    <p><strong>🎥 Film : </strong>{{ currentMood.film || "Non disponible" }}</p>
-  </div>
-</div> 
-
-
-      <div v-else class="no-mood">Aucune humeur disponible</div>
-
-      <!-- Flèche droite -->
-      <button class="arrow-btn" @click="nextMood" :disabled="!canNavigate || hasChosenMood">
-        ▶
-      </button>
-    </div>
+    <div class="choose-mood">
+      <h1>🌈 Choisissez votre humeur</h1>
+  
+      <!-- Message si l'humeur est déjà choisie -->
+      <div v-if="hasChosenMood" class="mood-status">
+        <p class="warning">{{ moodStatusMessage }}</p>
+      </div>
+  
+      <!-- Section principale de sélection d'humeur -->
+      <div v-if="!hasChosenMood" class="moods-container">
+        <!-- Flèche gauche -->
+        <button class="arrow-btn" @click="prevMood" :disabled="!canNavigate || hasChosenMood">
+          ◀
+        </button>
+  
+        <!-- Carte d'humeur avec design modernisé -->
+        <div class="mood-card" v-if="currentMood">
+          <img :src="currentMood.image" :alt="currentMood.title" />
+          <div class="mood-info">
+            <h3>{{ currentMood.title }}</h3>
+            <p>{{ currentMood.subtitle }}</p>
+            <p><strong>🎥 Film : </strong>{{ currentMood.film || "Non disponible" }}</p>
+          </div>
         </div>
-
-      
-      <!-- Afficher les horaires lorsque le bouton est désactivé -->
-      <p v-if="!canChooseMood" class="mood-hours">
-        Vous pouvez choisir votre humeur :
-        <br>Le matin de 6h à 12h et le soir de 17h à minuit.
-      </p>
-      
-      <!-- Bouton pour "choisir son humeur" -->
-      <button 
-        v-if="canChooseMood && !hasChosenMood" 
-        @click="chooseMood" 
-        class="select-mood-btn"
-      >
-        ✅ Choisir cette humeur
-      </button>
+  
+        <div v-else class="no-mood">Aucune humeur disponible</div>
+  
+        <!-- Flèche droite -->
+        <button class="arrow-btn" @click="nextMood" :disabled="!canNavigate || hasChosenMood">
+          ▶
+        </button>
+      </div>
+  
+      <!-- Actions -->
+      <div v-if="!hasChosenMood" class="mood-actions">
+        <button @click="chooseMood" :disabled="!canChooseMood || hasChosenMood" class="choose-btn">
+          ✅ Choisir cette humeur
+        </button>
+      </div>
+  
+      <!-- Zone de description -->
+      <div v-if="selectedMoodId" class="mood-details">
+        <textarea v-model="description" placeholder="📝 Décrivez votre humeur (optionnel)"></textarea>
+        <button @click="saveMood" class="save-btn">💾 Enregistrer</button>
+      </div>
     </div>
+  </template>
 
-    <!-- Zone de description -->
-    <div v-if="selectedMoodId" class="mood-details">
-      <textarea v-model="description" placeholder="📝 Décrivez votre humeur (optionnel)"></textarea>
-      <button @click="saveMood" class="save-btn">💾 Enregistrer</button>
-    </div>
-  </div>
-</template>
-
-<script setup>
-import { ref, computed, onMounted } from 'vue';
-import axios from 'axios';
-
-// Données et états
-const humeurs = ref([]);
-const currentIndex = ref(0);
-const selectedMoodId = ref(null);
-const description = ref('');
-const hasChosenMood = ref(false);
-const moodStatusMessage = ref('');
-
-// Charger les humeurs depuis l'API
-const fetchHumeurs = async () => {
-  try {
-    const response = await axios.get('https://suivi-humeurs-funes.onrender.com/api/humeurs');
-    humeurs.value = response.data;
-  } catch (error) {
-    console.error('Erreur lors de la récupération des humeurs :', error);
-  }
-};
-
-// Vérifier si l'utilisateur a déjà choisi une humeur
-const checkIfMoodAlreadyChosen = () => {
-  const storedMood = JSON.parse(localStorage.getItem('userMoodChoice'));
-  const currentDate = new Date().toISOString().split('T')[0];
-
-  if (storedMood && storedMood.date === currentDate) {
-    hasChosenMood.value = true;
-    moodStatusMessage.value = "Vous avez déjà choisi votre humeur pour aujourd'hui.";
-  } else {
-    hasChosenMood.value = false;
-    moodStatusMessage.value = '';
-  }
-};
-
-// Humeur actuelle basée sur l'index
-const currentMood = computed(() => humeurs.value[currentIndex.value]);
-
-// Navigation entre les humeurs
-const prevMood = () => {
-  currentIndex.value = (currentIndex.value - 1 + humeurs.value.length) % humeurs.value.length;
-};
-const nextMood = () => {
-  currentIndex.value = (currentIndex.value + 1) % humeurs.value.length;
-};
-
-// Vérifications
-const canNavigate = computed(() => humeurs.value.length > 1);
-const canChooseMood = computed(() => {
-  const currentHour = new Date().getHours();
-  return (currentHour >= 6 && currentHour < 12) || (currentHour >= 17 && currentHour < 24);
-});
-
-// Actions
-const chooseMood = () => {
-  if (!currentMood.value) {
-    alert('Aucune humeur sélectionnée.');
-    return;
-  }
-
-  selectedMoodId.value = currentMood.value._id;
-  alert('Humeur sélectionnée. Vous pouvez maintenant ajouter une description et enregistrer.');
-};
-
-const saveMood = async () => {
-  if (!selectedMoodId.value) {
-    alert("Veuillez choisir une humeur avant d'enregistrer.");
-    return;
-  }
-
-  const userMoodChoice = {
-    date: new Date().toISOString().split('T')[0],
-    humeurId: selectedMoodId.value,
-    description: description.value || "Aucune description fournie",
-  };
-
-  try {
-    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice);
-
-    if (response.status === 200) {
-      localStorage.setItem('userMoodChoice', JSON.stringify(userMoodChoice));
-      hasChosenMood.value = true;
-      moodStatusMessage.value = "Merci d'avoir enregistré votre humeur.";
-      selectedMoodId.value = null;
-      description.value = '';
-      checkIfMoodAlreadyChosen();
+  
+  <script setup>
+  import { ref, computed, onMounted } from 'vue';
+  import axios from 'axios';
+  
+  // Données et états
+  const humeurs = ref([]);
+  const currentIndex = ref(0);
+  const selectedMoodId = ref(null);
+  const description = ref('');
+  const hasChosenMood = ref(false);
+  const moodStatusMessage = ref('');
+  
+  // Charger les humeurs depuis l'API
+  const fetchHumeurs = async () => {
+    try {
+      const response = await axios.get('https://suivi-humeurs-funes.onrender.com/api/humeurs');
+      humeurs.value = response.data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des humeurs :', error);
     }
-  } catch (error) {
-    console.error('Erreur lors de l\'enregistrement de l\'humeur :', error);
+  };
+  
+  // Vérifier si l'utilisateur a déjà choisi une humeur
+  const checkIfMoodAlreadyChosen = () => {
+    const storedMood = JSON.parse(localStorage.getItem('userMoodChoice'));
+    const currentDate = new Date().toISOString().split('T')[0];
+  
+    if (storedMood && storedMood.date === currentDate) {
+      hasChosenMood.value = true;
+      moodStatusMessage.value = "Vous avez déjà choisi votre humeur pour aujourd'hui.";
+    } else {
+      hasChosenMood.value = false;
+      moodStatusMessage.value = '';
+    }
+  };
+  
+  // Humeur actuelle basée sur l'index
+  const currentMood = computed(() => humeurs.value[currentIndex.value]);
+  
+  // Navigation entre les humeurs
+  const prevMood = () => {
+    currentIndex.value = (currentIndex.value - 1 + humeurs.value.length) % humeurs.value.length;
+  };
+  const nextMood = () => {
+    currentIndex.value = (currentIndex.value + 1) % humeurs.value.length;
+  };
+  
+  // Vérifications
+  const canNavigate = computed(() => humeurs.value.length > 1);
+  const canChooseMood = computed(() => {
+    const currentHour = new Date().getHours();
+    return (currentHour >= 6 && currentHour < 12) || (currentHour >= 17 && currentHour < 24);
+  });
+  
+  // Actions
+  const chooseMood = () => {
+    if (!currentMood.value) {
+      alert('Aucune humeur sélectionnée.');
+      return;
+    }
+  
+    selectedMoodId.value = currentMood.value._id;
+    alert('Humeur sélectionnée. Vous pouvez maintenant ajouter une description et enregistrer.');
+  };
+  
+  const saveMood = async () => {
+    if (!selectedMoodId.value) {
+      alert("Veuillez choisir une humeur avant d'enregistrer.");
+      return;
+    }
+  
+    const userMoodChoice = {
+      date: new Date().toISOString().split('T')[0],
+      humeurId: selectedMoodId.value,
+      description: description.value || "Aucune description fournie",
+    };
+  
+    try {
+      const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice);
+  
+      if (response.status === 200) {
+        localStorage.setItem('userMoodChoice', JSON.stringify(userMoodChoice));
+        hasChosenMood.value = true;
+        moodStatusMessage.value = "Merci d'avoir enregistré votre humeur.";
+        selectedMoodId.value = null;
+        description.value = '';
+        checkIfMoodAlreadyChosen();
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'enregistrement de l\'humeur :', error);
+    }
+  };
+  
+  // Initialisation
+  onMounted(() => {
+    fetchHumeurs();
+    checkIfMoodAlreadyChosen();
+  });
+  </script>
+  
+  <style scoped>
+  /* Container principal */
+  .choose-mood {
+    text-align: center;
+    margin: 40px auto;
+    max-width: 800px;
   }
-};
+  
+  h1 {
+    font-size: 2.5rem;
+    color: #4CAF50;
+    margin-bottom: 30px;
+  }
+  
+  /* Message d'alerte */
+  .warning {
+    background: #ffdada;
+    color: #d32f2f;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+  
+  /* Container des humeurs */
+  .moods-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  /* Cartes d'humeur */
+  .mood-card {
+    background: #f9f9f9;
+    border: 2px solid #4CAF50;
+    border-radius: 20px;
+    width: 300px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .mood-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .mood-card img {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-bottom: 15px;
+  }
+  
+  .mood-info h3 {
+    font-size: 1.5rem;
+    color: #4CAF50;
+  }
+  
+  .mood-info p {
+    margin: 5px 0;
+  }
+  
+  /* Boutons fléchés */
+  .arrow-btn {
+    background: linear-gradient(145deg, #4CAF50, #45a049);
+    color: #fff;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 50px; /* Plus arrondi */
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .arrow-btn:hover {
+    background: #45a049;
+    transform: scale(1.1);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  }
+  
+  .arrow-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .arrow-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  
+  .choose-btn:hover, .save-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+  }
+  
+  .choose-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Zone de texte */
+  textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    resize: none;
+    margin-top: 10px;
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+  
+  /* Aucune humeur */
+  .no-mood {
+    color: #777;
+    font-size: 1.2rem;
+  }
+  
+  /* Message des horaires */
+  .mood-hours {
+    font-size: 1rem;
+    color: #777;
+    margin-top: 10px;
+  }
 
-// Initialisation
-onMounted(() => {
-  fetchHumeurs();
-  checkIfMoodAlreadyChosen();
-});
-</script>
-
-<style scoped>
-/* Container principal */
-.choose-mood {
-  text-align: center;
-  margin: 40px auto;
-  max-width: 800px;
-}
-
-h1 {
-  font-size: 2.5rem;
-  color: #4CAF50;
-  margin-bottom: 30px;
-}
-
-/* Message d'alerte */
-.warning {
-  background: #ffdada;
-  color: #d32f2f;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: bold;
-}
-
-/* Container des humeurs */
-.moods-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
-
-/* Cartes d'humeur */
-.mood-card {
-  background: #f9f9f9;
-  border: 2px solid #4CAF50;
-  border-radius: 20px;
-  width: 300px;
-  padding: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.mood-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-}
-
-.mood-card img {
-  width: 100%;
-  border-radius: 12px;
-  object-fit: cover;
-  margin-bottom: 15px;
-}
-
-.mood-info h3 {
-  font-size: 1.5rem;
-  color: #4CAF50;
-}
-
-.mood-info p {
-  margin: 5px 0;
-}
-
-/* Boutons fléchés */
-.arrow-btn {
+  /* Bouton Choisir cette humeur */
+.choose-btn {
   background: linear-gradient(145deg, #4CAF50, #45a049);
   color: #fff;
   border: none;
-  padding: 15px 20px;
-  border-radius: 50px; /* Plus arrondi */
-  font-size: 24px;
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-size: 18px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.3s;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.arrow-btn:hover {
+.choose-btn:hover {
   background: #45a049;
-  transform: scale(1.1);
+  transform: scale(1.05);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
 }
 
-.arrow-btn:active {
+.choose-btn:active {
   transform: scale(0.95);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.arrow-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.choose-btn:hover, .save-btn:hover {
-  background: #45a049;
-  transform: translateY(-2px);
 }
 
 .choose-btn:disabled {
   background: #ccc;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
-/* Zone de texte */
-textarea {
-  width: 100%;
-  height: 100px;
-  padding: 10px;
-  border-radius: 12px;
-  border: 2px solid #ddd;
-  resize: none;
-  margin-top: 10px;
-  transition: border-color 0.3s ease-in-out;
-}
-
-textarea:focus {
-  border-color: #4CAF50;
-  outline: none;
-}
-
-/* Aucune humeur */
-.no-mood {
-  color: #777;
-  font-size: 1.2rem;
-}
-
-/* Message des horaires */
-.mood-hours {
-  font-size: 1rem;
-  color: #777;
-  margin-top: 10px;
-}
-
-/* Nouveau bouton pour sélectionner l'humeur */
-.select-mood-btn {
-  background: linear-gradient(145deg, #4CAF50, #45a049);
+/* Bouton Enregistrer */
+.save-btn {
+  background: linear-gradient(145deg, #2196F3, #1976D2);
   color: #fff;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1.1rem;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
-  margin-top: 20px;
-  transition: background 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
 }
 
-.select-mood-btn:hover {
-  background: #45a049;
+.save-btn:hover {
+  background: #1976D2;
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
 }
 
-.select-mood-btn:active {
-  background: #4CAF50;
+.save-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-</style>
+
+.save-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+  </style>
+  
