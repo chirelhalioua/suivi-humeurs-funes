@@ -344,7 +344,7 @@ onMounted(fetchMoodData);
 }  
   
 .toggle-btn.active {  
-  background: var(--primary-color);  
+  background: #46A34A;  
   color: white;  
 }  
   
