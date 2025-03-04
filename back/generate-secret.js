@@ -7,7 +7,7 @@ const payload = {
 };
 
 // Créer un secret (assurez-vous de garder ce secret secret)
-const secretKey = '67d450cc93cb72dabb8da91b998b420ecb42649c453a0dfd5ba00a9de1f1218af1b8666667da1139e046d0f29b3dd498ff31ea0a02d0d1b336c776c4a9780bff';
+const secretKey = process.env.JWT_SECRET;
 
 // Générer un token avec une expiration (par exemple, 1 heure)
 const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
