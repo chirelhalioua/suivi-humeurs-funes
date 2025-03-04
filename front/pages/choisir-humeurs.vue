@@ -315,7 +315,7 @@
 
 /* Bouton Enregistrer */
 .save-btn {
-  background: linear-gradient(145deg, #2196F3, #1976D2);
+  background: #2C1810;
   color: #fff;
   border: none;
   padding: 12px 25px;
@@ -329,7 +329,7 @@
 }
 
 .save-btn:hover {
-  background: #1976D2;
+  background: #2C1810;
   transform: scale(1.05);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
 }
