@@ -1,154 +1,162 @@
 <template>
-    <div class="choose-mood">
-      <h1>🌈 Choisissez votre humeur</h1>
-  
-      <!-- Message si l'humeur est déjà choisie -->
-      <div v-if="hasChosenMood" class="mood-status">
-        <p class="warning">{{ moodStatusMessage }}</p>
-      </div>
-  
-      <!-- Section principale de sélection d'humeur -->
-      <div v-if="!hasChosenMood" class="moods-container">
-        <!-- Flèche gauche -->
-        <button class="arrow-btn" @click="prevMood" :disabled="!canNavigate || hasChosenMood">
-          ◀
-        </button>
-  
-        <!-- Carte d'humeur avec design modernisé -->
-        <div class="mood-card" v-if="currentMood">
-          <img :src="currentMood.image" :alt="currentMood.title" />
-          <div class="mood-info">
-            <h3>{{ currentMood.title }}</h3>
-            <p>{{ currentMood.subtitle }}</p>
-            <p><strong>🎥 Film : </strong>{{ currentMood.film || "Non disponible" }}</p>
-          </div>
-        </div>
-  
-        <div v-else class="no-mood">Aucune humeur disponible</div>
-  
-        <!-- Flèche droite -->
-        <button class="arrow-btn" @click="nextMood" :disabled="!canNavigate || hasChosenMood">
-          ▶
-        </button>
-      </div>
-  
-      <!-- Actions -->
-      <div v-if="!hasChosenMood" class="mood-actions">
-        <button @click="chooseMood" :disabled="!canChooseMood || hasChosenMood" class="choose-btn">
-          ✅ Choisir cette humeur
-        </button>
-      </div>
-  
-      <!-- Zone de description -->
-      <div v-if="selectedMoodId" class="mood-details">
-        <textarea v-model="description" placeholder="📝 Décrivez votre humeur (optionnel)"></textarea>
-        <button @click="saveMood" class="save-btn">💾 Enregistrer</button>
-      </div>
-    </div>
-  </template>
+  <div class="choose-mood">
+    <h1>🌈 Choisissez votre humeur</h1>
 
-  
-  <script setup>
-  import { ref, computed, onMounted } from 'vue';
-  import axios from 'axios';
-  
-  // Données et états
-  const humeurs = ref([]);
-  const currentIndex = ref(0);
-  const selectedMoodId = ref(null);
-  const description = ref('');
-  const hasChosenMood = ref(false);
-  const moodStatusMessage = ref('');
-  
-  // Charger les humeurs depuis l'API
-  const fetchHumeurs = async () => {
-    try {
-      const response = await axios.get('https://suivi-humeurs-funes.onrender.com/api/humeurs');
-      humeurs.value = response.data;
-    } catch (error) {
-      console.error('Erreur lors de la récupération des humeurs :', error);
-    }
+    <!-- Message si l'humeur est déjà choisie -->
+    <div v-if="hasChosenMood" class="mood-status">
+      <p class="warning">{{ moodStatusMessage }}</p>
+    </div>
+
+    <!-- Message d'erreur visible -->
+    <div v-if="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Section principale de sélection d'humeur -->
+    <div v-if="!hasChosenMood" class="moods-container">
+      <!-- Flèche gauche -->
+      <button class="arrow-btn" @click="prevMood" :disabled="!canNavigate || hasChosenMood">
+        ◀
+      </button>
+
+      <!-- Carte d'humeur avec design modernisé -->
+      <div class="mood-card" v-if="currentMood">
+        <img :src="currentMood.image" :alt="currentMood.title" />
+        <div class="mood-info">
+          <h3>{{ currentMood.title }}</h3>
+          <p>{{ currentMood.subtitle }}</p>
+          <p><strong>🎥 Film : </strong>{{ currentMood.film || "Non disponible" }}</p>
+        </div>
+      </div>
+
+      <div v-else class="no-mood">Aucune humeur disponible</div>
+
+      <!-- Flèche droite -->
+      <button class="arrow-btn" @click="nextMood" :disabled="!canNavigate || hasChosenMood">
+        ▶
+      </button>
+    </div>
+
+    <!-- Actions -->
+    <div v-if="!hasChosenMood" class="mood-actions">
+      <button @click="chooseMood" :disabled="!canChooseMood || hasChosenMood" class="choose-btn">
+        ✅ Choisir cette humeur
+      </button>
+    </div>
+
+    <!-- Zone de description -->
+    <div v-if="selectedMoodId" class="mood-details">
+      <textarea v-model="description" placeholder="📝 Décrivez votre humeur (optionnel)"></textarea>
+      <button @click="saveMood" class="save-btn">💾 Enregistrer</button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
+
+// Données et états
+const humeurs = ref([]);
+const currentIndex = ref(0);
+const selectedMoodId = ref(null);
+const description = ref('');
+const hasChosenMood = ref(false);
+const moodStatusMessage = ref('');
+const errorMessage = ref('');
+
+// Charger les humeurs depuis l'API
+const fetchHumeurs = async () => {
+  try {
+    const response = await axios.get('https://suivi-humeurs-funes.onrender.com/api/humeurs');
+    humeurs.value = response.data;
+  } catch (error) {
+    console.error('Erreur lors de la récupération des humeurs :', error);
+    errorMessage.value = "Impossible de charger les humeurs. Veuillez réessayer plus tard.";
+  }
+};
+
+// Vérifier si l'utilisateur a déjà choisi une humeur
+const checkIfMoodAlreadyChosen = () => {
+  const storedMood = JSON.parse(localStorage.getItem('userMoodChoice'));
+  const currentDate = new Date().toISOString().split('T')[0];
+
+  if (storedMood && storedMood.date === currentDate) {
+    hasChosenMood.value = true;
+    moodStatusMessage.value = "Vous avez déjà choisi votre humeur pour aujourd'hui.";
+  } else {
+    hasChosenMood.value = false;
+    moodStatusMessage.value = '';
+  }
+};
+
+// Humeur actuelle basée sur l'index
+const currentMood = computed(() => humeurs.value[currentIndex.value]);
+
+// Navigation entre les humeurs
+const prevMood = () => {
+  currentIndex.value = (currentIndex.value - 1 + humeurs.value.length) % humeurs.value.length;
+};
+const nextMood = () => {
+  currentIndex.value = (currentIndex.value + 1) % humeurs.value.length;
+};
+
+// Vérifications
+const canNavigate = computed(() => humeurs.value.length > 1);
+const canChooseMood = computed(() => {
+  const currentHour = new Date().getHours();
+  return (currentHour >= 6 && currentHour < 12) || (currentHour >= 17 && currentHour < 24);
+});
+
+// Actions
+const chooseMood = () => {
+  if (!currentMood.value) {
+    errorMessage.value = "Aucune humeur sélectionnée.";
+    return;
+  }
+
+  selectedMoodId.value = currentMood.value._id;
+  errorMessage.value = ''; // On enlève les erreurs si tout va bien
+};
+
+const saveMood = async () => {
+  if (!selectedMoodId.value) {
+    errorMessage.value = "Veuillez choisir une humeur avant d'enregistrer.";
+    return;
+  }
+
+  const userMoodChoice = {
+    date: new Date().toISOString().split('T')[0],
+    humeurId: selectedMoodId.value,
+    description: description.value || "Aucune description fournie",
   };
-  
-  // Vérifier si l'utilisateur a déjà choisi une humeur
-  const checkIfMoodAlreadyChosen = () => {
-    const storedMood = JSON.parse(localStorage.getItem('userMoodChoice'));
-    const currentDate = new Date().toISOString().split('T')[0];
-  
-    if (storedMood && storedMood.date === currentDate) {
+
+  try {
+    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice);
+
+    if (response.status === 200) {
+      localStorage.setItem('userMoodChoice', JSON.stringify(userMoodChoice));
       hasChosenMood.value = true;
-      moodStatusMessage.value = "Vous avez déjà choisi votre humeur pour aujourd'hui.";
-    } else {
-      hasChosenMood.value = false;
-      moodStatusMessage.value = '';
+      moodStatusMessage.value = "Merci d'avoir enregistré votre humeur.";
+      selectedMoodId.value = null;
+      description.value = '';
+      errorMessage.value = ''; // On efface les erreurs si tout se passe bien
+      checkIfMoodAlreadyChosen();
     }
-  };
-  
-  // Humeur actuelle basée sur l'index
-  const currentMood = computed(() => humeurs.value[currentIndex.value]);
-  
-  // Navigation entre les humeurs
-  const prevMood = () => {
-    currentIndex.value = (currentIndex.value - 1 + humeurs.value.length) % humeurs.value.length;
-  };
-  const nextMood = () => {
-    currentIndex.value = (currentIndex.value + 1) % humeurs.value.length;
-  };
-  
-  // Vérifications
-  const canNavigate = computed(() => humeurs.value.length > 1);
-  const canChooseMood = computed(() => {
-    const currentHour = new Date().getHours();
-    return (currentHour >= 6 && currentHour < 12) || (currentHour >= 17 && currentHour < 24);
-  });
-  
-  // Actions
-  const chooseMood = () => {
-    if (!currentMood.value) {
-      alert('Aucune humeur sélectionnée.');
-      return;
-    }
-  
-    selectedMoodId.value = currentMood.value._id;
-    alert('Humeur sélectionnée. Vous pouvez maintenant ajouter une description et enregistrer.');
-  };
-  
-  const saveMood = async () => {
-    if (!selectedMoodId.value) {
-      alert("Veuillez choisir une humeur avant d'enregistrer.");
-      return;
-    }
-  
-    const userMoodChoice = {
-      date: new Date().toISOString().split('T')[0],
-      humeurId: selectedMoodId.value,
-      description: description.value || "Aucune description fournie",
-    };
-  
-    try {
-      const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice);
-  
-      if (response.status === 200) {
-        localStorage.setItem('userMoodChoice', JSON.stringify(userMoodChoice));
-        hasChosenMood.value = true;
-        moodStatusMessage.value = "Merci d'avoir enregistré votre humeur.";
-        selectedMoodId.value = null;
-        description.value = '';
-        checkIfMoodAlreadyChosen();
-      }
-    } catch (error) {
-      console.error('Erreur lors de l\'enregistrement de l\'humeur :', error);
-    }
-  };
-  
-  // Initialisation
-  onMounted(() => {
-    fetchHumeurs();
-    checkIfMoodAlreadyChosen();
-  });
-  </script>
-  
-  <style scoped>
+  } catch (error) {
+    console.error('Erreur lors de l\'enregistrement de l\'humeur :', error);
+    errorMessage.value = "Une erreur est survenue lors de l'enregistrement. Veuillez réessayer plus tard.";
+  }
+};
+
+// Initialisation
+onMounted(() => {
+  fetchHumeurs();
+  checkIfMoodAlreadyChosen();
+});
+</script>
+
+<style scoped>
   /* Container principal */
   .choose-mood {
     text-align: center;
@@ -170,7 +178,16 @@
     border-radius: 8px;
     font-weight: bold;
   }
-  
+
+    .error-message {
+  background: #ffdada;
+  color: #d32f2f;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-top: 10px;
+    }
+    
   /* Container des humeurs */
   .moods-container {
     display: flex;
