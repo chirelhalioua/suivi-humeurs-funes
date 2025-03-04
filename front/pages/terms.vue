@@ -60,6 +60,7 @@ p {
 }
 
 ul {
+  list-style-type: disc;
   margin: 10px 0;
   padding-left: 20px;
 }
