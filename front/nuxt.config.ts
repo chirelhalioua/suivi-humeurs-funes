@@ -5,11 +5,12 @@ export default defineNuxtConfig({
 
   modules: [
     "@pinia/nuxt",
-    ['@nuxt/content', { ssr: false }],
+    '@nuxt/content', // Assurez-vous que @nuxt/content est dans les modules
     "@nuxtjs/tailwindcss",
   ],
 
   content: {
+    dir: 'front/content', // Spécifie le dossier personnalisé pour Nuxt Content
     documentDriven: true,
     markdown: {
       remarkPlugins: [],
