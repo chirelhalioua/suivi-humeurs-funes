@@ -5,12 +5,18 @@ export default defineNuxtConfig({
 
   modules: [
     "@pinia/nuxt",
-    '@nuxt/content',
-    "@nuxtjs/tailwindcss", // Ajout de TailwindCSS
+    ['@nuxt/content', { ssr: false }],
+    "@nuxtjs/tailwindcss",
   ],
- content: {
-    // Options du module @nuxt/content
- },
+
+  content: {
+    documentDriven: true,
+    markdown: {
+      remarkPlugins: [],
+      rehypePlugins: [],
+    },
+  },
+
   runtimeConfig: {
     public: {
       apiBase: "https://suivi-humeurs-back.onrender.com/api",
@@ -58,7 +64,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['@vueuse/head'],
     rollupOptions: {
-      external: ['@vueuse/head', 'axios'] // Ajout de 'axios'
+      external: ['@vueuse/head', 'axios']
     }
   },
 
