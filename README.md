@@ -2,7 +2,7 @@
 
 Bienvenue dans le repository **Les Humeurs à la Funes**. Ce projet est dédié à la collecte et au suivi des humeurs de façon journalière et hebdomadaire, avec l'originalité d'utiliser des images de Louis de Funès pour représenter ces humeurs.
 
- ## Fonctionnalités
+ ## 🌟 Fonctionnalités
 
 - **Suivi des humeurs** : Enregistrez et suivez vos humeurs de façon journalière et hebdomadaire. 
 - **Représentations humoristiques** : Louis de Funès illustre vos humeurs avec ses expressions et scènes cultes.
@@ -10,14 +10,14 @@ Bienvenue dans le repository **Les Humeurs à la Funes**. Ce projet est dédié 
 - **Notifications de rappel** : Recevez des rappels pour enregistrer vos humeurs.
 - **Partage sur les réseaux sociaux** : Partagez vos humeurs et statistiques avec vos amis sur les réseaux sociaux.
 
-## Prérequis
+## 📝 Prérequis
 
 Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur votre machine :
 
 - [Node.js](https://nodejs.org/) (version 14 ou supérieure)
 - [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
 
-## Installation
+## 🛠️ Installation
 
 1. Clonez le repository sur votre machine locale :
 
@@ -43,7 +43,7 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
    yarn install
    ```
 
-## Utilisation
+## 👩🏻‍💻 Utilisation
 
 Pour lancer l'application en mode développement, utilisez la commande suivante :
 
@@ -59,7 +59,7 @@ yarn start
 
 Ouvrez votre navigateur et accédez à `http://localhost:3000` pour voir l'application en action.
 
-## Contribution
+## 🤝🏻 Contribution
 
 Les contributions sont les bienvenues ! Si vous souhaitez contribuer, veuillez suivre les étapes ci-dessous :
 
@@ -69,11 +69,11 @@ Les contributions sont les bienvenues ! Si vous souhaitez contribuer, veuillez s
 4. Poussez votre branche (`git push origin feature/ma-fonctionnalite`).
 5. Ouvrez une Pull Request.
 
-## Licence
+## ©️ Licence
 
 Ce projet est sous licence MIT. Veuillez consulter le fichier [LICENSE](LICENSE) pour plus de détails.
 
-## Contact
+## 📧 Contact
 
 Pour toute question ou suggestion, veuillez contacter :
 
