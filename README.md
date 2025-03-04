@@ -1,4 +1,4 @@
-🌈 **Les Humeurs à la Funes**
+## Les Humeurs à la Funès 
 
 Bienvenue dans le repository **Les Humeurs à la Funes**. Ce projet est dédié à la collecte et au suivi des humeurs de façon journalière et hebdomadaire, avec l'originalité d'utiliser des images et des vidéos de Louis de Funès pour représenter ces humeurs.
 
