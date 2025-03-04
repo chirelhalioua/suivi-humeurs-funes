@@ -43,6 +43,15 @@
         Vous pouvez choisir votre humeur :
         <br>Le matin de 6h à 12h et le soir de 17h à minuit.
       </p>
+      
+      <!-- Bouton pour "choisir son humeur" -->
+      <button 
+        v-if="canChooseMood && !hasChosenMood" 
+        @click="chooseMood" 
+        class="select-mood-btn"
+      >
+        Sélectionner mon humeur
+      </button>
     </div>
 
     <!-- Zone de description -->
@@ -285,5 +294,25 @@ textarea:focus {
   font-size: 1rem;
   color: #777;
   margin-top: 10px;
+}
+
+/* Nouveau bouton pour sélectionner l'humeur */
+.select-mood-btn {
+  background: linear-gradient(145deg, #4CAF50, #45a049);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s ease-in-out;
+}
+
+.select-mood-btn:hover {
+  background: #45a049;
+}
+
+.select-mood-btn:active {
+  background: #4CAF50;
 }
 </style>
