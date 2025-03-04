@@ -491,7 +491,7 @@ onMounted(fetchMoodData);
 }  
   
 .day-card {  
-  background: white;  
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0); /* Fond dégradé */
   border-radius: 16px;  
   padding: 20px;  
   box-shadow: var(--card-shadow);  
