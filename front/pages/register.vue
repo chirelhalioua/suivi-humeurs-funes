@@ -4,10 +4,7 @@
       <div class="register-content">
         <h1 class="register-title">Inscription</h1>
         <p class="register-subtitle">Rejoignez Les Humeurs à la Funès</p>
-      
-        <div class="divider">
-          <span>ou</span>
-        </div>
+    
 
         <!-- Formulaire d'inscription -->
         <form @submit.prevent="registerUser" class="register-form">
