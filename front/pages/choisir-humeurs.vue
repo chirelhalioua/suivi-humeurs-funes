@@ -119,7 +119,6 @@ const chooseMood = () => {
   errorMessage.value = ''; // On enlève les erreurs si tout va bien
 };
 
-// Enregistrez l'humeur avec le token
 const saveMood = async () => {
   if (!selectedMoodId.value) {
     errorMessage.value = "Veuillez choisir une humeur avant d'enregistrer.";
@@ -179,13 +178,13 @@ onMounted(() => {
     margin: 40px auto;
     max-width: 800px;
   }
-  
+
   h1 {
     font-size: 2.5rem;
     color: #4CAF50;
     margin-bottom: 30px;
   }
-  
+
   /* Message d'alerte */
   .warning {
     background: #ffdada;
@@ -195,15 +194,15 @@ onMounted(() => {
     font-weight: bold;
   }
 
-    .error-message {
-  background: #ffdada;
-  color: #d32f2f;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: bold;
-  margin-top: 10px;
-    }
-    
+  .error-message {
+    background: #ffdada;
+    color: #d32f2f;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
   /* Container des humeurs */
   .moods-container {
     display: flex;
@@ -211,7 +210,7 @@ onMounted(() => {
     justify-content: center;
     gap: 20px;
   }
-  
+
   /* Cartes d'humeur */
   .mood-card {
     background: #f9f9f9;
@@ -221,30 +220,30 @@ onMounted(() => {
     padding: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    margin-bottom:20px;
+    margin-bottom: 20px;
   }
-  
+
   .mood-card:hover {
     transform: scale(1.05);
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
   }
-  
+
   .mood-card img {
     width: 100%;
     border-radius: 12px;
     object-fit: cover;
     margin-bottom: 15px;
   }
-  
+
   .mood-info h3 {
     font-size: 1.5rem;
     color: #4CAF50;
   }
-  
+
   .mood-info p {
     margin: 5px 0;
   }
-  
+
   /* Boutons fléchés */
   .arrow-btn {
     background: linear-gradient(145deg, #4CAF50, #45a049);
@@ -258,34 +257,35 @@ onMounted(() => {
     transition: background 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.3s;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
-  
+
   .arrow-btn:hover {
     background: #45a049;
     transform: scale(1.1);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
   }
-  
+
   .arrow-btn:active {
     transform: scale(0.95);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
-  
+
   .arrow-btn:disabled {
     background: #ccc;
     cursor: not-allowed;
     box-shadow: none;
   }
-  
-  .choose-btn:hover, .save-btn:hover {
+
+  .choose-btn:hover,
+  .save-btn:hover {
     background: #45a049;
     transform: translateY(-2px);
   }
-  
+
   .choose-btn:disabled {
     background: #ccc;
     cursor: not-allowed;
   }
-  
+
   /* Zone de texte */
   textarea {
     width: 100%;
@@ -297,23 +297,23 @@ onMounted(() => {
     margin-top: 10px;
     transition: border-color 0.3s ease-in-out;
   }
-  
+
   textarea:focus {
     border-color: #4CAF50;
     outline: none;
   }
-  
+
   /* Aucune humeur */
   .no-mood {
     color: #777;
     font-size: 1.2rem;
   }
-  
+
   /* Zone de description et boutons */
   .mood-details {
     margin-top: 20px;
   }
-  
+
   .save-btn {
     background-color: #4CAF50;
     color: white;
