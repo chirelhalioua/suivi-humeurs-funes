@@ -73,43 +73,41 @@ const loginUser = async () => {
     });
 
     if (response.status === 200 && response.data.user) {
-      // Enregistrer l'ID utilisateur dans localStorage
       localStorage.setItem('userId', response.data.user._id);
-      router.push('/profil').then(() => message.value = ''); // Rediriger vers la page profil après connexion
+      router.push('/profil');
     } else {
-      showMessage('Problème de connexion au serveur.', 'error');
+      showMessage('Identifiants incorrects ou serveur non disponible', 'error');
     }
   } catch (error) {
-    showMessage(error.response?.data.message || 'Une erreur est survenue.', 'error');
+    if (error.response) {
+      showMessage(error.response.data.message || 'Erreur serveur', 'error');
+    } else {
+      showMessage('Une erreur est survenue, veuillez réessayer.', 'error');
+    }
   } finally {
     isLoading.value = false;
   }
 };
 
-// Connexion Google avec GIS
 const signInWithGoogle = () => {
   google.accounts.id.initialize({
     client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
     callback: handleGoogleResponse,
   });
-
   google.accounts.id.prompt();
 };
 
 const handleGoogleResponse = async (response) => {
   try {
     const { credential } = response;
-
-    const res = await axios.post("https://suivi-humeurs-funes.onrender.com/api/auth/google", {
-      token: credential,
-    });
-
+    const res = await axios.post("https://suivi-humeurs-funes.onrender.com/api/auth/google", { token: credential });
     const { user } = res.data;
-    localStorage.setItem("userId", user._id); // Stocker seulement l'ID de l'utilisateur
+    localStorage.setItem("userId", user._id);
     showMessage("Connexion réussie!", "success");
-    router.push("/profil"); // Rediriger vers le profil après une connexion réussie
+    router.push("/profil");
   } catch (error) {
-    showMessage("Erreur lors de la connexion avec Google", "error");
+    const errorMessage = error.response?.data.message || "Erreur lors de la connexion avec Google";
+    showMessage(errorMessage, "error");
   }
 };
 
@@ -124,9 +122,8 @@ const initializeGoogleSignIn = () => {
     google.accounts.id.initialize({
       client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
       callback: handleGoogleResponse,
-      auto_select: true, // "One Tap" sign-in
+      auto_select: true,
     });
-
     google.accounts.id.prompt();
   } else {
     showMessage("Google API non chargé", "error");
