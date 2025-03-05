@@ -155,141 +155,157 @@
 </div>
 
   </div>  
-</template>  <script setup>  
-import { ref, onMounted, computed } from "vue";  
-import axios from "axios";  
+</template>  
   
-// État  
-const view = ref("daily");  
-const selectedDate = ref(new Date());  
-const isLoading = ref(true);  
-const morningData = ref([]);  
-const eveningData = ref([]);  
-  
-// Constantes  
-const days = [  
-  "Dimanche",  
-  "Lundi",  
-  "Mardi",  
-  "Mercredi",  
-  "Jeudi",  
-  "Vendredi",  
-  "Samedi",  
-];  
-  
-// Dates de la semaine  
-const weekDates = computed(() => {  
-  const dates = [];  
-  const currentDate = new Date(selectedDate.value);  
-  const firstDay = new Date(  
-    currentDate.setDate(currentDate.getDate() - currentDate.getDay()),  
-  );  
-  
-  for (let i = 0; i < 7; i++) {  
-    dates.push(  
-      new Date(  
-        firstDay.getFullYear(),  
-        firstDay.getMonth(),  
-        firstDay.getDate() + i,  
-      ),  
-    );  
-  }  
-  
-  return dates;  
-});  
-  
-// Formatage des dates  
-const formatDate = (date) => {  
-  return new Intl.DateTimeFormat("fr-FR", {  
-    day: "numeric",  
-    month: "long",  
-    year: "numeric",  
-  }).format(date);  
-};  
-  
-const formatDateShort = (date) => {  
-  return new Intl.DateTimeFormat("fr-FR", {  
-    day: "numeric",  
-    month: "short",  
-  }).format(date);  
-};  
-  
-// Vérification si la date est aujourd'hui  
-const isToday = (date) => {  
-  const today = new Date();  
-  return date.toDateString() === today.toDateString();  
-};  
-  
-// Navigation entre les jours  
-const previousDay = () => {  
-  selectedDate.value = new Date(  
-    selectedDate.value.setDate(selectedDate.value.getDate() - 1),  
-  );  
-};  
-  
-const nextDay = () => {  
-  if (!isToday(selectedDate.value)) {  
-    selectedDate.value = new Date(  
-      selectedDate.value.setDate(selectedDate.value.getDate() + 1),  
-    );  
-  }  
-};  
+
   
 // Changement de vue  
 const changeView = (newView) => {  
   view.value = newView;  
 };  
   
-// Récupération des données  
-const fetchMoodData = async () => {  
-  const token = localStorage.getItem("authToken");  
-  if (!token) {  
-    console.error("Token non trouvé");  
-    return;  
-  }  
-  
-  try {  
-    isLoading.value = true;  
-  
-    // Récupérer l'ID utilisateur  
-    const userResponse = await axios.get("https://suivi-humeurs-funes.onrender.com/api/auth/me", {  
-      headers: { Authorization: `Bearer ${token}` },  
-    });  
-  
-    // Récupérer les humeurs  
-    const moodsResponse = await axios.get(  
-      `https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userResponse.data._id}`,  
-      { headers: { Authorization: `Bearer ${token}` } },  
-    );  
-  
-    // Réinitialiser les tableaux  
-    morningData.value = Array(7).fill(null);  
-    eveningData.value = Array(7).fill(null);  
-  
-    // Traiter les données  
-    for (const entry of moodsResponse.data) {  
-      const moodDetails = await axios.get(  
-        `https://suivi-humeurs-funes.onrender.com/api/humeurs/${entry.humeurId}`,  
-      );  
-  
-      const dayIndex = new Date(entry.date).getDay();  
-  
-      if (entry.timeOfDay === "morning") {  
-        morningData.value[dayIndex] = moodDetails.data;  
-      } else {  
-        eveningData.value[dayIndex] = moodDetails.data;  
-      }  
-    }  
-  } catch (error) {  
-    console.error("Erreur lors de la récupération des données:", error);  
-  } finally {  
-    isLoading.value = false;  
-  }  
-};  
-  
-// Initialisation  
-onMounted(fetchMoodData);  
-</script>  
+<script setup>
+import { ref, onMounted, computed } from "vue";
+import axios from "axios";
+
+// État
+const view = ref("daily");
+const selectedDate = ref(new Date());
+const isLoading = ref(true);
+const morningData = ref([]);
+const eveningData = ref([]);
+const userId = ref(null); // Stocker l'ID utilisateur
+
+// Constantes
+const days = [
+  "Dimanche",
+  "Lundi",
+  "Mardi",
+  "Mercredi",
+  "Jeudi",
+  "Vendredi",
+  "Samedi",
+];
+
+// Dates de la semaine
+const weekDates = computed(() => {
+  const dates = [];
+  const currentDate = new Date(selectedDate.value);
+  const firstDay = new Date(
+    currentDate.setDate(currentDate.getDate() - currentDate.getDay())
+  );
+
+  for (let i = 0; i < 7; i++) {
+    dates.push(
+      new Date(
+        firstDay.getFullYear(),
+        firstDay.getMonth(),
+        firstDay.getDate() + i
+      )
+    );
+  }
+
+  return dates;
+});
+
+// Formatage des dates
+const formatDate = (date) => {
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+};
+
+const formatDateShort = (date) => {
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "short",
+  }).format(date);
+};
+
+// Vérification si la date est aujourd'hui
+const isToday = (date) => {
+  const today = new Date();
+  return date.toDateString() === today.toDateString();
+};
+
+// Navigation entre les jours
+const previousDay = () => {
+  selectedDate.value = new Date(
+    selectedDate.value.setDate(selectedDate.value.getDate() - 1)
+  );
+};
+
+const nextDay = () => {
+  if (!isToday(selectedDate.value)) {
+    selectedDate.value = new Date(
+      selectedDate.value.setDate(selectedDate.value.getDate() + 1)
+    );
+  }
+};
+
+// Changement de vue
+const changeView = (newView) => {
+  view.value = newView;
+};
+
+// Récupération des données
+const fetchMoodData = async () => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    console.error("Token non trouvé");
+    return;
+  }
+
+  try {
+    isLoading.value = true;
+
+    // Récupérer l'ID utilisateur
+    const userResponse = await axios.get(
+      "https://suivi-humeurs-funes.onrender.com/api/auth/me",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    userId.value = userResponse.data._id; // Assigner l'ID utilisateur
+
+    // Récupérer les humeurs
+    const moodsResponse = await axios.get(
+      `https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userResponse.data._id}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    // Réinitialiser les tableaux
+    morningData.value = Array(7).fill(null);
+    eveningData.value = Array(7).fill(null);
+
+    // Traiter les données
+    for (const entry of moodsResponse.data) {
+      const moodDetails = await axios.get(
+        `https://suivi-humeurs-funes.onrender.com/api/humeurs/${entry.humeurId}`
+      );
+
+      const dayIndex = new Date(entry.date).getDay();
+
+      if (entry.timeOfDay === "morning") {
+        morningData.value[dayIndex] = moodDetails.data;
+      } else {
+        eveningData.value[dayIndex] = moodDetails.data;
+      }
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération des données:", error);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// Initialisation
+onMounted(fetchMoodData);
+</script>
+
 
 <style scoped>  
 /* Variables */  
