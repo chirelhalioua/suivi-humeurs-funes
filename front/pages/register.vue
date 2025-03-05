@@ -130,16 +130,17 @@ const registerUser = async () => {
 
     console.log("Réponse API:", response.data);
 
-    if (response.data?.user?._id) {
-      localStorage.setItem("userId", response.data.user._id);
+    // Vérifier si la réponse contient un userId
+    if (response.data?.userId) {
+      // Enregistrer le userId dans le localStorage
+      localStorage.setItem("userId", response.data.userId);
       console.log("User ID enregistré:", localStorage.getItem("userId"));
 
       // Message de confirmation d'inscription
       showMessage('Inscription réussie! Vous allez être redirigé...', 'success');
 
-      // Assurez-vous que la redirection est effectuée après un délai de 2 secondes.
+      // Redirection vers la page de login après 2 secondes
       setTimeout(() => {
-        // Vérifiez si la redirection vers la page login est bien effectuée
         console.log("Redirection vers la page de connexion...");
         router.push('/login');
       }, 2000);
@@ -154,6 +155,7 @@ const registerUser = async () => {
   }
 };
 </script>
+
 
 <style scoped>
 .register-page {
