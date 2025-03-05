@@ -74,10 +74,10 @@ const loginUser = async () => {
 
     console.log(response);  // Ajout d'un log pour examiner la réponse
 
-    if (response.status === 200 && response.data.user) {
-      // Enregistrer l'ID utilisateur dans localStorage
-      localStorage.setItem('userId', response.data.user._id);
-      router.push('/profil');
+    if (response.status === 200 && response.data.userId) {
+      // Vérifiez si l'ID utilisateur est bien présent dans la réponse
+      localStorage.setItem('userId', response.data.userId);  // Enregistrez l'ID dans localStorage
+      router.push('/profil');  // Rediriger vers la page de profil
     } else {
       showMessage('Identifiants incorrects ou serveur non disponible', 'error');
     }
