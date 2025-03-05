@@ -4,14 +4,7 @@
       <div class="register-content">
         <h1 class="register-title">Inscription</h1>
         <p class="register-subtitle">Rejoignez Les Humeurs à la Funès</p>
-
-        <!-- Bouton Google -->
-        <div class="social-login">
-          <button @click="signInWithGoogle" class="google-btn" aria-label="Continuer avec Google">
-            <span>Continuer avec Google</span>
-          </button>
-        </div>
-
+      
         <div class="divider">
           <span>ou</span>
         </div>
@@ -155,40 +148,8 @@ const registerUser = async () => {
   }
 };
 
-// Connexion Google avec GIS
-const signInWithGoogle = () => {
-  google.accounts.id.initialize({
-    client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
-    callback: handleGoogleResponse,
-  });
-
-  google.accounts.id.prompt();
-};
-
-// Fonction de gestion de la réponse de Google
-const handleGoogleResponse = async (response) => {
-  try {
-    const { credential } = response;
-
-    const res = await axios.post("https://suivi-humeurs-funes.onrender.com/api/auth/google", {
-      token: credential,
-    });
-
-    const { userId } = res.data;
-    localStorage.setItem("userId", userId); // Stocker l'ID utilisateur
-    console.log("ID utilisateur stocké avec Google:", localStorage.getItem('userId'));
-
-    showMessage("Inscription réussie avec Google!", "success");
-
-    // Redirection vers le profil immédiatement
-    router.push("/profil");
-
-  } catch (error) {
-    showMessage("Erreur lors de l'inscription avec Google", "error");
-  }
-};
-</script>
-
+</scrip>
+  
 <style scoped>
 .register-page {
   min-height: 100vh;
