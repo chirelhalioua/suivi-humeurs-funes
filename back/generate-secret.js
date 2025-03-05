@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 // Créer un payload (données à encoder dans le token)
 const payload = {
-  userId: '67c7445b1283e3ae024a5800',  // L'ID utilisateur
+  id: '67c7445b1283e3ae024a5800',  // L'ID utilisateur
   role: 'admin',     // Le rôle de l'utilisateur
 };
 
