@@ -125,19 +125,52 @@ const saveMood = async () => {
     return;
   }
 
-  const userMoodChoice = {
-    date: new Date().toISOString().split('T')[0],
-    humeurId: selectedMoodId.value,
-    description: description.value || "Aucune description fournie",
-  };
-
-  // Récupérer le token depuis le localStorage
-  const token = localStorage.getItem('authToken');  // Utiliser le token stocké
-
+  // Récupérer le token et l'ID utilisateur
+  const token = localStorage.getItem('authToken');
   if (!token) {
     errorMessage.value = "Impossible d'enregistrer l'humeur. Le token JWT est manquant.";
     return;
   }
+
+  // Fonction pour décoder la partie base64 du JWT et obtenir l'ID utilisateur
+  function getUserIdFromToken(token) {
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      throw new Error('Token JWT invalide');
+    }
+    const payload = decodeBase64Url(parts[1]);
+    const parsedPayload = JSON.parse(payload);
+    return parsedPayload.id;
+  }
+
+  // Fonction pour décoder Base64 URL
+  function decodeBase64Url(base64Url) {
+    base64Url = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const padding = base64Url.length % 4 === 0 ? '' : '='.repeat(4 - (base64Url.length % 4));
+    const base64 = base64Url + padding;
+    return atob(base64);
+  }
+
+  const userId = getUserIdFromToken(token); // Utiliser la fonction pour extraire l'ID utilisateur
+
+  // Déterminer le moment de la journée (timeOfDay)
+  const hours = new Date().getHours();
+  let timeOfDay = '';
+  if (hours >= 6 && hours < 12) {
+    timeOfDay = 'morning';
+  } else if (hours >= 12 && hours < 18) {
+    timeOfDay = 'afternoon';
+  } else {
+    timeOfDay = 'evening';
+  }
+
+  const userMoodChoice = {
+    date: new Date().toISOString().split('T')[0],
+    humeurId: selectedMoodId.value,
+    description: description.value || "Aucune description fournie",
+    userId: userId,  // Ajouter l'ID utilisateur
+    timeOfDay: timeOfDay  // Ajouter le moment de la journée
+  };
 
   try {
     console.log('Données envoyées :', userMoodChoice);
@@ -154,7 +187,7 @@ const saveMood = async () => {
       moodStatusMessage.value = "Merci d'avoir enregistré votre humeur.";
       selectedMoodId.value = null;
       description.value = '';
-      errorMessage.value = ''; // On efface les erreurs si tout se passe bien
+      errorMessage.value = '';  // On efface les erreurs si tout se passe bien
       checkIfMoodAlreadyChosen();
     }
   } catch (error) {
