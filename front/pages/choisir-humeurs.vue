@@ -132,7 +132,7 @@ const saveMood = async () => {
   };
 
   // Récupérer le token depuis le localStorage
-  const token = localStorage.getItem('auth_token');  // Utiliser le token stocké
+  const token = localStorage.getItem('authToken');  // Utiliser le token stocké
 
   if (!token) {
     errorMessage.value = "Impossible d'enregistrer l'humeur. Le token JWT est manquant.";
