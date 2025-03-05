@@ -5,10 +5,7 @@
         <h1 class="login-title">Connexion</h1>
         <p class="login-subtitle">Bienvenue sur Les Humeurs à la Funès</p>
 
-    
-
-        <div class="divider"><span>ou</span></div>
-
+  
         <form @submit.prevent="loginUser" class="login-form">
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
