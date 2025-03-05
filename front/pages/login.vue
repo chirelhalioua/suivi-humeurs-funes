@@ -64,19 +64,17 @@ const showMessage = (text, type) => {
   setTimeout(() => message.value = '', 5000);
 };
 
-const loginUser = async (credentials) => {
+const loginUser = async () => {
   try {
     isLoading.value = true;
     const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/login', {
       email: email.value,
       password: password.value
     });
-     console.log('Token reçu du backend :', response.data.token); 
 
     if (response.status === 200 && response.data.token) {
+      // Enregistrer le token dans localStorage
       localStorage.setItem('authToken', response.data.token);
-      const decodedToken = JSON.parse(atob(response.data.token.split('.')[1]));
-      console.log('Contenu du token décodé :', decodedToken);
       router.push('/profil').then(() => message.value = '');
     } else {
       showMessage('Problème de connexion au serveur.', 'error');
@@ -87,6 +85,7 @@ const loginUser = async (credentials) => {
     isLoading.value = false;
   }
 };
+
 
 // Connexion Google avec GIS
 const signInWithGoogle = () => {
