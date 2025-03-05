@@ -82,6 +82,7 @@ const loginUser = async () => {
     if (response.status === 200 && response.data.userId) {
       // Enregistrer l'ID utilisateur dans localStorage
       localStorage.setItem('userId', response.data.userId);
+      console.log("ID utilisateur enregistré:", localStorage.getItem('userId'));
       showMessage("Connexion réussie!", "success");
       router.push('/profil');
     } else {
