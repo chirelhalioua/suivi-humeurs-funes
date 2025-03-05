@@ -58,14 +58,14 @@ const messageClass = ref('');
 const isLoading = ref(false);
 const router = useRouter();
 
-// Affichage des messages d'erreur ou de succès
+// Affichage des messages
 const showMessage = (text, type) => {
   message.value = text;
   messageClass.value = type;
-  setTimeout(() => message.value = '', 5000);
+  setTimeout(() => message.value = '', 5000);  // Effacer après 5 secondes
 };
 
-// Fonction de connexion de l'utilisateur
+// Connexion de l'utilisateur classique
 const loginUser = async () => {
   try {
     isLoading.value = true;
@@ -74,31 +74,26 @@ const loginUser = async () => {
       password: password.value
     });
 
-    console.log(response);  // Affiche la réponse pour débogage
-
     if (response.status === 200 && response.data.userId) {
-      // Si la connexion est réussie et qu'il y a un userId
-      localStorage.setItem('userId', response.data.userId);  // Enregistrer l'ID utilisateur dans localStorage
+      // Stocker l'ID utilisateur dans localStorage
+      localStorage.setItem('userId', response.data.userId);
+      console.log('ID utilisateur stocké:', localStorage.getItem('userId'));  // Vérification
+      // Redirection vers le profil
       router.push('/profil').then(() => {
         console.log("Redirection réussie vers le profil...");
-        message.value = '';
+        message.value = ''; // Reset du message
       });
     } else {
       showMessage('Identifiants incorrects ou serveur non disponible', 'error');
     }
   } catch (error) {
-    console.error(error);  // Affichage des erreurs pour débogage
-    if (error.response) {
-      showMessage(error.response.data.message || 'Erreur serveur', 'error');
-    } else {
-      showMessage('Une erreur est survenue, veuillez réessayer.', 'error');
-    }
+    showMessage(error.response?.data.message || 'Une erreur est survenue.', 'error');
   } finally {
     isLoading.value = false;
   }
 };
 
-// Connexion Google avec GIS (Google Identity Services)
+// Connexion via Google
 const signInWithGoogle = () => {
   google.accounts.id.initialize({
     client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
@@ -108,32 +103,31 @@ const signInWithGoogle = () => {
   google.accounts.id.prompt();
 };
 
-// Gestion de la réponse de Google après la connexion
 const handleGoogleResponse = async (response) => {
   try {
     const { credential } = response;
 
+    // Envoyer le token Google à l'API pour obtenir l'ID utilisateur
     const res = await axios.post("https://suivi-humeurs-funes.onrender.com/api/auth/google", {
       token: credential,
     });
 
-    const { user } = res.data;
-    localStorage.setItem("userId", user._id); // Stocker l'ID utilisateur
-    showMessage("Connexion réussie!", "success");
+    const { userId } = res.data;
+    localStorage.setItem("userId", userId); // Stocker l'ID utilisateur
+    console.log("ID utilisateur stocké avec Google:", localStorage.getItem('userId'));
+    showMessage("Connexion réussie avec Google!", "success");
     router.push("/profil");
   } catch (error) {
     showMessage("Erreur lors de la connexion avec Google", "error");
   }
 };
 
-// Initialisation du Google Sign-In sur le montage du composant
 onMounted(() => {
   useHead({
     script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true, onload: initializeGoogleSignIn }],
   });
 });
 
-// Fonction d'initialisation de Google Sign-In
 const initializeGoogleSignIn = () => {
   if (window.google) {
     google.accounts.id.initialize({
@@ -148,6 +142,7 @@ const initializeGoogleSignIn = () => {
   }
 };
 </script>
+
 
 <style scoped>
 /* Styles CSS pour le composant login */
