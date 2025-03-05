@@ -129,6 +129,8 @@ const registerUser = async () => {
       password: password.value,
     });
 
+    // Enregistrez l'ID utilisateur après l'inscription réussie
+    localStorage.setItem("userId", response.data.user._id); // Stocke l'ID de l'utilisateur
     showMessage('Inscription réussie! Vous allez être redirigé...', 'success');
     setTimeout(() => {
       router.push('/login');
@@ -166,9 +168,8 @@ const handleGoogleResponse = async (response) => {
     });
 
     if (res.status === 200) {
-      const { token, user } = res.data;
-      localStorage.setItem("authToken", token);
-      localStorage.setItem("userId", user._id);
+      const { user } = res.data;
+      localStorage.setItem("userId", user._id); // Stocke l'ID de l'utilisateur
 
       showMessage("Connexion réussie!", "success");
       router.push("/profil");
@@ -203,7 +204,7 @@ onMounted(() => {
       onerror: () => {
         showMessage("Erreur de chargement de l'API Google", "error");
       },
-    }],
+    }], 
   });
 });
 </script>
