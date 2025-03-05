@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const { OAuth2Client } = require('google-auth-library');
@@ -30,9 +29,7 @@ const registerUser = async (req, res) => {
 
     const savedUser = await user.save();
 
-    const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.status(201).json({ token, user: savedUser });
+    res.status(201).json({ userId: savedUser._id }); // Retourne uniquement l'ID de l'utilisateur
   } catch (error) {
     console.error("Erreur lors de l'inscription : ", error);
     res.status(500).json({ message: 'Erreur du serveur lors de l\'inscription' });
@@ -58,10 +55,7 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: 'Email ou mot de passe incorrect' });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    console.log('Token généré :', token);
-
-    res.status(200).json({ token });
+    res.status(200).json({ userId: user._id }); // Retourne uniquement l'ID de l'utilisateur
   } catch (error) {
     console.error('Erreur lors de la connexion : ', error);
     res.status(500).json({ message: 'Erreur du serveur' });
@@ -93,9 +87,7 @@ const googleAuth = async (req, res) => {
       await user.save();
     }
 
-    // Générer un token JWT pour l'utilisateur
-    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ token: jwtToken, user });
+    res.status(200).json({ userId: user._id }); // Retourne uniquement l'ID de l'utilisateur
   } catch (error) {
     console.error("Erreur lors de l'authentification Google :", error);
     res.status(400).json({ message: "Échec de l'authentification avec Google" });
