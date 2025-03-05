@@ -75,6 +75,8 @@ const loginUser = async (credentials) => {
 
     if (response.status === 200 && response.data.token) {
       localStorage.setItem('authToken', response.data.token);
+      const decodedToken = JSON.parse(atob(response.data.token.split('.')[1]));
+      console.log('Contenu du token décodé :', decodedToken);
       router.push('/profil').then(() => message.value = '');
     } else {
       showMessage('Problème de connexion au serveur.', 'error');
