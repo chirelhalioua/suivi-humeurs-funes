@@ -5,11 +5,7 @@
         <h1 class="login-title">Connexion</h1>
         <p class="login-subtitle">Bienvenue sur Les Humeurs à la Funès</p>
 
-        <div class="social-login">
-          <button @click="signInWithGoogle" class="google-btn" aria-label="Continuer avec Google">
-            <span>Continuer avec Google</span>
-          </button>
-        </div>
+    
 
         <div class="divider"><span>ou</span></div>
 
@@ -93,63 +89,6 @@ const loginUser = async () => {
     showMessage(error.response?.data.message || 'Une erreur est survenue.', 'error');
   } finally {
     isLoading.value = false;
-  }
-};
-
-
-
-// Connexion Google avec GIS
-const signInWithGoogle = () => {
-  google.accounts.id.initialize({
-    client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
-    callback: handleGoogleResponse,
-  });
-
-  google.accounts.id.prompt();
-};
-
-// Fonction de gestion de la réponse de Google
-const handleGoogleResponse = async (response) => {
-  try {
-    const { credential } = response;
-
-    const res = await axios.post("https://suivi-humeurs-funes.onrender.com/api/auth/google", {
-      token: credential,
-    });
-
-    const { userId } = res.data;
-    localStorage.setItem("userId", userId); // Stocker l'ID utilisateur
-    console.log("ID utilisateur stocké avec Google:", localStorage.getItem('userId'));
-
-    showMessage("Connexion réussie avec Google!", "success");
-
-    // Redirection vers le profil immédiatement
-    router.push("/profil");
-
-  } catch (error) {
-    showMessage("Erreur lors de la connexion avec Google", "error");
-  }
-};
-
-// Charger le script Google au montage du composant
-onMounted(() => {
-  useHead({
-    script: [{ src: "https://accounts.google.com/gsi/client", async: true, defer: true, onload: initializeGoogleSignIn }],
-  });
-});
-
-// Initialiser Google Sign-In
-const initializeGoogleSignIn = () => {
-  if (window.google) {
-    google.accounts.id.initialize({
-      client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
-      callback: handleGoogleResponse,
-      auto_select: true, // "One Tap" sign-in
-    });
-
-    google.accounts.id.prompt();
-  } else {
-    showMessage("Google API non chargé", "error");
   }
 };
 </script>
