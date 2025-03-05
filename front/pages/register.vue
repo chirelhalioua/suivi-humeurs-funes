@@ -254,7 +254,7 @@ const registerUser = async () => {
 .submit-btn {
   width: 100%;
   padding: 12px;
-  background-color: #007bff;
+  background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 8px;
@@ -263,12 +263,12 @@ const registerUser = async () => {
 }
 
 .submit-btn.loading {
-  background-color: #6c757d;
+  background-color: #4CAF50;
   cursor: not-allowed;
 }
 
 .submit-btn:hover {
-  background-color: #0056b3;
+  background-color: #4CAF50;
 }
 
 .terms-text {
