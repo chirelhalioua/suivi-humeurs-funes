@@ -72,9 +72,9 @@ const loginUser = async () => {
       password: password.value
     });
 
-    if (response.status === 200 && response.data.token) {
-      // Enregistrer le token dans localStorage
-      localStorage.setItem('authToken', response.data.token);
+    if (response.status === 200 && response.data.user) {
+      // Enregistrer l'ID utilisateur dans localStorage
+      localStorage.setItem('userId', response.data.user._id);
       router.push('/profil').then(() => message.value = '');
     } else {
       showMessage('Problème de connexion au serveur.', 'error');
@@ -85,7 +85,6 @@ const loginUser = async () => {
     isLoading.value = false;
   }
 };
-
 
 // Connexion Google avec GIS
 const signInWithGoogle = () => {
@@ -105,10 +104,8 @@ const handleGoogleResponse = async (response) => {
       token: credential,
     });
 
-    const { token, user } = res.data;
-    localStorage.setItem("authToken", token);
-    localStorage.setItem("userId", user._id);
-
+    const { user } = res.data;
+    localStorage.setItem("userId", user._id); // Stocker seulement l'ID de l'utilisateur
     showMessage("Connexion réussie!", "success");
     router.push("/profil");
   } catch (error) {
