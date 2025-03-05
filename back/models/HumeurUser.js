@@ -1,29 +1,16 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const humeurUserSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User',
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-  timeOfDay: {
-    type: String,
-    enum: ['morning', 'evening'],
-    required: true,
-  },
-  humeurId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Humeur',
-    required: true,
-  },
-  description: {
-    type: String,
-    required: false,
-  },
+const humeurUserSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, required: true },
+  humeurId: { type: Schema.Types.ObjectId, required: true },
+  description: { type: String, default: 'Aucune description fournie' },
+  date: { type: String, required: true },
+  timeOfDay: { type: String, required: true },  // Ajout du champ `timeOfDay`
+}, {
+  timestamps: true
 });
 
-module.exports = mongoose.model('HumeurUser', humeurUserSchema);
+const HumeurUser = mongoose.model('HumeurUser', humeurUserSchema);
+
+module.exports = HumeurUser;
