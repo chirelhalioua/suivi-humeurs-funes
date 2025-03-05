@@ -59,7 +59,6 @@
           <div class="form-group terms">
             <label class="checkbox-container">
               <input type="checkbox" v-model="acceptTerms" required />
-              <span class="checkmark"></span>
               <span class="terms-text">J'accepte les <NuxtLink to="/terms" class="highlight-link">conditions d'utilisation</NuxtLink></span>
             </label>
           </div>
