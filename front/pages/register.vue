@@ -147,9 +147,8 @@ const registerUser = async () => {
     isLoading.value = false;
   }
 };
+</script>
 
-</scrip>
-  
 <style scoped>
 .register-page {
   min-height: 100vh;
@@ -221,89 +220,62 @@ const registerUser = async () => {
   display: block;
   font-weight: 500;
   color: #2c1810;
-  margin-bottom: 8px;
 }
 
 .input-container {
   position: relative;
-  display: flex;
-  align-items: center;
 }
 
 .input-icon {
   position: absolute;
   left: 12px;
-  color: #666;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
 }
 
 .form-input {
   width: 100%;
-  padding: 12px 16px 12px 40px;
-  border: 2px solid #e0e0e0;
+  padding: 12px 40px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-.form-input:focus {
-  border-color: #4caf50;
+  font-size: 14px;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
 .password-toggle {
   position: absolute;
   right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
-  color: #666;
+  font-size: 18px;
   cursor: pointer;
-  padding: 4px;
 }
 
 .submit-btn {
   width: 100%;
-  padding: 14px;
-  background-color: #4caf50;
+  padding: 12px;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 16px;
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.submit-btn:hover {
-  background-color: #45a049;
 }
 
 .submit-btn.loading {
-  background-color: #9e9e9e;
-  pointer-events: none;
+  background-color: #6c757d;
+  cursor: not-allowed;
 }
 
-.loader {
-  border: 2px solid #fff;
-  border-top: 2px solid transparent;
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.submit-btn:hover {
+  background-color: #0056b3;
 }
 
 .terms-text {
   font-size: 14px;
-  color: #666;
 }
 
 .checkbox-container {
@@ -311,47 +283,53 @@ const registerUser = async () => {
   align-items: center;
 }
 
-.checkmark {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #4caf50;
-  border-radius: 4px;
-  margin-right: 8px;
-}
-
-.terms-text a {
-  color: #4caf50;
-  text-decoration: none;
-}
-
 .message {
   margin-top: 16px;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 10px;
   text-align: center;
+  border-radius: 8px;
+  font-size: 14px;
 }
 
 .message.success {
-  background-color: #e8f5e9;
-  color: #388e3c;
+  background-color: #d4edda;
+  color: #155724;
 }
 
 .message.error {
-  background-color: #ffebee;
-  color: #d32f2f;
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
 .login-link {
-  margin-top: 16px;
   text-align: center;
+  margin-top: 20px;
 }
 
 .highlight-link {
-  color: #4caf50;
+  color: #007bff;
   text-decoration: none;
 }
 
 .highlight-link:hover {
   text-decoration: underline;
+}
+
+.divider {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.divider span {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>
