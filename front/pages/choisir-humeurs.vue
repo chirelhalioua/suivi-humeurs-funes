@@ -70,7 +70,12 @@ const errorMessage = ref('');
 // Charger les humeurs depuis l'API
 const fetchHumeurs = async () => {
   try {
-    const response = await axios.get('https://suivi-humeurs-funes.onrender.com/api/humeurs');
+    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice, {
+  headers: {
+    'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+    'Content-Type': 'application/json'
+  }
+});
     humeurs.value = response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération des humeurs :', error);
