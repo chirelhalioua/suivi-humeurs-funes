@@ -49,7 +49,6 @@
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
-    
   </div>
 </template>
 
@@ -133,13 +132,19 @@ const saveMood = async () => {
     description: description.value || "Aucune description fournie",
   };
 
-  const token = process.env.JWT_SECRET;  // Récupère le token depuis les variables d'environnement
+  // Récupérer le token depuis le localStorage
+  const token = localStorage.getItem('auth_token');  // Utiliser le token stocké
+
+  if (!token) {
+    errorMessage.value = "Impossible d'enregistrer l'humeur. Le token JWT est manquant.";
+    return;
+  }
 
   try {
     console.log('Données envoyées :', userMoodChoice);
     const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice, {
       headers: {
-        'Authorization': `Bearer ${token}`  // Assurez-vous d'inclure le token ici
+        'Authorization': `Bearer ${token}`  // Inclure le token dans l'en-tête Authorization
       }
     });
     console.log('Réponse API :', response);
@@ -304,74 +309,18 @@ onMounted(() => {
     font-size: 1.2rem;
   }
   
-  /* Message des horaires */
-  .mood-hours {
-    font-size: 1rem;
-    color: #777;
-    margin-top: 10px;
+  /* Zone de description et boutons */
+  .mood-details {
+    margin-top: 20px;
   }
-
-  /* Bouton Choisir cette humeur */
-.choose-btn {
-  background: linear-gradient(145deg, #4CAF50, #45a049);
-  color: #fff;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 50px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.3s;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.choose-btn:hover {
-  background: #45a049;
-  transform: scale(1.05);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-}
-
-.choose-btn:active {
-  transform: scale(0.95);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.choose-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-/* Bouton Enregistrer */
-.save-btn {
-  background: #2C1810;
-  color: #fff;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 50px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.3s;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
-}
-
-.save-btn:hover {
-  background: #2C1810;
-  transform: scale(1.05);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-}
-
-.save-btn:active {
-  transform: scale(0.95);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.save-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-  </style>
+  
+  .save-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+</style>
