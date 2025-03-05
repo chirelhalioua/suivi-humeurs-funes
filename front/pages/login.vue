@@ -69,10 +69,14 @@ const showMessage = (text, type) => {
 const loginUser = async () => {
   try {
     isLoading.value = true;
+    console.log("Tentative de connexion avec l'email:", email.value, "et le mot de passe:", password.value);
+
     const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/login', {
       email: email.value,
       password: password.value
     });
+
+    console.log("Réponse API:", response);
 
     if (response.status === 200 && response.data.user) {
       // Enregistrer l'ID utilisateur dans localStorage
@@ -83,6 +87,7 @@ const loginUser = async () => {
       showMessage('Problème de connexion au serveur.', 'error');
     }
   } catch (error) {
+    console.log("Erreur de connexion:", error.response?.data || error.message);
     showMessage(error.response?.data.message || 'Une erreur est survenue.', 'error');
   } finally {
     isLoading.value = false;
