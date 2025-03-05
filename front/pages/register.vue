@@ -85,10 +85,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { useHead } from '@vueuse/head';
 
 const nom = ref('');
 const email = ref('');
@@ -129,84 +128,26 @@ const registerUser = async () => {
       password: password.value,
     });
 
-    // Enregistrez l'ID utilisateur après l'inscription réussie
-    localStorage.setItem("userId", response.data.user._id); // Stocke l'ID de l'utilisateur
-    showMessage('Inscription réussie! Vous allez être redirigé...', 'success');
-    setTimeout(() => {
-      router.push('/login');
-    }, 2000);
-  } catch (error) {
-    if (error.response?.data?.message) {
-      showMessage(error.response.data.message, 'error');
+    console.log("Réponse API:", response.data);
+
+    if (response.data?.user?._id) {
+      localStorage.setItem("userId", response.data.user._id);
+      console.log("User ID enregistré:", localStorage.getItem("userId"));
+
+      showMessage('Inscription réussie! Vous allez être redirigé...', 'success');
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
     } else {
-      showMessage("Une erreur est survenue lors de l'inscription", 'error');
+      showMessage("Réponse inattendue de l'API", "error");
     }
+  } catch (error) {
+    console.error("Erreur API:", error.response?.data || error.message);
+    showMessage(error.response?.data?.message || "Une erreur est survenue lors de l'inscription", 'error');
   } finally {
     isLoading.value = false;
   }
 };
-
-const signInWithGoogle = () => {
-  if (window.google) {
-    google.accounts.id.initialize({
-      client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
-      callback: handleGoogleResponse,
-    });
-
-    google.accounts.id.prompt();
-  } else {
-    showMessage("Google API non chargé", "error");
-  }
-};
-
-const handleGoogleResponse = async (response) => {
-  try {
-    const { credential } = response;
-
-    const res = await axios.post("https://suivi-humeurs-funes.onrender.com/api/auth/google", {
-      token: credential,
-    });
-
-    if (res.status === 200) {
-      const { user } = res.data;
-      localStorage.setItem("userId", user._id); // Stocke l'ID de l'utilisateur
-
-      showMessage("Connexion réussie!", "success");
-      router.push("/profil");
-    } else {
-      showMessage("Erreur lors de la connexion avec Google", "error");
-    }
-  } catch (error) {
-    console.error("Google Auth Error:", error.response?.data || error.message);
-    showMessage(error.response?.data.message || "Erreur lors de la connexion avec Google", "error");
-  }
-};
-
-onMounted(() => {
-  useHead({
-    script: [{
-      src: "https://accounts.google.com/gsi/client",
-      async: true,
-      defer: true,
-      onload: () => {
-        if (window.google) {
-          google.accounts.id.initialize({
-            client_id: "542946205769-56cf927j96setvvaf5434eib5qr9e2mb.apps.googleusercontent.com",
-            callback: handleGoogleResponse,
-            auto_select: true,
-          });
-
-          google.accounts.id.prompt();
-        } else {
-          showMessage("Google API non chargé", "error");
-        }
-      },
-      onerror: () => {
-        showMessage("Erreur de chargement de l'API Google", "error");
-      },
-    }], 
-  });
-});
 </script>
 
 <style scoped>
