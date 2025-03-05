@@ -250,26 +250,6 @@ const initializeGoogleSignIn = () => {
   padding: 4px;
 }
 
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.remember-me {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #666;
-}
-
-.forgot-password {
-  color: #4caf50;
-  text-decoration: none;
-  font-size: 14px;
-}
-
 .submit-btn {
   width: 100%;
   padding: 14px;
@@ -281,7 +261,6 @@ const initializeGoogleSignIn = () => {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
 }
 
 .submit-btn:hover {
@@ -293,16 +272,6 @@ const initializeGoogleSignIn = () => {
 .submit-btn.loading {
   background-color: #45a049;
   cursor: wait;
-}
-
-.loader {
-  width: 20px;
-  height: 20px;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
-  border-top-color: transparent;
-  animation: spin 1s linear infinite;
-  display: inline-block;
 }
 
 .message {
@@ -323,53 +292,5 @@ const initializeGoogleSignIn = () => {
 .message.error {
   background-color: #ffebee;
   color: #c62828;
-}
-
-.register-link {
-  text-align: center;
-  margin-top: 24px;
-  color: #666;
-}
-
-.highlight-link {
-  color: #4caf50;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.highlight-link:hover {
-  color: #45a049;
-  text-decoration: underline;
-}
-
-/* Animations */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Media Queries */
-@media (max-width: 480px) {
-  .login-content {
-    padding: 24px;
-  }
-
-  .form-options {
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
-  }
 }
 </style>
