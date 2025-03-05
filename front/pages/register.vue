@@ -304,7 +304,7 @@ const registerUser = async () => {
 }
 
 .highlight-link {
-  color: #007bff;
+  color: #4CAF50;
   text-decoration: none;
 }
 
