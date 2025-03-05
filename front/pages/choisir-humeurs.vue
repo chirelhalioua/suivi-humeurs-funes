@@ -134,7 +134,9 @@ const saveMood = async () => {
   };
 
   try {
+    console.log('Données envoyées :', userMoodChoice);
     const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice);
+    console.log('Réponse API :', response);
 
     if (response.status === 200) {
       localStorage.setItem('userMoodChoice', JSON.stringify(userMoodChoice));
@@ -147,6 +149,7 @@ const saveMood = async () => {
     }
   } catch (error) {
     console.error('Erreur lors de l\'enregistrement de l\'humeur :', error);
+    console.error('Détails de l\'erreur :', error.response || error);
     errorMessage.value = "Une erreur est survenue lors de l'enregistrement. Veuillez réessayer plus tard.";
   }
 };
