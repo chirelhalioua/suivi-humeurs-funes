@@ -75,7 +75,7 @@ const loginUser = async () => {
     if (response.status === 200 && response.data.user) {
       // Enregistrer l'ID utilisateur dans localStorage
       localStorage.setItem('userId', response.data.user._id);
-      router.push('/profil').then(() => message.value = '');
+      router.push('/profil').then(() => message.value = ''); // Rediriger vers la page profil après connexion
     } else {
       showMessage('Problème de connexion au serveur.', 'error');
     }
@@ -107,7 +107,7 @@ const handleGoogleResponse = async (response) => {
     const { user } = res.data;
     localStorage.setItem("userId", user._id); // Stocker seulement l'ID de l'utilisateur
     showMessage("Connexion réussie!", "success");
-    router.push("/profil");
+    router.push("/profil"); // Rediriger vers le profil après une connexion réussie
   } catch (error) {
     showMessage("Erreur lors de la connexion avec Google", "error");
   }
