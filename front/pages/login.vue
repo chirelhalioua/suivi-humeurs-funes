@@ -72,13 +72,18 @@ const loginUser = async () => {
       password: password.value
     });
 
+    console.log(response);  // Ajout d'un log pour examiner la réponse
+
     if (response.status === 200 && response.data.user) {
+      // Enregistrer l'ID utilisateur dans localStorage
       localStorage.setItem('userId', response.data.user._id);
       router.push('/profil');
     } else {
       showMessage('Identifiants incorrects ou serveur non disponible', 'error');
     }
   } catch (error) {
+    console.error(error); // Affichage de l'erreur pour plus de détails
+
     if (error.response) {
       showMessage(error.response.data.message || 'Erreur serveur', 'error');
     } else {
@@ -88,6 +93,7 @@ const loginUser = async () => {
     isLoading.value = false;
   }
 };
+
 
 const signInWithGoogle = () => {
   google.accounts.id.initialize({
