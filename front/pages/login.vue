@@ -76,11 +76,12 @@ const loginUser = async () => {
       password: password.value
     });
 
-    console.log("Réponse API:", response);
+    console.log("Réponse API:", response); // Affiche la réponse complète
 
-    if (response.status === 200 && response.data.user) {
+    // Modifiez cette partie pour gérer la structure de la réponse correctement
+    if (response.status === 200 && response.data.userId) {
       // Enregistrer l'ID utilisateur dans localStorage
-      localStorage.setItem('userId', response.data.user._id);
+      localStorage.setItem('userId', response.data.userId);
       showMessage("Connexion réussie!", "success");
       router.push('/profil');
     } else {
@@ -93,6 +94,8 @@ const loginUser = async () => {
     isLoading.value = false;
   }
 };
+
+
 
 // Connexion Google avec GIS
 const signInWithGoogle = () => {
