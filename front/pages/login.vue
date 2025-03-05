@@ -64,13 +64,14 @@ const showMessage = (text, type) => {
   setTimeout(() => message.value = '', 5000);
 };
 
-const loginUser = async () => {
+const loginUser = async (credentials) => {
   try {
     isLoading.value = true;
     const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/login', {
       email: email.value,
       password: password.value
     });
+     console.log('Token reçu du backend :', response.data.token); 
 
     if (response.status === 200 && response.data.token) {
       localStorage.setItem('authToken', response.data.token);
