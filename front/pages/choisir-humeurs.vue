@@ -132,27 +132,6 @@ const saveMood = async () => {
     return;
   }
 
-  // Fonction pour décoder la partie base64 du JWT et obtenir l'ID utilisateur
-  function getUserIdFromToken(token) {
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-      throw new Error('Token JWT invalide');
-    }
-    const payload = decodeBase64Url(parts[1]);
-    const parsedPayload = JSON.parse(payload);
-    return parsedPayload.id;
-  }
-
-  // Fonction pour décoder Base64 URL
-  function decodeBase64Url(base64Url) {
-    base64Url = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const padding = base64Url.length % 4 === 0 ? '' : '='.repeat(4 - (base64Url.length % 4));
-    const base64 = base64Url + padding;
-    return atob(base64);
-  }
-
-  const userId = getUserIdFromToken(token); // Utiliser la fonction pour extraire l'ID utilisateur
-
   // Déterminer le moment de la journée (timeOfDay)
   const hours = new Date().getHours();
   let timeOfDay = '';
@@ -168,7 +147,7 @@ const saveMood = async () => {
     date: new Date().toISOString().split('T')[0],
     humeurId: selectedMoodId.value,
     description: description.value || "Aucune description fournie",
-    userId: userId,  // Ajouter l'ID utilisateur
+    userId: getUserIdFromLocalStorage(),  // Utiliser l'ID de l'utilisateur stocké dans le localStorage
     timeOfDay: timeOfDay  // Ajouter le moment de la journée
   };
 
@@ -197,10 +176,28 @@ const saveMood = async () => {
   }
 };
 
+// Récupérer l'ID utilisateur depuis le localStorage
+function getUserIdFromLocalStorage() {
+  const userId = localStorage.getItem('userId');  // L'ID utilisateur est supposé être stocké sous cette clé
+  if (userId) {
+    console.log("ID de l'utilisateur connecté : ", userId);  // Affichage dans la console
+    return userId;
+  } else {
+    console.error("Aucun ID utilisateur trouvé.");
+    return null;
+  }
+}
+
 // Initialisation
 onMounted(() => {
   fetchHumeurs();
   checkIfMoodAlreadyChosen();
+  const userId = localStorage.getItem('userId');  // Récupérer l'ID utilisateur depuis localStorage
+  if (userId) {
+    console.log("ID de l'utilisateur connecté : ", userId);  // Affichage dans la console
+  } else {
+    console.log("Aucun utilisateur connecté.");
+  }
 });
 </script>
 
