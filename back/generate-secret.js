@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const express = require('express');
+const app = express();
 
 // Exemple de fonction de login avec récupération de l'utilisateur
 app.post('/login', async (req, res) => {
