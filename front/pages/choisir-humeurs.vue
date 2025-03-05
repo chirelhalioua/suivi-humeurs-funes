@@ -2,7 +2,6 @@
   <div class="choose-mood">
     <h1>🌈 Choisissez votre humeur</h1>
 
-
     <!-- Section principale de sélection d'humeur -->
     <div v-if="!hasChosenMood" class="moods-container">
       <!-- Flèche gauche -->
@@ -121,6 +120,7 @@ const chooseMood = () => {
   errorMessage.value = ''; // On enlève les erreurs si tout va bien
 };
 
+// Enregistrez l'humeur avec le token
 const saveMood = async () => {
   if (!selectedMoodId.value) {
     errorMessage.value = "Veuillez choisir une humeur avant d'enregistrer.";
@@ -133,9 +133,15 @@ const saveMood = async () => {
     description: description.value || "Aucune description fournie",
   };
 
+  const token = process.env.JWT_SECRET;  // Récupère le token depuis les variables d'environnement
+
   try {
     console.log('Données envoyées :', userMoodChoice);
-    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice);
+    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice, {
+      headers: {
+        'Authorization': `Bearer ${token}`  // Assurez-vous d'inclure le token ici
+      }
+    });
     console.log('Réponse API :', response);
 
     if (response.status === 200) {
