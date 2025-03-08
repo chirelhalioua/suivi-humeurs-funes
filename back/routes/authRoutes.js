@@ -22,8 +22,8 @@ router.post('/login', loginUser);
 // Récupérer tous les utilisateurs
 router.get('/users', getAllUsers);
 
-// Récupérer le profil de l'utilisateur connecté (route protégée)
-app.get('/api/auth/profil', (req, res) => {
+// Récupérer le profil de l'utilisateur (sans token, par userId dans la query)
+router.get('/profil', (req, res) => {
   const userId = req.query.userId; // Récupérer l'userId depuis les paramètres de la requête
 
   if (!userId) {
@@ -40,6 +40,5 @@ app.get('/api/auth/profil', (req, res) => {
     })
     .catch(err => res.status(500).json({ message: 'Server error' }));
 });
-
 
 module.exports = router;
