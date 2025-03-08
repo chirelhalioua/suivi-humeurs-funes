@@ -2,13 +2,16 @@ const express = require('express');
 const router = express.Router();
 const HumeurUser = require('../models/HumeurUser');
 const moment = require('moment');
-const authMiddleware = require('../middleware/authMiddleware'); // Import du middleware d'authentification
 
-// Route pour enregistrer l'humeur
-router.post('/humeurs_utilisateurs', authMiddleware, async (req, res) => {
+// Route pour enregistrer l'humeur (sans authMiddleware)
+router.post('/humeurs_utilisateurs', async (req, res) => {
     console.log('Payload reçu :', req.body); // Log pour debug
     try {
-        const { date, timeOfDay, humeurId, description } = req.body;
+        const { date, timeOfDay, humeurId, description, userId } = req.body; // Ajout de userId
+
+        if (!userId) {
+            return res.status(400).json({ message: 'L\'ID utilisateur est requis.' });
+        }
 
         // Validation de la date avec moment.js
         const parsedDate = moment(date, moment.ISO_8601, true);
@@ -16,15 +19,12 @@ router.post('/humeurs_utilisateurs', authMiddleware, async (req, res) => {
             return res.status(400).json({ message: 'La date est invalide.' });
         }
 
-        // L'ID de l'utilisateur est extrait du token JWT
-        const userId = req.userId;
-
         const newHumeurUser = new HumeurUser({
-            userId,  // Utilise l'ID de l'utilisateur authentifié
-            date: parsedDate.toDate(),  // Convertir la date en objet Date
+            userId,
+            date: parsedDate.toDate(), // Convertir la date en objet Date
             timeOfDay,
             humeurId,
-            description,
+            description: description || 'Aucune description fournie'
         });
 
         const savedHumeurUser = await newHumeurUser.save();
@@ -35,12 +35,15 @@ router.post('/humeurs_utilisateurs', authMiddleware, async (req, res) => {
     }
 });
 
-// Route pour récupérer les humeurs de l'utilisateur authentifié
-router.get('/humeurs_utilisateurs', authMiddleware, async (req, res) => {
-    try {
-        const userId = req.userId;  // Utilise l'ID de l'utilisateur authentifié depuis le middleware
+// Route pour récupérer les humeurs de l'utilisateur (sans authMiddleware)
+router.get('/humeurs_utilisateurs/:userId', async (req, res) => {
+    const { userId } = req.params;
 
-        // Récupérer les humeurs de l'utilisateur authentifié
+    if (!userId) {
+        return res.status(400).json({ message: 'L\'ID utilisateur est requis.' });
+    }
+
+    try {
         const humeurs = await HumeurUser.find({ userId }).sort({ date: 1 });
 
         if (!humeurs.length) {
