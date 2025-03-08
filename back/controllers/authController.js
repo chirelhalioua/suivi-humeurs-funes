@@ -138,7 +138,6 @@ const deleteUserProfile = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
-  googleAuth,
   getAllUsers,
   getUserProfile,
   updateUserProfile,
