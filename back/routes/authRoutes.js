@@ -19,20 +19,11 @@ router.post('/register', (req, res) => {
 // Connexion classique
 router.post('/login', loginUser);
 
-// Profil de l'utilisateur (protégé)
-router.get('/profile', authMiddleware, (req, res) => {
-  console.log('Route /profile atteinte avec utilisateur :', req.user);
-  res.send('Profil trouvé');
-});
-
 // Récupérer tous les utilisateurs
 router.get('/users', getAllUsers);
 
-// Suppression du profil de l'utilisateur connecté
-router.delete('/profile', authMiddleware, deleteUserProfile);
-
-// Endpoint pour récupérer les données de l'utilisateur connecté
-router.get('/me', authMiddleware, async (req, res) => {
+// Récupérer le profil de l'utilisateur connecté (protégé)
+router.get('/profil', authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) return res.status(404).send('Utilisateur non trouvé.');
@@ -41,5 +32,11 @@ router.get('/me', authMiddleware, async (req, res) => {
     res.status(500).send('Erreur serveur.');
   }
 });
+
+// Récupérer un profil via son ID
+router.get('/profil/:userId', getUserProfile);
+
+// Suppression du profil de l'utilisateur connecté (protégé)
+router.delete('/profil', authMiddleware, deleteUserProfile);
 
 module.exports = router;
