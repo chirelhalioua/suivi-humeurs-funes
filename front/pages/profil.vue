@@ -96,19 +96,14 @@ const showConfirmDelete = ref(false);
 
 // Fonction pour récupérer les informations du profil
 const fetchUserProfile = async () => {
-  const userId = localStorage.getItem("userId"); // Utilisation de userId au lieu de authToken
+  const userId = localStorage.getItem("userId"); // Utilisation de userId
   if (!userId) {
     router.push("/login");
     return;
   }
 
   try {
-    const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/profil/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('authToken')}` // Toujours utiliser le token pour l'authentification
-      }
-    });
-
+    const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/profil/${userId}`);
     if (response.data?.user) {
       user.value = response.data.user;
     } else {
@@ -125,7 +120,6 @@ const fetchUserProfile = async () => {
 // Fonction pour se déconnecter
 const logout = () => {
   localStorage.removeItem("userId");
-  localStorage.removeItem("authToken");
   router.push("/login");
 };
 
@@ -150,12 +144,8 @@ const deleteProfile = async () => {
   }
 
   try {
-    await axios.delete(`https://suivi-humeurs-funes.onrender.com/api/auth/profile/${userId}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` },
-    });
-
+    await axios.delete(`https://suivi-humeurs-funes.onrender.com/api/auth/profile/${userId}`);
     localStorage.removeItem("userId");
-    localStorage.removeItem("authToken");
     router.push("/login");
   } catch (error) {
     console.error("Erreur:", error);
