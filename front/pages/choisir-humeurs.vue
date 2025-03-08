@@ -121,8 +121,6 @@ const getTimeOfDay = () => {
 onMounted(fetchHumeurs);
 </script>
   
-</style>
-// Récupérer l'ID utilisateur depuis le localStorage
 <style scoped>
   /* Container principal */
   .choose-mood {
