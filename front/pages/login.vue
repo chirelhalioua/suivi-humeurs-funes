@@ -71,13 +71,16 @@ const loginUser = async () => {
 
     console.log("Réponse API:", response); // Affiche la réponse complète
 
-    // Modifiez cette partie pour gérer la structure de la réponse correctement
     if (response.status === 200 && response.data.userId) {
-      // Enregistrer l'ID utilisateur dans localStorage
+      // Stocker l'ID utilisateur dans localStorage
       localStorage.setItem('userId', response.data.userId);
       console.log("ID utilisateur enregistré:", localStorage.getItem('userId'));
+      
+      // Afficher un message de succès
       showMessage("Connexion réussie!", "success");
-router.push('/profil').catch(err => console.log(err));
+      
+      // Rediriger vers la page de profil
+      router.push('/profil').catch(err => console.log(err));
     } else {
       showMessage('Problème de connexion au serveur.', 'error');
     }
