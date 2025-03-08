@@ -65,9 +65,6 @@ app.get("/", (req, res) => {
   res.send("✅ API opérationnelle !");
 });
 
-// Route protégée pour obtenir le profil de l'utilisateur connecté
-app.get("/api/profil", authMiddleware, getUserProfile);
-
 // Liste des routes disponibles
 console.log("📌 Routes disponibles :");
 console.table(listEndpoints(app));
