@@ -1,4 +1,3 @@
-
 <template>
   <div class="choose-mood">
     <h1>🌈 Choisissez votre humeur</h1>
