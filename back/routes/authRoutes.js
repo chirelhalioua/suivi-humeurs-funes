@@ -23,9 +23,23 @@ router.post('/login', loginUser);
 router.get('/users', getAllUsers);
 
 // Récupérer le profil de l'utilisateur connecté (route protégée)
-router.get('/profil', authMiddleware, getUserProfile);
+app.get('/api/auth/profil', (req, res) => {
+  const userId = req.query.userId; // Récupérer l'userId depuis les paramètres de la requête
 
-// Suppression du profil de l'utilisateur connecté (protégé)
-router.delete('/profil', authMiddleware, deleteUserProfile);
+  if (!userId) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
+
+  // Logique pour récupérer le profil de l'utilisateur depuis la base de données
+  User.findById(userId)
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json({ user });
+    })
+    .catch(err => res.status(500).json({ message: 'Server error' }));
+});
+
 
 module.exports = router;
