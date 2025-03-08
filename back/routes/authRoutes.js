@@ -5,8 +5,7 @@ const {
   loginUser, 
   getAllUsers, 
   getUserProfile, 
-  deleteUserProfile, 
-  googleAuth 
+  deleteUserProfile,  
 } = require('../controllers/authController');
 const authMiddleware = require('../middleware/authMiddleware');
 const User = require('../models/User');
