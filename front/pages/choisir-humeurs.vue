@@ -125,10 +125,10 @@ const saveMood = async () => {
     return;
   }
 
-  // Récupérer l'ID utilisateur depuis localStorage
-  const userId = getUserIdFromLocalStorage();
-  if (!userId) {
-    errorMessage.value = "Impossible d'enregistrer l'humeur. ID utilisateur manquant.";
+  // Récupérer le token et l'ID utilisateur
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    errorMessage.value = "Impossible d'enregistrer l'humeur. Le token JWT est manquant.";
     return;
   }
 
@@ -147,13 +147,17 @@ const saveMood = async () => {
     date: new Date().toISOString().split('T')[0],
     humeurId: selectedMoodId.value,
     description: description.value || "Aucune description fournie",
-    userId: userId,  // Utiliser l'ID de l'utilisateur stocké dans le localStorage
+    userId: getUserIdFromLocalStorage(),  // Utiliser l'ID de l'utilisateur stocké dans le localStorage
     timeOfDay: timeOfDay  // Ajouter le moment de la journée
   };
 
   try {
     console.log('Données envoyées :', userMoodChoice);
-    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice);
+    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice, {
+      headers: {
+        'Authorization': `Bearer ${token}`  // Inclure le token dans l'en-tête Authorization
+      }
+    });
     console.log('Réponse API :', response);
 
     if (response.status === 200) {
@@ -167,6 +171,7 @@ const saveMood = async () => {
     }
   } catch (error) {
     console.error('Erreur lors de l\'enregistrement de l\'humeur :', error);
+    console.error('Détails de l\'erreur :', error.response || error);
     errorMessage.value = "Une erreur est survenue lors de l'enregistrement. Veuillez réessayer plus tard.";
   }
 };
@@ -300,14 +305,27 @@ onMounted(() => {
     box-shadow: none;
   }
 
+  .choose-btn,
+  .save-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px; /* Boutons arrondis */
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    font-size: 16px;
+  }
+
   .choose-btn:hover,
   .save-btn:hover {
-    background: #45a049;
+    background-color: #45a049;
     transform: translateY(-2px);
   }
 
-  .choose-btn:disabled {
-    background: #ccc;
+  .choose-btn:disabled,
+  .save-btn:disabled {
+    background-color: #ccc;
     cursor: not-allowed;
   }
 
@@ -337,15 +355,5 @@ onMounted(() => {
   /* Zone de description et boutons */
   .mood-details {
     margin-top: 20px;
-  }
-
-  .save-btn {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
   }
 </style>
