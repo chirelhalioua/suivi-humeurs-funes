@@ -62,38 +62,6 @@ const loginUser = async (req, res) => {
   }
 };
 
-// Authentification via Google (connexion et inscription)
-const googleAuth = async (req, res) => {
-  const { token } = req.body;
-
-  try {
-    // Vérifier le token Google
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-    const payload = ticket.getPayload();
-
-    // Rechercher un utilisateur existant avec l'email fourni par Google
-    let user = await User.findOne({ email: payload.email });
-    if (!user) {
-      // Si l'utilisateur n'existe pas, le créer
-      user = new User({
-        name: payload.name,
-        email: payload.email,
-        password: '', // Aucun mot de passe n'est requis pour une connexion Google
-        avatar: payload.picture // Si votre modèle User possède un champ "avatar"
-      });
-      await user.save();
-    }
-
-    res.status(200).json({ userId: user._id }); // Retourne uniquement l'ID de l'utilisateur
-  } catch (error) {
-    console.error("Erreur lors de l'authentification Google :", error);
-    res.status(400).json({ message: "Échec de l'authentification avec Google" });
-  }
-};
-
 // Récupérer tous les utilisateurs
 const getAllUsers = async (req, res) => {
   try {
