@@ -103,7 +103,7 @@ const fetchUserProfile = async () => {
   }
 
   try {
-    const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/profil/${userId}`);
+    const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/auth/profil`);
     if (response.data?.user) {
       user.value = response.data.user;
     } else {
