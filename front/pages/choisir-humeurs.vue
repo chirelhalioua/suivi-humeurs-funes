@@ -125,10 +125,10 @@ const saveMood = async () => {
     return;
   }
 
-  // Récupérer le token et l'ID utilisateur
-  const token = localStorage.getItem('authToken');
-  if (!token) {
-    errorMessage.value = "Impossible d'enregistrer l'humeur. Le token JWT est manquant.";
+  // Récupérer l'ID utilisateur depuis localStorage
+  const userId = getUserIdFromLocalStorage();
+  if (!userId) {
+    errorMessage.value = "Impossible d'enregistrer l'humeur. ID utilisateur manquant.";
     return;
   }
 
@@ -147,17 +147,13 @@ const saveMood = async () => {
     date: new Date().toISOString().split('T')[0],
     humeurId: selectedMoodId.value,
     description: description.value || "Aucune description fournie",
-    userId: getUserIdFromLocalStorage(),  // Utiliser l'ID de l'utilisateur stocké dans le localStorage
+    userId: userId,  // Utiliser l'ID de l'utilisateur stocké dans le localStorage
     timeOfDay: timeOfDay  // Ajouter le moment de la journée
   };
 
   try {
     console.log('Données envoyées :', userMoodChoice);
-    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice, {
-      headers: {
-        'Authorization': `Bearer ${token}`  // Inclure le token dans l'en-tête Authorization
-      }
-    });
+    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice);
     console.log('Réponse API :', response);
 
     if (response.status === 200) {
@@ -171,7 +167,6 @@ const saveMood = async () => {
     }
   } catch (error) {
     console.error('Erreur lors de l\'enregistrement de l\'humeur :', error);
-    console.error('Détails de l\'erreur :', error.response || error);
     errorMessage.value = "Une erreur est survenue lors de l'enregistrement. Veuillez réessayer plus tard.";
   }
 };
