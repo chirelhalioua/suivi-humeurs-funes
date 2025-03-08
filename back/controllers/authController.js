@@ -79,7 +79,7 @@ const getAllUsers = async (req, res) => {
 // Récupérer le profil de l'utilisateur connecté
 const getUserProfile = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.id; // ou req.user._id selon ta configuration
     const user = await User.findById(userId).select('-password');
 
     if (!user) {
