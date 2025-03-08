@@ -41,4 +41,11 @@ router.get('/profil', (req, res) => {
     .catch(err => res.status(500).json({ message: 'Server error' }));
 });
 
+// Récupérer le profil d'un utilisateur
+router.get('/profil', getUserProfile);
+
+// Supprimer un profil utilisateur
+router.delete('/profil', deleteUserProfile);
+
+
 module.exports = router;
