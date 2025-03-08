@@ -96,26 +96,30 @@ const showConfirmDelete = ref(false);
 
 // Fonction pour récupérer les informations du profil
 const fetchUserProfile = async () => {
-  const userId = localStorage.getItem("userId"); // Utilisation de userId
+  const userId = localStorage.getItem("userId"); // Récupérer l'ID utilisateur depuis localStorage
   if (!userId) {
-    router.push("/login");
+    router.push("/login"); // Rediriger vers la page de connexion si l'utilisateur n'est pas authentifié
     return;
   }
 
   try {
-    const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/auth/profil`);
+    const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/auth/profil`, {
+      params: { userId } // Passer l'ID utilisateur en paramètre
+    });
+
     if (response.data?.user) {
-      user.value = response.data.user;
+      user.value = response.data.user; // Mettre à jour le profil de l'utilisateur
     } else {
       throw new Error("Profil non trouvé");
     }
   } catch (error) {
     console.error("Erreur:", error);
-    router.push("/login");
+    router.push("/login"); // Rediriger vers la page de connexion en cas d'erreur
   } finally {
     isLoading.value = false;
   }
 };
+
 
 // Fonction pour se déconnecter
 const logout = () => {
