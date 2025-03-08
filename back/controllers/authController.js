@@ -76,9 +76,53 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// Exporter les fonctions du contrôleur
+// Récupérer le profil d'un utilisateur spécifique
+const getUserProfile = async (req, res) => {
+  const { userId } = req.query; // On récupère l'ID de l'utilisateur depuis la requête
+
+  if (!userId) {
+    return res.status(400).json({ message: 'L\'ID de l\'utilisateur est requis' });
+  }
+
+  try {
+    const user = await User.findById(userId).select('-password'); // On exclut le mot de passe
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error('Erreur lors de la récupération du profil : ', error);
+    res.status(500).json({ message: 'Erreur du serveur' });
+  }
+};
+
+// Supprimer un profil utilisateur
+const deleteUserProfile = async (req, res) => {
+  const { userId } = req.query;
+
+  if (!userId) {
+    return res.status(400).json({ message: 'L\'ID de l\'utilisateur est requis pour la suppression' });
+  }
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+
+    await User.findByIdAndDelete(userId); // Suppression de l'utilisateur
+    res.status(200).json({ message: 'Profil utilisateur supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du profil : ', error);
+    res.status(500).json({ message: 'Erreur du serveur' });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getAllUsers,
+  getUserProfile,
+  deleteUserProfile,
 };
