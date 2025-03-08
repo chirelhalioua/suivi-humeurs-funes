@@ -102,8 +102,10 @@ const fetchUserProfile = async () => {
   }
 
   try {
-    const response = await axios.get("https://suivi-humeurs-funes.onrender.com/api/auth/profile", {
-      headers: { Authorization: `Bearer ${token}` },
+    const response = await axios.get('https://suivi-humeurs-funes.onrender.com/api/profil', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
     });
 
     if (response.data?.user) {
