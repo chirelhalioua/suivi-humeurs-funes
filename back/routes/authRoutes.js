@@ -21,7 +21,10 @@ router.post('/register', (req, res) => {
 router.post('/login', loginUser);
 
 // Profil de l'utilisateur (protégé)
-router.get('/profile', authMiddleware, getUserProfile);
+router.get('/profile', authMiddleware, (req, res) => {
+  console.log('Route /profile atteinte avec utilisateur :', req.user);
+  res.send('Profil trouvé');
+});
 
 // Récupérer tous les utilisateurs
 router.get('/users', getAllUsers);
