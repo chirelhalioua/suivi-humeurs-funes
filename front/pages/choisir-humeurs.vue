@@ -105,7 +105,7 @@ const nextMood = () => {
 const canNavigate = computed(() => humeurs.value.length > 1);
 const canChooseMood = computed(() => {
   const currentHour = new Date().getHours();
-  return (currentHour >= 6 && currentHour < 12) || (currentHour >= 17 && currentHour < 24);
+  return (currentHour >= 6 && currentHour < 12) || (currentHour >= 17 && currentHour < 25);
 });
 
 // Actions
