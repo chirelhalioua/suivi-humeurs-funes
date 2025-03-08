@@ -77,45 +77,23 @@ const getAllUsers = async (req, res) => {
 };
 
 // Récupérer le profil de l'utilisateur connecté
-const getUserProfile = async (req, res) => {
-  try {
-    const userId = req.user.id; // ou req.user._id selon ta configuration
-    const user = await User.findById(userId).select('-password');
+app.get('/api/auth/profil', (req, res) => {
+  const userId = req.query.userId; // Récupérer l'userId depuis les paramètres de la requête
 
-    if (!user) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé' });
-    }
-
-    res.status(200).json({ user });
-  } catch (error) {
-    console.error('Erreur lors de la récupération du profil : ', error);
-    res.status(500).json({ message: 'Erreur du serveur' });
+  if (!userId) {
+    return res.status(400).json({ message: 'User ID is required' });
   }
-};
 
-// Mettre à jour le profil de l'utilisateur connecté
-const updateUserProfile = async (req, res) => {
-  const { name, email, password } = req.body;
-  const userId = req.user.id;
-
-  try {
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé' });
-    }
-
-    if (name) user.name = name;
-    if (email) user.email = email;
-    if (password) user.password = await bcrypt.hash(password, 10);
-
-    await user.save();
-    res.status(200).json({ message: 'Profil mis à jour', user });
-  } catch (error) {
-    console.error('Erreur lors de la mise à jour du profil : ', error);
-    res.status(500).json({ message: 'Erreur du serveur' });
-  }
-};
+  // Logique pour récupérer le profil de l'utilisateur depuis la base de données
+  User.findById(userId)
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json({ user });
+    })
+    .catch(err => res.status(500).json({ message: 'Server error' }));
+});
 
 // Supprimer le profil de l'utilisateur
 const deleteUserProfile = async (req, res) => {
@@ -140,6 +118,5 @@ module.exports = {
   loginUser,
   getAllUsers,
   getUserProfile,
-  updateUserProfile,
   deleteUserProfile
 };
