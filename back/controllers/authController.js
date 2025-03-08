@@ -76,47 +76,9 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// Récupérer le profil de l'utilisateur connecté
-app.get('/api/auth/profil', (req, res) => {
-  const userId = req.query.userId; // Récupérer l'userId depuis les paramètres de la requête
-
-  if (!userId) {
-    return res.status(400).json({ message: 'User ID is required' });
-  }
-
-  // Logique pour récupérer le profil de l'utilisateur depuis la base de données
-  User.findById(userId)
-    .then(user => {
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      res.json({ user });
-    })
-    .catch(err => res.status(500).json({ message: 'Server error' }));
-});
-
-// Supprimer le profil de l'utilisateur
-const deleteUserProfile = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const user = await User.findByIdAndDelete(userId);
-
-    if (!user) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé' });
-    }
-
-    res.status(200).json({ message: 'Profil supprimé avec succès' });
-  } catch (error) {
-    console.error('Erreur lors de la suppression du profil : ', error);
-    res.status(500).json({ message: 'Erreur du serveur' });
-  }
-};
-
 // Exporter les fonctions du contrôleur
 module.exports = {
   registerUser,
   loginUser,
   getAllUsers,
-  getUserProfile,
-  deleteUserProfile
 };
