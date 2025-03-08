@@ -43,7 +43,4 @@ router.get('/me', authMiddleware, async (req, res) => {
   }
 });
 
-// Route pour l'authentification avec Google
-router.post('/google', googleAuth);
-
 module.exports = router;
