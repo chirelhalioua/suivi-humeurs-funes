@@ -77,7 +77,7 @@ const loginUser = async () => {
       localStorage.setItem('userId', response.data.userId);
       console.log("ID utilisateur enregistré:", localStorage.getItem('userId'));
       showMessage("Connexion réussie!", "success");
-router.push('/profil').catch(err => console.log(err));
+router.push('/profile').catch(err => console.log(err));
     } else {
       showMessage('Problème de connexion au serveur.', 'error');
     }
