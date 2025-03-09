@@ -260,8 +260,8 @@ const toggleSocials = () => {
   socialsVisible.value = !socialsVisible.value;
 };
 
-// Partage sur les réseaux sociaux
-const shareText = computed(() => {
+  // Partage sur les réseaux sociaux
+const formattedShareText = computed(() => {
   const date = formatDate(selectedDate.value);
   const moodMorning = morningData.value[selectedDate.value.getDay()];
   const moodEvening = eveningData.value[selectedDate.value.getDay()];
@@ -269,36 +269,34 @@ const shareText = computed(() => {
   let shareText = `📅 ${date} - Mon humeur :\n`;
   shareText += moodMorning ? `🌞 Matin : ${moodMorning.title}\n` : "🌞 Matin : Pas d'humeur enregistrée\n";
   shareText += moodEvening ? `🌙 Soir : ${moodEvening.title}\n` : "🌙 Soir : Pas d'humeur enregistrée\n";
-  
+
   return shareText;
 });
 
 const siteUrl = "https://suivi-humeurs-funes.vercel.app/";
-const shareText = computed(() => encodeURIComponent(shareText.value));
-const fullText = computed(() => encodeURIComponent(`${shareText.value} ${siteUrl}`));
+const encodedShareText = computed(() => encodeURIComponent(formattedShareText.value));
+const fullText = computed(() => encodeURIComponent(`${formattedShareText.value} ${siteUrl}`));
 
-// Facebook : Parfois, seul le lien s'affiche en aperçu, donc on garde le texte dans "quote"
+// Facebook : Texte + lien
 const facebookShareLink = computed(() => {
-  return `https://www.facebook.com/sharer/sharer.php?u=${siteUrl}&quote=${shareText.value}`;
+  return `https://www.facebook.com/sharer/sharer.php?u=${siteUrl}&quote=${encodedShareText.value}`;
 });
 
-// Twitter : Le texte + le lien dans le tweet
+// Twitter : Texte + lien dans le tweet
 const twitterShareLink = computed(() => {
   return `https://twitter.com/intent/tweet?text=${fullText.value}`;
 });
 
-// LinkedIn : Même principe que Facebook, on sépare l'URL et le texte
+// LinkedIn : Texte + lien
 const linkedinShareLink = computed(() => {
-  return `https://www.linkedin.com/shareArticle?mini=true&url=${siteUrl}&title=Partager mon humeur&summary=${shareText.value}`;
+  return `https://www.linkedin.com/shareArticle?mini=true&url=${siteUrl}&title=Partager mon humeur&summary=${encodedShareText.value}`;
 });
 
-// WhatsApp : Message texte simple avec le lien
+// WhatsApp : Texte + lien
 const whatsappShareLink = computed(() => {
   return `https://wa.me/?text=${fullText.value}`;
 });
-  
-  
-        
+
 
 onMounted(fetchMoodData);
 </script>
