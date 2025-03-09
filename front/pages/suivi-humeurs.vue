@@ -275,17 +275,17 @@ const shareText = computed(() => {
 
 const facebookShareLink = computed(() => {
   const text = encodeURIComponent(shareText.value);
-  return `https://www.facebook.com/sharer/sharer.php?u=https://www.votresite.com&quote=${text}`;
+  return `https://www.facebook.com/sharer/sharer.php?u=https://suivi-humeurs-funes.vercel.app&quote=${text}`;
 });
 
 const twitterShareLink = computed(() => {
   const text = encodeURIComponent(shareText.value);
-  return `https://twitter.com/intent/tweet?text=${text}&url=https://www.votresite.com`;
+  return `https://twitter.com/intent/tweet?text=${text}&url=https://suivi-humeurs-funes.vercel.app/`;
 });
 
 const linkedinShareLink = computed(() => {
   const text = encodeURIComponent(shareText.value);
-  return `https://www.linkedin.com/shareArticle?mini=true&url=https://www.votresite.com&title=Partager mon humeur&summary=${text}`;
+  return `https://www.linkedin.com/shareArticle?mini=true&url=https://suivi-humeurs-funes.vercel.app/&title=Partager mon humeur&summary=${text}`;
 });
 
 const whatsappShareLink = computed(() => {
