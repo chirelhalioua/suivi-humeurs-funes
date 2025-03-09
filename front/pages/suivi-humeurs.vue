@@ -29,9 +29,28 @@
           </button>
         </div>
         <div class="mood-card" v-for="(mood, time) in dailyMoods" :key="time">
-          <h3>{{ time === 'morning' ? 'Matin' : 'Soir' }}</h3>
+          <h3>
+            <i :class="time === 'morning' ? 'fas fa-sun morning-icon' : 'fas fa-moon evening-icon'"></i>
+            {{ time === 'morning' ? 'Matin (6h - 13h)' : 'Soir (17h - Minuit)' }}
+          </h3>
           <p v-if="mood">{{ mood.title }}</p>
           <p v-else>Pas d'humeur enregistrée</p>
+        </div>
+      </div>
+
+      <div v-if="view === 'weekly'" class="weekly-view">
+        <div class="mood-card" v-for="(mood, index) in weeklyMoods" :key="index">
+          <h3>{{ formatDate(new Date(mood.date)) }}</h3>
+          <p v-if="mood.morning">
+            <i class="fas fa-sun morning-icon"></i>
+            Matin : {{ mood.morning.title }}
+          </p>
+          <p v-else>Matin : Pas d'humeur enregistrée</p>
+          <p v-if="mood.evening">
+            <i class="fas fa-moon evening-icon"></i>
+            Soir : {{ mood.evening.title }}
+          </p>
+          <p v-else>Soir : Pas d'humeur enregistrée</p>
         </div>
       </div>
     </div>
@@ -39,13 +58,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 
 const view = ref('daily');
 const selectedDate = ref(new Date());
 const isLoading = ref(true);
 const dailyMoods = ref({ morning: null, evening: null });
+const weeklyMoods = ref([]);
 
 const userId = localStorage.getItem('userId');
 
@@ -59,6 +79,7 @@ const fetchMoods = async () => {
     const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userId}`);
     const today = selectedDate.value.toISOString().split('T')[0];
     dailyMoods.value = response.data.find(entry => entry.date === today) || { morning: null, evening: null };
+    fetchWeeklyMoods(response.data);
   } catch (error) {
     console.error('Erreur lors de la récupération des humeurs:', error);
   } finally {
@@ -66,11 +87,25 @@ const fetchMoods = async () => {
   }
 };
 
+const fetchWeeklyMoods = (data) => {
+  const startOfWeek = new Date(selectedDate.value);
+  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(endOfWeek.getDate() + 6);
+
+  weeklyMoods.value = data.filter(entry => {
+    const entryDate = new Date(entry.date);
+    return entryDate >= startOfWeek && entryDate <= endOfWeek;
+  });
+};
+
 const formatDate = date => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
 const isToday = date => date.toDateString() === new Date().toDateString();
 const previousDay = () => selectedDate.value.setDate(selectedDate.value.getDate() - 1);
 const nextDay = () => selectedDate.value.setDate(selectedDate.value.getDate() + 1);
 const changeView = newView => (view.value = newView);
+
+watch(selectedDate, fetchMoods);
 
 onMounted(fetchMoods);
 </script>
@@ -102,6 +137,15 @@ onMounted(fetchMoods);
   margin: 10px 0;
   padding: 20px;
   border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.morning-icon {
+  color: #ffd700;
+  margin-right: 5px;
+}
+.evening-icon {
+  color: #8a2be2;
+  margin-right: 5px;
 }
 .spinner {
   width: 50px;
