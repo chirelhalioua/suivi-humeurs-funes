@@ -340,124 +340,253 @@ onMounted(fetchMoodData);
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
-  font-size: 1.1rem;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  background: white;
+  color: var(--secondary-color);
+  font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
 }
 
 .toggle-btn.active {
-  background-color: var(--primary-color);
-  color: #fff;
+  background: #46A34A;
+  color: white;
 }
 
 .toggle-btn i {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
 }
 
-/* Daily View Styles */
-.daily-view .date-selector {
+/* Loading State */
+.loading-state {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+/* Daily View */
+.daily-view {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.date-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
   margin-bottom: 30px;
 }
 
-.nav-btn {
-  background-color: transparent;
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
-  padding: 0 15px;
+.current-date {
+  text-align: center;
 }
 
 .current-date h2 {
-  font-size: 1.8rem;
-  margin: 0 10px;
+  font-size: 1.5rem;
+  color: var(--secondary-color);
+  margin-bottom: 4px;
 }
 
+.current-date p {
+  color: #666;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--secondary-color);
+  cursor: pointer;
+  padding: 8px;
+  transition: var(--transition);
+}
+
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mood Cards */
 .moods-container {
-  display: flex;
-  justify-content: space-around;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
 }
 
 .mood-card {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: var(--card-shadow);
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0); /* Fond dégradé */
+  border-radius: 16px;
   padding: 20px;
-  width: 45%;
+  box-shadow: var(--card-shadow);
 }
 
-.mood-card .time-label {
+.time-label {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: var(--secondary-color);
 }
 
-.mood-image-container img {
-  max-width: 100px;
+.mood-content {
+  text-align: center;
+}
+
+.mood-image-container {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 20px;
   border-radius: 50%;
+  overflow: hidden;
+}
+
+.mood-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.mood-image:hover {
+  transform: scale(1.1);
 }
 
 .mood-details h3 {
-  font-size: 1.3rem;
-  margin: 10px 0;
+  font-size: 1.2rem;
+  color: var(--secondary-color);
+  margin-bottom: 8px;
 }
 
 .mood-details p {
-  font-size: 1rem;
+  color: #666;
 }
 
-/* Weekly View Styles */
-.weekly-view .week-grid {
-  display: flex;
-  flex-wrap: wrap;
+.mood-empty {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.mood-empty i {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+/* Weekly View */
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
-  justify-content: space-around;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .day-card {
-  background-color: white;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0); /* Fond dégradé */
+  border-radius: 16px;
+  padding: 20px;
   box-shadow: var(--card-shadow);
-  width: 30%;
-  padding: 15px;
+}
+
+.day-card.current-day {
+  border: 2px solid var(--primary-color);
+}
+
+.day-header {
   text-align: center;
+  margin-bottom: 16px;
+}
+
+.day-header h3 {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+  margin-bottom: 4px;
+}
+
+.day-header p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.day-moods {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .mini-mood {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin: 10px 0;
+  gap: 12px;
+}
+
+.time-indicator {
+  font-size: 0.9rem;
+  color: #666;
+  width: 50px;
 }
 
 .mini-mood-content {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+}
+
+.mini-mood-content img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.mini-mood-content span {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
 }
 
 .mini-mood-empty {
-  color: gray;
+  color: #ccc;
 }
 
-.mini-mood-empty i {
-  font-size: 1.5rem;
+/* Animations */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.current-day {
-  border: 2px solid var(--primary-color);
+/* Media Queries */
+@media (max-width: 768px) {
+  .tracking-header h1 {
+    font-size: 2rem;
+  }
+
+  .moods-container {
+    grid-template-columns: 1fr;
+  }
+
+  .week-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.day-header {
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-}
-
-/* Share Button */
+  /* Share Button */
 .share-button-container {
   margin-top: 40px;
   text-align: center;
@@ -482,3 +611,4 @@ onMounted(fetchMoodData);
   font-size: 1.5rem;
 }
 </style>
+
