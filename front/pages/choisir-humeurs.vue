@@ -78,7 +78,7 @@ const nextMood = () => {
 const canNavigate = computed(() => humeurs.value.length > 1);
 const canChooseMood = computed(() => {
   const currentHour = new Date().getHours();
-  return (currentHour >= 6 && currentHour < 12) || (currentHour >= 17 && currentHour <= 23);
+  return (currentHour >= 6 && currentHour < 13) || (currentHour >= 17 && currentHour <= 23);
 });
 
 const chooseMood = () => {
@@ -102,7 +102,7 @@ const saveMood = async () => {
   }
 
   const hours = new Date().getHours();
-  let timeOfDay = hours >= 6 && hours < 12 ? 'morning' : 'evening';
+  let timeOfDay = hours >= 6 && hours < 13 ? 'morning' : 'evening';
 
   const userMoodChoice = {
     date: new Date().toISOString().split('T')[0],
