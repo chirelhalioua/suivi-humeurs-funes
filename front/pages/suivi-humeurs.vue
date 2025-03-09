@@ -156,9 +156,23 @@
     </div>
 
     <div class="share-button-container">
-      <button class="share-btn" @click="shareMood">
+      <div class="share-btn" @click="toggleSocials">
         Partager mon humeur
-      </button>
+        <div class="social-icons" v-if="socialsVisible">
+          <a :href="facebookShareLink" target="_blank">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a :href="twitterShareLink" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a :href="linkedinShareLink" target="_blank">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+          <a :href="whatsappShareLink" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -172,6 +186,7 @@ const selectedDate = ref(new Date());
 const isLoading = ref(true);
 const morningData = ref([]);
 const eveningData = ref([]);
+const socialsVisible = ref(false);
 
 const days = [
   "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
@@ -202,27 +217,6 @@ const nextDay = () => {
 
 const changeView = (newView) => {
   view.value = newView;
-};
-
-const shareMood = () => {
-  const date = formatDate(selectedDate.value);
-  const moodMorning = morningData.value[selectedDate.value.getDay()];
-  const moodEvening = eveningData.value[selectedDate.value.getDay()];
-  
-  let shareText = `📅 ${date} - Mon humeur :\n`;
-  shareText += moodMorning ? `🌞 Matin : ${moodMorning.title}\n` : "🌞 Matin : Pas d'humeur enregistrée\n";
-  shareText += moodEvening ? `🌙 Soir : ${moodEvening.title}\n` : "🌙 Soir : Pas d'humeur enregistrée\n";
-  
-  if (navigator.share) {
-    navigator.share({
-      title: "Mon humeur du jour",
-      text: shareText,
-    }).catch(error => console.error("Erreur de partage", error));
-  } else {
-    navigator.clipboard.writeText(shareText).then(() => {
-      alert("Humeur copiée dans le presse-papier ! Partagez-la où vous voulez !");
-    });
-  }
 };
 
 const fetchMoodData = async () => {
@@ -262,8 +256,116 @@ const weekDates = computed(() => {
   });
 });
 
+const toggleSocials = () => {
+  socialsVisible.value = !socialsVisible.value;
+};
+
+// Partage sur les réseaux sociaux
+const shareText = computed(() => {
+  const date = formatDate(selectedDate.value);
+  const moodMorning = morningData.value[selectedDate.value.getDay()];
+  const moodEvening = eveningData.value[selectedDate.value.getDay()];
+
+  let shareText = `📅 ${date} - Mon humeur :\n`;
+  shareText += moodMorning ? `🌞 Matin : ${moodMorning.title}\n` : "🌞 Matin : Pas d'humeur enregistrée\n";
+  shareText += moodEvening ? `🌙 Soir : ${moodEvening.title}\n` : "🌙 Soir : Pas d'humeur enregistrée\n";
+  
+  return shareText;
+});
+
+const facebookShareLink = computed(() => {
+  const text = encodeURIComponent(shareText.value);
+  return `https://www.facebook.com/sharer/sharer.php?u=https://suivi-humeurs-funes.vercel.app&quote=${text}`;
+});
+
+const twitterShareLink = computed(() => {
+  const text = encodeURIComponent(shareText.value);
+  return `https://twitter.com/intent/tweet?text=${text}&url=https://suivi-humeurs-funes.vercel.app/`;
+});
+
+const linkedinShareLink = computed(() => {
+  const text = encodeURIComponent(shareText.value);
+  return `https://www.linkedin.com/shareArticle?mini=true&url=https://suivi-humeurs-funes.vercel.app/&title=Partager mon humeur&summary=${text}`;
+});
+
+const whatsappShareLink = computed(() => {
+  const text = encodeURIComponent(shareText.value);
+  return `https://wa.me/?text=${text}`;
+});
+
 onMounted(fetchMoodData);
 </script>
+
+<style scoped>
+.mood-tracking-page {
+  padding: 20px;
+}
+
+.tracking-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.view-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.toggle-btn {
+  padding: 10px 20px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.toggle-btn.active {
+  background-color: #46A34A;
+  color: white;
+}
+
+.daily-view, .weekly-view {
+  margin-top: 20px;
+}
+
+.share-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.share-btn {
+  background-color: #46A34A;
+  color: white;
+  width: 200px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  position: relative;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+}
+
+.social-icons i {
+  font-size: 1.5rem;
+  color: #46A34A;
+  transition: 0.3s ease;
+}
+
+.share-btn:hover .social-icons i {
+  color: #388e3c;
+}
+</style>
+
 
 <style scoped>
 /* Variables */
@@ -482,7 +584,7 @@ onMounted(fetchMoodData);
 
 .day-header h3 {
   font-size: 1.1rem;
-  color: var(--secondary-color);
+  color: var (--secondary-color);
   margin-bottom: 4px;
 }
 
@@ -558,17 +660,41 @@ onMounted(fetchMoodData);
   margin-bottom: 20px;
 }
 
-.share-btn {
-  background-color: var(--primary-color);
-  color: black;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: var(--transition);
+.share-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.share-btn:hover {
-  background-color: #388e3c;
+.share-btn {
+  background-color: #46A34A;
+  color: white;
+  width: 300px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  position: relative;
+  font-weight: 500;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+}
+
+.social-icons i {
+  font-size: 1.5rem;
+  color: #46A34A;
+  transition: 0.3s ease;
+}
+
+.share-btn:hover .social-icons i {
+  color: #388e3c;
 }
 </style>
