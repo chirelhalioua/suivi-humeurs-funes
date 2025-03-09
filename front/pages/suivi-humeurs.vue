@@ -156,9 +156,15 @@
     </div>
 
     <div class="share-button-container">
-      <button class="share-btn" @click="shareMood">
+      <div class="share-btn" @mouseover="showSocials" @mouseleave="hideSocials">
         Partager mon humeur
-      </button>
+        <div class="social-icons" v-if="socialsVisible">
+          <i class="fab fa-facebook-f"></i>
+          <i class="fab fa-twitter"></i>
+          <i class="fab fa-linkedin-in"></i>
+          <i class="fab fa-whatsapp"></i>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -172,6 +178,7 @@ const selectedDate = ref(new Date());
 const isLoading = ref(true);
 const morningData = ref([]);
 const eveningData = ref([]);
+const socialsVisible = ref(false);
 
 const days = [
   "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
@@ -261,6 +268,14 @@ const weekDates = computed(() => {
     return date;
   });
 });
+
+const showSocials = () => {
+  socialsVisible.value = true;
+};
+
+const hideSocials = () => {
+  socialsVisible.value = false;
+};
 
 onMounted(fetchMoodData);
 </script>
@@ -560,15 +575,36 @@ onMounted(fetchMoodData);
 
 .share-btn {
   background-color: var(--primary-color);
-  color: black;
+  color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
   transition: var(--transition);
+  position: relative;
 }
 
 .share-btn:hover {
   background-color: #388e3c;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+}
+
+.social-icons i {
+  font-size: 1.5rem;
+  color: white;
+  transition: var(--transition);
+}
+
+.social-icons i:hover {
+  color: #d4d4d4;
 }
 </style>
