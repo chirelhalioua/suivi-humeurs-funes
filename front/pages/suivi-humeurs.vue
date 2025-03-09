@@ -586,29 +586,65 @@ onMounted(fetchMoodData);
   }
 }
 
-  /* Share Button */
+.share-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 15px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+
+.share-btn:hover {
+  background-color: #0056b3;
+}
+  
+.mini-mood .share-btn {
+  margin-top: 10px;
+  padding: 5px;
+  width: 100%;
+}
+  
+/* Style pour l'élément de partage de la semaine */
 .share-button-container {
-  margin-top: 40px;
+  margin-top: 30px;
   text-align: center;
 }
 
 .share-btn {
-  padding: 10px 25px;
-  background-color: var(--primary-color);
+  font-size: 18px;
+  display: inline-block;
+  background-color: #007bff;
   color: white;
-  font-size: 1.2rem;
+  padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
-  border-radius: 30px;
 }
 
 .share-btn:hover {
-  background-color: #388e3c;
+  background-color: #0056b3;
+}
+
+/* Icônes sociales */
+.social-icons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 }
 
 .social-icons a {
-  margin: 0 10px;
-  color: #fff;
-  font-size: 1.5rem;
+  font-size: 20px;
+  color: #333;
+  text-decoration: none;
+}
+
+.social-icons a:hover {
+  color: #007bff;
 }
 </style>
 
