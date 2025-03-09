@@ -482,7 +482,7 @@ onMounted(fetchMoodData);
 
 .day-header h3 {
   font-size: 1.1rem;
-  color: var(--secondary-color);
+  color: var (--secondary-color);
   margin-bottom: 4px;
 }
 
