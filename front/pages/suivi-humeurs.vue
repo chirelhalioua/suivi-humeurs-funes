@@ -573,6 +573,7 @@ onMounted(fetchMoodData);
   background-color: #46A34A;
   color: white;
   width:50px;
+  margin-top:20px;
   padding: 12px 24px;
   border: none;
   border-radius: 50px;
