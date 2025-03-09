@@ -98,6 +98,27 @@
             </div>
           </div>
         </div>
+
+        <!-- Bouton de partage quotidien -->
+        <div v-if="canShareDay" class="share-button-container">
+          <div class="share-btn" @click="toggleSocials">
+            Partager mon humeur
+            <div class="social-icons" v-if="socialsVisible">
+              <a :href="facebookShareLink" target="_blank">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a :href="twitterShareLink" target="_blank">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a :href="linkedinShareLink" target="_blank">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+              <a :href="whatsappShareLink" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Vue Hebdomadaire -->
@@ -179,9 +200,11 @@
 </template>
 
 <script setup>
+// L'état pour les boutons de partage
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 
+// Déclarations et initialisations
 const view = ref("daily");
 const selectedDate = ref(new Date());
 const isLoading = ref(true);
@@ -189,10 +212,9 @@ const morningData = ref([]);
 const eveningData = ref([]);
 const socialsVisible = ref(false);
 const canShareWeek = ref(false);
+const canShareDay = ref(false);
 
-const days = [
-  "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
-];
+const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
 const formatDate = (date) => {
   return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric" }).format(date);
@@ -229,55 +251,30 @@ const fetchMoodData = async () => {
   }
   try {
     isLoading.value = true;
-    const moodsResponse = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userId}`);
-    morningData.value = Array(7).fill(null);
-    eveningData.value = Array(7).fill(null);
-    for (const entry of moodsResponse.data) {
-      const moodDetails = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs/${entry.humeurId}`);
-      const dayIndex = new Date(entry.date).getDay();
-      if (entry.timeOfDay === "morning") {
-        morningData.value[dayIndex] = moodDetails.data;
-      } else {
-        eveningData.value[dayIndex] = moodDetails.data;
-      }
-    }
+    const moodsResponse = await axios.get(`https://api.example.com/moods/${userId}`);
+    morningData.value = moodsResponse.data.morning;
+    eveningData.value = moodsResponse.data.evening;
+    canShareDay.value = moodsResponse.data.canShareDay;
+    canShareWeek.value = moodsResponse.data.canShareWeek;
   } catch (error) {
-    console.error("Erreur lors de la récupération des données:", error);
+    console.error("Erreur lors de la récupération des humeurs", error);
   } finally {
     isLoading.value = false;
-    canShareWeek.value = morningData.value.every(mood => mood !== null) && eveningData.value.every(mood => mood !== null);
   }
 };
-
-const weekDates = computed(() => {
-  const startOfWeek = new Date(selectedDate.value);
-  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-  return Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(startOfWeek);
-    date.setDate(startOfWeek.getDate() + i);
-    return date;
-  });
-});
 
 const toggleSocials = () => {
   socialsVisible.value = !socialsVisible.value;
 };
 
+// Liens pour les partages
 const shareText = computed(() => {
-  const date = formatDate(selectedDate.value);
-  const moodMorning = morningData.value[selectedDate.value.getDay()];
-  const moodEvening = eveningData.value[selectedDate.value.getDay()];
-
-  let shareText = `📅 ${date} - Mon humeur :\n`;
-  shareText += moodMorning ? `🌞 Matin : ${moodMorning.title}\n` : "🌞 Matin : Pas d'humeur enregistrée\n";
-  shareText += moodEvening ? `🌙 Soir : ${moodEvening.title}\n` : "🌙 Soir : Pas d'humeur enregistrée\n";
-  
-  return shareText;
+  return `J'ai partagé mon humeur du jour! ${formatDate(selectedDate.value)}`;
 });
 
 const facebookShareLink = computed(() => {
   const text = encodeURIComponent(shareText.value);
-  return `https://www.facebook.com/sharer/sharer.php?u=https://suivi-humeurs-funes.vercel.app&quote=${text}`;
+  return `https://www.facebook.com/sharer/sharer.php?u=https://suivi-humeurs-funes.vercel.app/&quote=${text}`;
 });
 
 const twitterShareLink = computed(() => {
@@ -287,15 +284,17 @@ const twitterShareLink = computed(() => {
 
 const linkedinShareLink = computed(() => {
   const text = encodeURIComponent(shareText.value);
-  return `https://www.linkedin.com/shareArticle?mini=true&url=https://suivi-humeurs-funes.vercel.app/&title=Partager mon humeur&summary=${text}`;
+  return `https://www.linkedin.com/shareArticle?mini=true&url=https://suivi-humeurs-funes.vercel.app/&title=${text}`;
 });
 
 const whatsappShareLink = computed(() => {
   const text = encodeURIComponent(shareText.value);
-  return `https://wa.me/?text=${text}`;
+  return `https://wa.me/?text=${text} https://suivi-humeurs-funes.vercel.app/`;
 });
 
-onMounted(fetchMoodData);
+onMounted(() => {
+  fetchMoodData();
+});
 </script>
 
 <style scoped>
@@ -351,7 +350,7 @@ onMounted(fetchMoodData);
 }
 
 .toggle-btn.active {
-  background: #46A34A;
+  background: #46a34a;
   color: white;
 }
 
@@ -429,7 +428,7 @@ onMounted(fetchMoodData);
 }
 
 .mood-card {
-  background: linear-gradient(135deg, #f1f1f1, #e0e0e0); /* Fond dégradé */
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0);
   border-radius: 16px;
   padding: 20px;
   box-shadow: var(--card-shadow);
@@ -498,7 +497,7 @@ onMounted(fetchMoodData);
 }
 
 .day-card {
-  background: linear-gradient(135deg, #f1f1f1, #e0e0e0); /* Fond dégradé */
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0);
   border-radius: 16px;
   padding: 20px;
   box-shadow: var(--card-shadow);
@@ -585,66 +584,4 @@ onMounted(fetchMoodData);
     grid-template-columns: 1fr;
   }
 }
-
-.share-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px;
-  margin-top: 15px;
-  width: 100%;
-  cursor: pointer;
-  font-size: 14px;
-  text-align: center;
-}
-
-.share-btn:hover {
-  background-color: #0056b3;
-}
-  
-.mini-mood .share-btn {
-  margin-top: 10px;
-  padding: 5px;
-  width: 100%;
-}
-  
-/* Style pour l'élément de partage de la semaine */
-.share-button-container {
-  margin-top: 30px;
-  text-align: center;
-}
-
-.share-btn {
-  font-size: 18px;
-  display: inline-block;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.share-btn:hover {
-  background-color: #0056b3;
-}
-
-/* Icônes sociales */
-.social-icons {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.social-icons a {
-  font-size: 20px;
-  color: #333;
-  text-decoration: none;
-}
-
-.social-icons a:hover {
-  color: #007bff;
-}
 </style>
-
