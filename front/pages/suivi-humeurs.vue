@@ -49,19 +49,19 @@
       </div>
 
       <div v-if="view === 'weekly'" class="weekly-view">
-        <div class="moods-column">
-          <div v-for="day in fullWeek" :key="day.date" class="mood-card">
+        <div class="week-row">
+          <div v-for="day in fullWeek" :key="day.date" class="week-day">
             <h3>{{ formatDate(new Date(day.date)) }}</h3>
-            <p v-if="day.morning">
+            <div class="mood-entry">
               <i class="fas fa-sun morning-icon"></i>
-              Matin : {{ day.morning.title }}
-            </p>
-            <p v-else>Matin : Pas d'humeur enregistrée</p>
-            <p v-if="day.evening">
+              <p v-if="day.morning">Matin : {{ day.morning.title }}</p>
+              <p v-else>Matin : Pas d'humeur enregistrée</p>
+            </div>
+            <div class="mood-entry">
               <i class="fas fa-moon evening-icon"></i>
-              Soir : {{ day.evening.title }}
-            </p>
-            <p v-else>Soir : Pas d'humeur enregistrée</p>
+              <p v-if="day.evening">Soir : {{ day.evening.title }}</p>
+              <p v-else>Soir : Pas d'humeur enregistrée</p>
+            </div>
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@ import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 
 const view = ref('daily');
-const selectedDate = ref(new Date());
+const selectedDate = ref(new Date('2025-03-09')); // Définir la date initiale à dimanche 9 mars 2025
 const isLoading = ref(true);
 const dailyMoods = ref({ morning: null, evening: null });
 const weeklyMoods = ref([]);
@@ -102,7 +102,10 @@ const fetchMoods = async () => {
 
 const fetchWeeklyMoods = (data) => {
   const startOfWeek = new Date(selectedDate.value);
+
+  // Début de semaine = dimanche précédent ou actuel
   startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+
   const week = [];
 
   for (let i = 0; i < 7; i++) {
@@ -117,8 +120,15 @@ const fetchWeeklyMoods = (data) => {
 
 const formatDate = date => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
 const isToday = date => date.toDateString() === new Date().toDateString();
-const previousDay = () => selectedDate.value.setDate(selectedDate.value.getDate() - 1);
-const nextDay = () => selectedDate.value.setDate(selectedDate.value.getDate() + 1);
+
+const previousDay = () => {
+  selectedDate.value = new Date(selectedDate.value.setDate(selectedDate.value.getDate() - 1));
+};
+
+const nextDay = () => {
+  selectedDate.value = new Date(selectedDate.value.setDate(selectedDate.value.getDate() + 1));
+};
+
 const changeView = newView => (view.value = newView);
 
 watch(selectedDate, fetchMoods);
@@ -154,17 +164,19 @@ onMounted(fetchMoods);
 .loading-state {
   text-align: center;
 }
-.moods-column {
+.week-row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-around;
 }
-.mood-card {
+.week-day {
   background: white;
-  margin: 10px 0;
-  padding: 20px;
+  padding: 10px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.mood-entry {
+  display: flex;
+  align-items: center;
 }
 .morning-icon {
   color: #ffd700;
@@ -173,17 +185,5 @@ onMounted(fetchMoods);
 .evening-icon {
   color: #8a2be2;
   margin-right: 5px;
-}
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #4caf50;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
 </style>
