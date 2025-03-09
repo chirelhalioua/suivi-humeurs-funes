@@ -273,25 +273,27 @@ const shareText = computed(() => {
   return shareText;
 });
 
+const siteUrl = "https://suivi-humeurs-funes.vercel.app/";
+const shareText = computed(() => encodeURIComponent(shareText.value));
+
 const facebookShareLink = computed(() => {
-  const text = encodeURIComponent(`${shareText.value} https://suivi-humeurs-funes.vercel.app/`);
-  return `https://www.facebook.com/sharer/sharer.php?u=https://suivi-humeurs-funes.vercel.app&quote=${text}`;
+  return `https://www.facebook.com/sharer/sharer.php?u=${siteUrl}&quote=${shareText.value}`;
 });
 
 const twitterShareLink = computed(() => {
-  const text = encodeURIComponent(`${shareText.value} https://suivi-humeurs-funes.vercel.app/`);
+  const text = encodeURIComponent(`${shareText.value} ${siteUrl}`);
   return `https://twitter.com/intent/tweet?text=${text}`;
 });
 
 const linkedinShareLink = computed(() => {
-  const text = encodeURIComponent(`${shareText.value} https://suivi-humeurs-funes.vercel.app/`);
-  return `https://www.linkedin.com/shareArticle?mini=true&url=https://suivi-humeurs-funes.vercel.app/&title=Partager mon humeur&summary=${text}`;
+  return `https://www.linkedin.com/shareArticle?mini=true&url=${siteUrl}&title=Partager mon humeur&summary=${shareText.value}`;
 });
 
 const whatsappShareLink = computed(() => {
-  const text = encodeURIComponent(`${shareText.value} https://suivi-humeurs-funes.vercel.app/`);
+  const text = encodeURIComponent(`${shareText.value} ${siteUrl}`);
   return `https://wa.me/?text=${text}`;
 });
+  
         
 
 onMounted(fetchMoodData);
