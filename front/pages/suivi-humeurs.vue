@@ -584,4 +584,67 @@ onMounted(() => {
     grid-template-columns: 1fr;
   }
 }
+
+  /* Style pour le bouton de partage */
+.share-button-container {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+}
+
+.share-btn:hover {
+  background-color: #388e3c;
+}
+
+.share-btn .social-icons {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+  display: flex;
+  gap: 15px;
+}
+
+.share-btn:hover .social-icons {
+  display: flex;
+}
+
+.social-icons a {
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.social-icons a:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.social-icons i {
+  font-size: 1.5rem;
+  color: var(--secondary-color);
+}
+
+.social-icons a:hover i {
+  color: #388e3c;
+}
 </style>
