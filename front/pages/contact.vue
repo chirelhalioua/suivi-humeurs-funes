@@ -100,7 +100,7 @@ const faqItems = ref([
   },
   {
     question: "De quelle heure à quelle heure puis-je choisir mon humeur ?",
-    answer: "Le matin de 6h à 12h et le soir de 17h à minuit.",
+    answer: "Le matin de 6h à 13h et le soir de 17h à minuit.",
     isOpen: false,
   },
   {
