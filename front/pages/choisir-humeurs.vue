@@ -2,15 +2,9 @@
   <div class="choose-mood">
     <h1>🌈 Choisissez votre humeur</h1>
 
-    <!-- Notifications -->
-    <transition name="fade">
-      <div v-if="notification.message" :class="['notification', notification.type]">
-        {{ notification.message }}
-      </div>
-    </transition>
-
+    <!-- Section principale de sélection d'humeur -->
     <div v-if="!hasChosenMood" class="moods-container">
-      <button class="arrow-btn" @click="prevMood" :disabled="!canNavigate">◀</button>
+      <button class="arrow-btn" @click="prevMood" :disabled="!canNavigate || hasChosenMood">◀</button>
 
       <div class="mood-card" v-if="currentMood">
         <img :src="currentMood.image" :alt="currentMood.title" />
@@ -23,11 +17,11 @@
 
       <div v-else class="no-mood">Aucune humeur disponible</div>
 
-      <button class="arrow-btn" @click="nextMood" :disabled="!canNavigate">▶</button>
+      <button class="arrow-btn" @click="nextMood" :disabled="!canNavigate || hasChosenMood">▶</button>
     </div>
 
     <div v-if="!hasChosenMood" class="mood-actions">
-      <button @click="chooseMood" :disabled="!canChooseMood" class="choose-btn">
+      <button @click="chooseMood" :disabled="!canChooseMood || hasChosenMood" class="choose-btn">
         ✅ Choisir cette humeur
       </button>
     </div>
@@ -35,6 +29,11 @@
     <div v-if="selectedMoodId" class="mood-details">
       <textarea v-model="description" placeholder="📝 Décrivez votre humeur (optionnel)"></textarea>
       <button @click="saveMood" class="save-btn">💾 Enregistrer</button>
+      <transition name="fade">
+        <div v-if="notification.message" :class="['notification', notification.type]">
+          {{ notification.message }}
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -47,6 +46,7 @@ const humeurs = ref([]);
 const currentIndex = ref(0);
 const selectedMoodId = ref(null);
 const description = ref('');
+const hasChosenMood = ref(false);
 const notification = ref({ message: '', type: '' });
 
 const fetchHumeurs = async () => {
@@ -90,12 +90,12 @@ const saveMood = async () => {
 
   const userId = localStorage.getItem('userId');
   if (!userId) {
-    showNotification("ID utilisateur manquant.", "error");
+    showNotification("Impossible d'enregistrer l'humeur. ID utilisateur manquant.", "error");
     return;
   }
 
   const hours = new Date().getHours();
-  const timeOfDay = hours >= 6 && hours < 13 ? 'morning' : 'evening';
+  let timeOfDay = (hours >= 6 && hours < 13) ? 'morning' : 'evening';
 
   const userMoodChoice = {
     date: new Date().toISOString().split('T')[0],
@@ -109,10 +109,12 @@ const saveMood = async () => {
     const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice);
 
     if (response.status === 200) {
+      localStorage.setItem('userMoodChoice', JSON.stringify(userMoodChoice));
+      hasChosenMood.value = true;
       showNotification("Votre humeur a été enregistrée avec succès !", "success");
     }
   } catch (error) {
-    showNotification("Une erreur est survenue lors de l'enregistrement.", "error");
+    showNotification("Une erreur est survenue lors de l'enregistrement. Veuillez réessayer plus tard.", "error");
   }
 };
 
@@ -284,6 +286,20 @@ onMounted(() => {
     margin-top: 20px;
   }
 
-.notification.success { color: green; }
-.notification.error { color: red; }
+  .notification {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.notification.success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.notification.error {
+  background: #f8d7da;
+  color: #721c24;
+}
 </style>
