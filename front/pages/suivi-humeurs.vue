@@ -275,24 +275,28 @@ const shareText = computed(() => {
 
 const siteUrl = "https://suivi-humeurs-funes.vercel.app/";
 const shareText = computed(() => encodeURIComponent(shareText.value));
+const fullText = computed(() => encodeURIComponent(`${shareText.value} ${siteUrl}`));
 
+// Facebook : Parfois, seul le lien s'affiche en aperçu, donc on garde le texte dans "quote"
 const facebookShareLink = computed(() => {
   return `https://www.facebook.com/sharer/sharer.php?u=${siteUrl}&quote=${shareText.value}`;
 });
 
+// Twitter : Le texte + le lien dans le tweet
 const twitterShareLink = computed(() => {
-  const text = encodeURIComponent(`${shareText.value} ${siteUrl}`);
-  return `https://twitter.com/intent/tweet?text=${text}`;
+  return `https://twitter.com/intent/tweet?text=${fullText.value}`;
 });
 
+// LinkedIn : Même principe que Facebook, on sépare l'URL et le texte
 const linkedinShareLink = computed(() => {
   return `https://www.linkedin.com/shareArticle?mini=true&url=${siteUrl}&title=Partager mon humeur&summary=${shareText.value}`;
 });
 
+// WhatsApp : Message texte simple avec le lien
 const whatsappShareLink = computed(() => {
-  const text = encodeURIComponent(`${shareText.value} ${siteUrl}`);
-  return `https://wa.me/?text=${text}`;
+  return `https://wa.me/?text=${fullText.value}`;
 });
+  
   
         
 
