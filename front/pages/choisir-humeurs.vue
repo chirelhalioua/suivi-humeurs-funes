@@ -29,11 +29,9 @@
     <div v-if="selectedMoodId" class="mood-details">
       <textarea v-model="description" placeholder="📝 Décrivez votre humeur (optionnel)"></textarea>
       <button @click="saveMood" class="save-btn">💾 Enregistrer</button>
-      <transition name="fade">
-        <div v-if="notification.message" :class="['notification', notification.type]">
-          {{ notification.message }}
-        </div>
-      </transition>
+      <div v-if="notification.message" :class="['notification', notification.type]">
+        {{ notification.message }}
+      </div>
     </div>
   </div>
 </template>
@@ -144,23 +142,6 @@ onMounted(() => {
     margin-bottom: 30px;
   }
 
-  /* Message d'alerte */
-  .warning {
-    background: #ffdada;
-    color: #d32f2f;
-    padding: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-  }
-
-  .error-message {
-    background: #ffdada;
-    color: #d32f2f;
-    padding: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-    margin-top: 10px;
-  }
 
   /* Container des humeurs */
   .moods-container {
@@ -286,6 +267,7 @@ onMounted(() => {
     margin-top: 20px;
   }
 
+  /* Messages d'alertes */
   .notification {
   margin-top: 10px;
   padding: 10px;
