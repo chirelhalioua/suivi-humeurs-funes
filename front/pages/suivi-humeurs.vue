@@ -4,22 +4,25 @@
     <div class="tracking-header">
       <h1>Suivi des Humeurs</h1>
       <div class="view-toggle">
-        <button
-          :class="['toggle-btn', { active: view === 'daily' }]"
-          @click="changeView('daily')"
-        >
+        <button :class="['toggle-btn', { active: view === 'daily' }]" @click="changeView('daily')">
           <i class="fas fa-calendar-day"></i>
           Journalier
         </button>
-        <button
-          :class="['toggle-btn', { active: view === 'weekly' }]"
-          @click="changeView('weekly')"
-        >
+        <button :class="['toggle-btn', { active: view === 'weekly' }]" @click="changeView('weekly')">
           <i class="fas fa-calendar-week"></i>
           Hebdomadaire
         </button>
       </div>
-    </div> <!-- Loading State -->
+    </div>
+    
+    <!-- Bouton de partage -->
+    <div class="share-button-container">
+      <button class="share-btn" @click="shareMood">
+        <i class="fas fa-share-alt"></i> Partager mon humeur
+      </button>
+    </div>
+    
+    <!-- Loading State -->
     <div v-if="isLoading" class="loading-state">
       <div class="spinner"></div>
       <p>Chargement de vos humeurs...</p>
@@ -36,11 +39,7 @@
             <h2>{{ formatDate(selectedDate) }}</h2>
             <p>{{ days[selectedDate.getDay()] }}</p>
           </div>
-          <button
-            class="nav-btn"
-            @click="nextDay"
-            :disabled="isToday(selectedDate)"
-          >
+          <button class="nav-btn" @click="nextDay" :disabled="isToday(selectedDate)">
             <i class="fas fa-chevron-right"></i>
           </button>
         </div>
@@ -54,11 +53,7 @@
             </div>
             <div v-if="morningData[selectedDate.getDay()]" class="mood-content">
               <div class="mood-image-container">
-                <img
-                  :src="morningData[selectedDate.getDay()].image"
-                  :alt="morningData[selectedDate.getDay()].title"
-                  class="mood-image"
-                />
+                <img :src="morningData[selectedDate.getDay()].image" :alt="morningData[selectedDate.getDay()].title" class="mood-image" />
               </div>
               <div class="mood-details">
                 <h3>{{ morningData[selectedDate.getDay()].title }}</h3>
@@ -68,80 +63,6 @@
             <div v-else class="mood-empty">
               <i class="fas fa-cloud"></i>
               <p>Pas d'humeur enregistrée</p>
-            </div>
-          </div>
-
-          <!-- Humeur du Soir -->
-          <div class="mood-card evening">
-            <div class="time-label">
-              <i class="fas fa-moon"></i>
-              Soir
-            </div>
-            <div v-if="eveningData[selectedDate.getDay()]" class="mood-content">
-              <div class="mood-image-container">
-                <img
-                  :src="eveningData[selectedDate.getDay()].image"
-                  :alt="eveningData[selectedDate.getDay()].title"
-                  class="mood-image"
-                />
-              </div>
-              <div class="mood-details">
-                <h3>{{ eveningData[selectedDate.getDay()].title }}</h3>
-                <p>{{ eveningData[selectedDate.getDay()].subtitle }}</p>
-              </div>
-            </div>
-            <div v-else class="mood-empty">
-              <i class="fas fa-cloud"></i>
-              <p>Pas d'humeur enregistrée</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Vue Hebdomadaire -->
-      <div v-else class="weekly-view">
-        <div class="week-grid">
-          <div
-            v-for="(date, index) in weekDates"
-            :key="index"
-            class="day-card"
-            :class="{ 'current-day': isToday(date) }"
-          >
-            <div class="day-header">
-              <h3>{{ days[date.getDay()] }}</h3>
-              <p>{{ formatDateShort(date) }}</p>
-            </div>
-
-            <div class="day-moods">
-              <!-- Matin -->
-              <div class="mini-mood morning">
-                <span class="time-indicator">Matin</span>
-                <div v-if="morningData[date.getDay()]" class="mini-mood-content">
-                  <img
-                    :src="morningData[date.getDay()].image"
-                    :alt="morningData[date.getDay()].title"
-                  />
-                  <span>{{ morningData[date.getDay()].title }}</span>
-                </div>
-                <div v-else class="mini-mood-empty">
-                  <i class="fas fa-minus-circle"></i>
-                </div>
-              </div>
-
-              <!-- Soir -->
-              <div class="mini-mood evening">
-                <span class="time-indicator">Soir</span>
-                <div v-if="eveningData[date.getDay()]" class="mini-mood-content">
-                  <img
-                    :src="eveningData[date.getDay()].image"
-                    :alt="eveningData[date.getDay()].title"
-                  />
-                  <span>{{ eveningData[date.getDay()].title }}</span>
-                </div>
-                <div v-else class="mini-mood-empty">
-                  <i class="fas fa-minus-circle"></i>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -154,117 +75,74 @@
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 
-// État
 const view = ref("daily");
 const selectedDate = ref(new Date());
 const isLoading = ref(true);
 const morningData = ref([]);
 const eveningData = ref([]);
 
-// Constantes
 const days = [
-  "Dimanche",
-  "Lundi",
-  "Mardi",
-  "Mercredi",
-  "Jeudi",
-  "Vendredi",
-  "Samedi",
+  "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
 ];
 
-// Dates de la semaine
-const weekDates = computed(() => {
-  const dates = [];
-  const currentDate = new Date(selectedDate.value);
-  const firstDay = new Date(
-    currentDate.setDate(currentDate.getDate() - currentDate.getDay())
-  );
-
-  for (let i = 0; i < 7; i++) {
-    dates.push(
-      new Date(
-        firstDay.getFullYear(),
-        firstDay.getMonth(),
-        firstDay.getDate() + i
-      )
-    );
-  }
-
-  return dates;
-});
-
-// Formatage des dates
 const formatDate = (date) => {
-  return new Intl.DateTimeFormat("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
+  return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric" }).format(date);
 };
 
-const formatDateShort = (date) => {
-  return new Intl.DateTimeFormat("fr-FR", {
-    day: "numeric",
-    month: "short",
-  }).format(date);
-};
-
-// Vérification si la date est aujourd'hui
 const isToday = (date) => {
   const today = new Date();
   return date.toDateString() === today.toDateString();
 };
 
-// Navigation entre les jours
 const previousDay = () => {
-  selectedDate.value = new Date(
-    selectedDate.value.setDate(selectedDate.value.getDate() - 1)
-  );
+  selectedDate.value = new Date(selectedDate.value.setDate(selectedDate.value.getDate() - 1));
 };
 
 const nextDay = () => {
   if (!isToday(selectedDate.value)) {
-    selectedDate.value = new Date(
-      selectedDate.value.setDate(selectedDate.value.getDate() + 1)
-    );
+    selectedDate.value = new Date(selectedDate.value.setDate(selectedDate.value.getDate() + 1));
   }
 };
 
-// Changement de vue
 const changeView = (newView) => {
   view.value = newView;
 };
 
-// Récupération des données
-const fetchMoodData = async () => {
-  // Récupérer l'ID utilisateur
-  const userId = localStorage.getItem("userId");
+const shareMood = () => {
+  const date = formatDate(selectedDate.value);
+  const moodMorning = morningData.value[selectedDate.value.getDay()];
+  const moodEvening = eveningData.value[selectedDate.value.getDay()];
+  
+  let shareText = `📅 ${date} - Mon humeur :\n`;
+  shareText += moodMorning ? `🌞 Matin : ${moodMorning.title}\n` : "🌞 Matin : Pas d'humeur enregistrée\n";
+  shareText += moodEvening ? `🌙 Soir : ${moodEvening.title}\n` : "🌙 Soir : Pas d'humeur enregistrée\n";
+  
+  if (navigator.share) {
+    navigator.share({
+      title: "Mon humeur du jour",
+      text: shareText,
+    }).catch(error => console.error("Erreur de partage", error));
+  } else {
+    navigator.clipboard.writeText(shareText).then(() => {
+      alert("Humeur copiée dans le presse-papier ! Partagez-la où vous voulez !");
+    });
+  }
+};
 
+const fetchMoodData = async () => {
+  const userId = localStorage.getItem("userId");
   if (!userId) {
     console.error("ID utilisateur non trouvé");
     return;
   }
-
   try {
     isLoading.value = true;
-
-    // Récupérer les humeurs
-    const moodsResponse = await axios.get(
-      `https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userId}`
-    );
-
-    // Réinitialiser les tableaux
+    const moodsResponse = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userId}`);
     morningData.value = Array(7).fill(null);
     eveningData.value = Array(7).fill(null);
-
-    // Traiter les données
     for (const entry of moodsResponse.data) {
-      const moodDetails = await axios.get(
-        `https://suivi-humeurs-funes.onrender.com/api/humeurs/${entry.humeurId}`
-      );
-
+      const moodDetails = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs/${entry.humeurId}`);
       const dayIndex = new Date(entry.date).getDay();
-
       if (entry.timeOfDay === "morning") {
         morningData.value[dayIndex] = moodDetails.data;
       } else {
@@ -278,9 +156,9 @@ const fetchMoodData = async () => {
   }
 };
 
-// Initialisation
 onMounted(fetchMoodData);
 </script>
+
 
 <style scoped>  
 /* Variables */  
@@ -569,4 +447,21 @@ onMounted(fetchMoodData);
     grid-template-columns: 1fr;  
   }  
 }  
+
+  .share-button-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.share-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.share-btn:hover {
+  background-color: #388e3c;
+}
 </style>
