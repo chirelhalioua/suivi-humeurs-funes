@@ -80,6 +80,7 @@ const chooseMood = () => {
     return;
   }
   selectedMoodId.value = currentMood.value._id;
+  showNotification("Humeur sélectionnée avec succès !", "success");
 };
 
 const saveMood = async () => {
@@ -108,10 +109,12 @@ const saveMood = async () => {
   try {
     const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice);
 
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       localStorage.setItem('userMoodChoice', JSON.stringify(userMoodChoice));
       hasChosenMood.value = true;
       showNotification("Votre humeur a été enregistrée avec succès !", "success");
+    } else {
+      showNotification("L'enregistrement de l'humeur a échoué.", "error");
     }
   } catch (error) {
     showNotification("Une erreur est survenue lors de l'enregistrement. Veuillez réessayer plus tard.", "error");
@@ -129,6 +132,25 @@ onMounted(() => {
   fetchHumeurs();
 });
 </script>
+
+<style scoped>
+.notification {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.notification.success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.notification.error {
+  background: #f8d7da;
+  color: #721c24;
+}
+</style>
 
 <style scoped>
   /* Container principal */
@@ -270,7 +292,7 @@ onMounted(() => {
   }
 
   /* Messages d'alertes */
-  .notification {
+.notification {
   margin-top: 10px;
   padding: 10px;
   border-radius: 8px;
