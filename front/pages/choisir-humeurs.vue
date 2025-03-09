@@ -29,9 +29,11 @@
     <div v-if="selectedMoodId" class="mood-details">
       <textarea v-model="description" placeholder="📝 Décrivez votre humeur (optionnel)"></textarea>
       <button @click="saveMood" class="save-btn">💾 Enregistrer</button>
-      <div v-if="notification.message" :class="['notification', notification.type]">
-        {{ notification.message }}
-      </div>
+      <transition name="fade">
+        <div v-if="notification.message" :class="['notification', notification.type]">
+          {{ notification.message }}
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -78,6 +80,7 @@ const chooseMood = () => {
     return;
   }
   selectedMoodId.value = currentMood.value._id;
+  showNotification("Humeur sélectionnée avec succès !", "success");
 };
 
 const saveMood = async () => {
