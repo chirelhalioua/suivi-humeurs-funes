@@ -156,7 +156,7 @@
     </div>
 
     <div class="share-button-container">
-      <div class="share-btn" @mouseover="showSocials" @mouseleave="hideSocials">
+      <div class="share-btn" @click="toggleSocials">
         Partager mon humeur
         <div class="social-icons" v-if="socialsVisible">
           <i class="fab fa-facebook-f"></i>
@@ -269,12 +269,8 @@ const weekDates = computed(() => {
   });
 });
 
-const showSocials = () => {
-  socialsVisible.value = true;
-};
-
-const hideSocials = () => {
-  socialsVisible.value = false;
+const toggleSocials = () => {
+  socialsVisible.value = !socialsVisible.value;
 };
 
 onMounted(fetchMoodData);
@@ -497,7 +493,7 @@ onMounted(fetchMoodData);
 
 .day-header h3 {
   font-size: 1.1rem;
-  color: var(--secondary-color);
+  color: var (--secondary-color);
   margin-bottom: 4px;
 }
 
