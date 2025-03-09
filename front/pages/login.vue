@@ -29,6 +29,10 @@
           <button type="submit" class="submit-btn" :disabled="isLoading">{{ isLoading ? 'Connexion...' : 'Se connecter' }}</button>
         </form>
 
+        <div class="forgot-password">
+          <router-link to="/reset-password">Vous avez oublié votre mot de passe ?</router-link>
+        </div>
+
         <transition name="fade">
           <div v-if="message" :class="['message', messageClass]" role="alert">{{ message }}</div>
         </transition>
