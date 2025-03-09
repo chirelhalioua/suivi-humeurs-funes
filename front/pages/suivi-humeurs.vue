@@ -65,6 +65,48 @@
               <p>Pas d'humeur enregistrée</p>
             </div>
           </div>
+
+          <!-- Humeur du Soir -->
+          <div class="mood-card evening">
+            <div class="time-label">
+              <i class="fas fa-moon"></i>
+              Soir
+            </div>
+            <div v-if="eveningData[selectedDate.getDay()]" class="mood-content">
+              <div class="mood-image-container">
+                <img :src="eveningData[selectedDate.getDay()].image" :alt="eveningData[selectedDate.getDay()].title" class="mood-image" />
+              </div>
+              <div class="mood-details">
+                <h3>{{ eveningData[selectedDate.getDay()].title }}</h3>
+                <p>{{ eveningData[selectedDate.getDay()].subtitle }}</p>
+              </div>
+            </div>
+            <div v-else class="mood-empty">
+              <i class="fas fa-cloud"></i>
+              <p>Pas d'humeur enregistrée</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vue Hebdomadaire -->
+      <div v-if="view === 'weekly'" class="weekly-view">
+        <h2>Résumé de la semaine</h2>
+        <div class="weekly-mood-grid">
+          <div v-for="(day, index) in days" :key="index" class="weekly-mood">
+            <h3>{{ day }}</h3>
+            <div v-if="morningData[index]" class="mood-content">
+              <img :src="morningData[index].image" :alt="morningData[index].title" class="mood-image" />
+              <p>{{ morningData[index].title }}</p>
+            </div>
+            <div v-else class="mood-empty">-</div>
+
+            <div v-if="eveningData[index]" class="mood-content">
+              <img :src="eveningData[index].image" :alt="eveningData[index].title" class="mood-image" />
+              <p>{{ eveningData[index].title }}</p>
+            </div>
+            <div v-else class="mood-empty">-</div>
+          </div>
         </div>
       </div>
     </div>
@@ -454,7 +496,7 @@ onMounted(fetchMoodData);
 }
 .share-btn {
   background-color: var(--primary-color);
-  color: white;
+  color: black;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
