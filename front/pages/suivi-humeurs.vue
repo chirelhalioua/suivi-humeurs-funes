@@ -274,24 +274,25 @@ const shareText = computed(() => {
 });
 
 const facebookShareLink = computed(() => {
-  const text = encodeURIComponent(shareText.value);
+  const text = encodeURIComponent(`${shareText.value} https://suivi-humeurs-funes.vercel.app/`);
   return `https://www.facebook.com/sharer/sharer.php?u=https://suivi-humeurs-funes.vercel.app&quote=${text}`;
 });
 
 const twitterShareLink = computed(() => {
-  const text = encodeURIComponent(shareText.value);
-  return `https://twitter.com/intent/tweet?text=${text}&url=https://suivi-humeurs-funes.vercel.app/`;
+  const text = encodeURIComponent(`${shareText.value} https://suivi-humeurs-funes.vercel.app/`);
+  return `https://twitter.com/intent/tweet?text=${text}`;
 });
 
 const linkedinShareLink = computed(() => {
-  const text = encodeURIComponent(shareText.value);
+  const text = encodeURIComponent(`${shareText.value} https://suivi-humeurs-funes.vercel.app/`);
   return `https://www.linkedin.com/shareArticle?mini=true&url=https://suivi-humeurs-funes.vercel.app/&title=Partager mon humeur&summary=${text}`;
 });
 
 const whatsappShareLink = computed(() => {
-  const text = encodeURIComponent(shareText.value);
+  const text = encodeURIComponent(`${shareText.value} https://suivi-humeurs-funes.vercel.app/`);
   return `https://wa.me/?text=${text}`;
 });
+        
 
 onMounted(fetchMoodData);
 </script>
