@@ -155,9 +155,9 @@
       </div>
     </div>
 
-    <div class="share-button-container">
+    <div v-if="canShareWeek" class="share-button-container">
       <div class="share-btn" @click="toggleSocials">
-        Partager mon humeur
+        Partager ma semaine
         <div class="social-icons" v-if="socialsVisible">
           <a :href="facebookShareLink" target="_blank">
             <i class="fab fa-facebook-f"></i>
@@ -187,6 +187,7 @@ const isLoading = ref(true);
 const morningData = ref([]);
 const eveningData = ref([]);
 const socialsVisible = ref(false);
+const canShareWeek = ref(false); // Détection de si la semaine est complète
 
 const days = [
   "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
@@ -243,6 +244,7 @@ const fetchMoodData = async () => {
     console.error("Erreur lors de la récupération des données:", error);
   } finally {
     isLoading.value = false;
+    canShareWeek.value = morningData.value.every(mood => mood !== null) && eveningData.value.every(mood => mood !== null);
   }
 };
 
@@ -260,7 +262,6 @@ const toggleSocials = () => {
   socialsVisible.value = !socialsVisible.value;
 };
 
-// Partage sur les réseaux sociaux
 const shareText = computed(() => {
   const date = formatDate(selectedDate.value);
   const moodMorning = morningData.value[selectedDate.value.getDay()];
@@ -338,292 +339,145 @@ onMounted(fetchMoodData);
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 50px;
-  background: white;
-  color: var(--secondary-color);
-  font-weight: 500;
+  padding: 10px 20px;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: var(--transition);
 }
 
 .toggle-btn.active {
-  background: #46A34A;
-  color: white;
+  background-color: var(--primary-color);
+  color: #fff;
 }
 
 .toggle-btn i {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
 }
 
-/* Loading State */
-.loading-state {
+/* Daily View Styles */
+.daily-view .date-selector {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  min-height: 400px;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid var(--primary-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 20px;
-}
-
-/* Daily View */
-.daily-view {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.date-selector {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
   margin-bottom: 30px;
 }
 
-.current-date {
-  text-align: center;
+.nav-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0 15px;
 }
 
 .current-date h2 {
-  font-size: 1.5rem;
-  color: var(--secondary-color);
-  margin-bottom: 4px;
+  font-size: 1.8rem;
+  margin: 0 10px;
 }
 
-.current-date p {
-  color: #666;
-}
-
-.nav-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--secondary-color);
-  cursor: pointer;
-  padding: 8px;
-  transition: var(--transition);
-}
-
-.nav-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Mood Cards */
 .moods-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
 }
 
 .mood-card {
-  background: linear-gradient(135deg, #f1f1f1, #e0e0e0); /* Fond dégradé */
-  border-radius: 16px;
-  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
   box-shadow: var(--card-shadow);
+  padding: 20px;
+  width: 45%;
 }
 
-.time-label {
+.mood-card .time-label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  margin-bottom: 20px;
-  color: var(--secondary-color);
+  gap: 10px;
 }
 
-.mood-content {
-  text-align: center;
-}
-
-.mood-image-container {
-  width: 200px;
-  height: 200px;
-  margin: 0 auto 20px;
+.mood-image-container img {
+  max-width: 100px;
   border-radius: 50%;
-  overflow: hidden;
-}
-
-.mood-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: var(--transition);
-}
-
-.mood-image:hover {
-  transform: scale(1.1);
 }
 
 .mood-details h3 {
-  font-size: 1.2rem;
-  color: var(--secondary-color);
-  margin-bottom: 8px;
+  font-size: 1.3rem;
+  margin: 10px 0;
 }
 
 .mood-details p {
-  color: #666;
+  font-size: 1rem;
 }
 
-.mood-empty {
-  text-align: center;
-  padding: 40px;
-  color: #666;
-}
-
-.mood-empty i {
-  font-size: 2rem;
-  margin-bottom: 12px;
-}
-
-/* Weekly View */
-.week-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+/* Weekly View Styles */
+.weekly-view .week-grid {
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  justify-content: space-around;
 }
 
 .day-card {
-  background: linear-gradient(135deg, #f1f1f1, #e0e0e0); /* Fond dégradé */
-  border-radius: 16px;
-  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
   box-shadow: var(--card-shadow);
-}
-
-.day-card.current-day {
-  border: 2px solid var(--primary-color);
-}
-
-.day-header {
+  width: 30%;
+  padding: 15px;
   text-align: center;
-  margin-bottom: 16px;
-}
-
-.day-header h3 {
-  font-size: 1.1rem;
-  color: var (--secondary-color);
-  margin-bottom: 4px;
-}
-
-.day-header p {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.day-moods {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 }
 
 .mini-mood {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-}
-
-.time-indicator {
-  font-size: 0.9rem;
-  color: #666;
-  width: 50px;
+  margin: 10px 0;
 }
 
 .mini-mood-content {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.mini-mood-content img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.mini-mood-content span {
-  font-size: 0.9rem;
-  color: var(--secondary-color);
+  gap: 10px;
 }
 
 .mini-mood-empty {
-  color: #ccc;
+  color: gray;
 }
 
-/* Animations */
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.mini-mood-empty i {
+  font-size: 1.5rem;
 }
 
-/* Media Queries */
-@media (max-width: 768px) {
-  .tracking-header h1 {
-    font-size: 2rem;
-  }
-
-  .moods-container {
-    grid-template-columns: 1fr;
-  }
-
-  .week-grid {
-    grid-template-columns: 1fr;
-  }
+.current-day {
+  border: 2px solid var(--primary-color);
 }
 
+.day-header {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+/* Share Button */
 .share-button-container {
+  margin-top: 40px;
   text-align: center;
-  margin-bottom: 20px;
-}
-
-.share-button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
 }
 
 .share-btn {
-  background-color: #46A34A;
+  padding: 10px 25px;
+  background-color: var(--primary-color);
   color: white;
-  width: 300px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 50px;
+  font-size: 1.2rem;
   cursor: pointer;
-  position: relative;
-  font-weight: 500;
+  border-radius: 30px;
 }
 
-.social-icons {
-  display: flex;
-  gap: 10px;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 10px;
+.share-btn:hover {
+  background-color: #388e3c;
 }
 
-.social-icons i {
+.social-icons a {
+  margin: 0 10px;
+  color: #fff;
   font-size: 1.5rem;
-  color: #46A34A;
-  transition: 0.3s ease;
-}
-
-.share-btn:hover .social-icons i {
-  color: #388e3c;
 }
 </style>
