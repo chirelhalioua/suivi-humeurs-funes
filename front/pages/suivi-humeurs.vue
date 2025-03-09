@@ -2,8 +2,6 @@
   <div class="mood-tracking-page">
     <div class="tracking-header">
       <h1>Suivi des Humeurs</h1>
-      
-      <!-- Navigation entre les jours -->
       <div class="date-selector">
         <button class="nav-btn" @click="previousDay">
           <i class="fas fa-chevron-left"></i>
@@ -13,8 +11,6 @@
           <i class="fas fa-chevron-right"></i>
         </button>
       </div>
-
-      <!-- Boutons de bascule (Journalier / Hebdomadaire) -->
       <div class="view-toggle">
         <button :class="['toggle-btn', { active: view === 'daily' }]" @click="changeView('daily')">
           <i class="fas fa-calendar-day"></i> Journalier
@@ -26,42 +22,28 @@
     </div>
 
     <div v-if="isLoading" class="loading-state">
-      <div class="spinner"></div>
-      <p>Chargement de vos humeurs...</p>
+      <p>Chargement...</p>
     </div>
 
     <div v-else>
-      <!-- Mode Journalier -->
+      <!-- Affichage journalier -->
       <div v-if="view === 'daily'" class="daily-view">
-        <div class="mood-column">
-          <div class="mood-card">
-            <h3><i class="fas fa-sun morning-icon"></i> Matin (6h - 13h)</h3>
-            <p v-if="dailyMoods.morning">{{ dailyMoods.morning.title }}</p>
-            <p v-else>Pas d'humeur enregistrée</p>
-          </div>
-          <div class="mood-card">
-            <h3><i class="fas fa-moon evening-icon"></i> Soir (17h - Minuit)</h3>
-            <p v-if="dailyMoods.evening">{{ dailyMoods.evening.title }}</p>
-            <p v-else>Pas d'humeur enregistrée</p>
-          </div>
+        <div class="mood-card" v-for="(mood, time) in dailyMoods" :key="time">
+          <h3>{{ time === 'morning' ? 'Matin (6h - 13h)' : 'Soir (17h - Minuit)' }}</h3>
+          <p v-if="mood">{{ mood.title }}</p>
+          <p v-else>Pas d'humeur enregistrée</p>
         </div>
       </div>
 
-      <!-- Mode Hebdomadaire -->
+      <!-- Affichage hebdomadaire -->
       <div v-if="view === 'weekly'" class="weekly-view">
-        <div class="week-row">
+        <div class="week-container">
           <div v-for="day in fullWeek" :key="day.date" class="week-day">
             <h3>{{ formatDate(new Date(day.date)) }}</h3>
-            <div class="mood-card">
-              <i class="fas fa-sun morning-icon"></i>
-              <p v-if="day.morning">Matin : {{ day.morning.title }}</p>
-              <p v-else>Matin : Pas d'humeur enregistrée</p>
-            </div>
-            <div class="mood-card">
-              <i class="fas fa-moon evening-icon"></i>
-              <p v-if="day.evening">Soir : {{ day.evening.title }}</p>
-              <p v-else>Soir : Pas d'humeur enregistrée</p>
-            </div>
+            <p v-if="day.morning">Matin : {{ day.morning.title }}</p>
+            <p v-else>Matin : Pas d'humeur enregistrée</p>
+            <p v-if="day.evening">Soir : {{ day.evening.title }}</p>
+            <p v-else>Soir : Pas d'humeur enregistrée</p>
           </div>
         </div>
       </div>
@@ -73,24 +55,18 @@
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 
-// Vue par défaut
 const view = ref('daily');
-const selectedDate = ref(new Date('2025-03-09')); // Début au 9 mars 2025
-const isLoading = ref(true);
+const selectedDate = ref(new Date());
+const isLoading = ref(false);
 const dailyMoods = ref({ morning: null, evening: null });
 const fullWeek = ref([]);
 
-// Vérifier la présence de l'ID utilisateur
 const userId = localStorage.getItem('userId') || null;
 
 const fetchMoods = async () => {
-  if (!userId) {
-    console.error('ID utilisateur non trouvé');
-    return;
-  }
-
+  if (!userId) return;
+  isLoading.value = true;
   try {
-    isLoading.value = true;
     const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userId}`);
     const today = selectedDate.value.toISOString().split('T')[0];
     dailyMoods.value = response.data.find(entry => entry.date === today) || { morning: null, evening: null };
@@ -105,8 +81,8 @@ const fetchMoods = async () => {
 const fetchWeeklyMoods = (data) => {
   const startOfWeek = new Date(selectedDate.value);
   startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-
   const week = [];
+
   for (let i = 0; i < 7; i++) {
     const day = new Date(startOfWeek);
     day.setDate(startOfWeek.getDate() + i);
@@ -119,11 +95,9 @@ const fetchWeeklyMoods = (data) => {
 
 const formatDate = date => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
 const isToday = date => date.toDateString() === new Date().toDateString();
-
-const previousDay = () => selectedDate.value = new Date(selectedDate.value.setDate(selectedDate.value.getDate() - 1));
-const nextDay = () => selectedDate.value = new Date(selectedDate.value.setDate(selectedDate.value.getDate() + 1));
-
-const changeView = newView => (view.value = newView);
+const previousDay = () => { selectedDate.value.setDate(selectedDate.value.getDate() - 1); fetchMoods(); };
+const nextDay = () => { selectedDate.value.setDate(selectedDate.value.getDate() + 1); fetchMoods(); };
+const changeView = newView => { view.value = newView; fetchMoods(); };
 
 watch(selectedDate, fetchMoods);
 onMounted(fetchMoods);
@@ -157,41 +131,23 @@ onMounted(fetchMoods);
 .loading-state {
   text-align: center;
 }
-.week-row {
+.daily-view .mood-card {
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+.week-container {
   display: flex;
-  flex-wrap: nowrap;
   overflow-x: auto;
+  gap: 10px;
 }
 .week-day {
   background: white;
   padding: 10px;
-  margin: 5px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   min-width: 120px;
-}
-.mood-column {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-.mood-card {
-  background: white;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-.mood-entry {
-  display: flex;
-  align-items: center;
-}
-.morning-icon {
-  color: #ffd700;
-  margin-right: 5px;
-}
-.evening-icon {
-  color: #8a2be2;
-  margin-right: 5px;
 }
 </style>
