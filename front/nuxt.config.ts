@@ -35,7 +35,7 @@ export default defineNuxtConfig({
         {
           name: "description",
           content:
-            "Exprimez vos humeurs avec des GIFs et des citations de Louis de Funès",
+            "Exprimez vos humeurs avec des expressions et des citations de Louis de Funès",
         },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
       ],
