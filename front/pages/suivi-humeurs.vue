@@ -1,117 +1,161 @@
-<template>
-  <div class="mood-tracking-page">
-    <!-- Header avec navigation -->
-    <div class="tracking-header">
-      <h1>Suivi des Humeurs</h1>
-      <div class="view-toggle">
-        <button :class="['toggle-btn', { active: view === 'daily' }]" @click="changeView('daily')">
-          <i class="fas fa-calendar-day"></i>
-          Journalier
-        </button>
-        <button :class="['toggle-btn', { active: view === 'weekly' }]" @click="changeView('weekly')">
-          <i class="fas fa-calendar-week"></i>
-          Hebdomadaire
-        </button>
-      </div>
-    </div>
-    
-    <!-- Bouton de partage -->
-    <div class="share-button-container">
-      <button class="share-btn" @click="shareMood">
-        <i class="fas fa-share-alt"></i> Partager mon humeur
-      </button>
-    </div>
-    
-    <!-- Loading State -->
-    <div v-if="isLoading" class="loading-state">
-      <div class="spinner"></div>
-      <p>Chargement de vos humeurs...</p>
-    </div>
+<template>  
+  <div class="mood-tracking-page">  
+    <!-- Header avec navigation -->  
+    <div class="tracking-header">  
+      <h1>Suivi des Humeurs</h1>  
+      <div class="view-toggle">  
+        <button  
+          :class="['toggle-btn', { active: view === 'daily' }]"  
+          @click="changeView('daily')"  
+        >  
+          <i class="fas fa-calendar-day"></i>  
+          Journalier  
+        </button>  
+        <button  
+          :class="['toggle-btn', { active: view === 'weekly' }]"  
+          @click="changeView('weekly')"  
+        >  
+          <i class="fas fa-calendar-week"></i>  
+          Hebdomadaire  
+        </button>  
+      </div>  
+    </div>  <!-- Loading State -->  
+<div v-if="isLoading" class="loading-state">  
+  <div class="spinner"></div>  
+  <p>Chargement de vos humeurs...</p>  
+</div>  
 
-    <div v-else>
-      <!-- Vue Journalière -->
-      <div v-if="view === 'daily'" class="daily-view">
-        <div class="date-selector">
-          <button class="nav-btn" @click="previousDay">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <div class="current-date">
-            <h2>{{ formatDate(selectedDate) }}</h2>
-            <p>{{ days[selectedDate.getDay()] }}</p>
-          </div>
-          <button class="nav-btn" @click="nextDay" :disabled="isToday(selectedDate)">
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </div>
+<div v-else>  
+  <!-- Vue Journalière -->  
+  <div v-if="view === 'daily'" class="daily-view">  
+    <div class="date-selector">  
+      <button class="nav-btn" @click="previousDay">  
+        <i class="fas fa-chevron-left"></i>  
+      </button>  
+      <div class="current-date">  
+        <h2>{{ formatDate(selectedDate) }}</h2>  
+        <p>{{ days[selectedDate.getDay()] }}</p>  
+      </div>  
+      <button  
+        class="nav-btn"  
+        @click="nextDay"  
+        :disabled="isToday(selectedDate)"  
+      >  
+        <i class="fas fa-chevron-right"></i>  
+      </button>  
+    </div>  
 
-        <div class="moods-container">
-          <!-- Humeur du Matin -->
-          <div class="mood-card morning">
-            <div class="time-label">
-              <i class="fas fa-sun"></i>
-              Matin
-            </div>
-            <div v-if="morningData[selectedDate.getDay()]" class="mood-content">
-              <div class="mood-image-container">
-                <img :src="morningData[selectedDate.getDay()].image" :alt="morningData[selectedDate.getDay()].title" class="mood-image" />
-              </div>
-              <div class="mood-details">
-                <h3>{{ morningData[selectedDate.getDay()].title }}</h3>
-                <p>{{ morningData[selectedDate.getDay()].subtitle }}</p>
-              </div>
-            </div>
-            <div v-else class="mood-empty">
-              <i class="fas fa-cloud"></i>
-              <p>Pas d'humeur enregistrée</p>
-            </div>
-          </div>
+    <div class="moods-container">  
+      <!-- Humeur du Matin -->  
+      <div class="mood-card morning">  
+        <div class="time-label">  
+          <i class="fas fa-sun"></i>  
+          Matin  
+        </div>  
+        <div v-if="morningData[selectedDate.getDay()]" class="mood-content">  
+          <div class="mood-image-container">  
+            <img  
+              :src="morningData[selectedDate.getDay()].image"  
+              :alt="morningData[selectedDate.getDay()].title"  
+              class="mood-image"  
+            />  
+          </div>  
+          <div class="mood-details">  
+            <h3>{{ morningData[selectedDate.getDay()].title }}</h3>  
+            <p>{{ morningData[selectedDate.getDay()].subtitle }}</p>  
+          </div>  
+        </div>  
+        <div v-else class="mood-empty">  
+          <i class="fas fa-cloud"></i>  
+          <p>Pas d'humeur enregistrée</p>  
+        </div>  
+      </div>  
 
-          <!-- Humeur du Soir -->
-          <div class="mood-card evening">
-            <div class="time-label">
-              <i class="fas fa-moon"></i>
-              Soir
-            </div>
-            <div v-if="eveningData[selectedDate.getDay()]" class="mood-content">
-              <div class="mood-image-container">
-                <img :src="eveningData[selectedDate.getDay()].image" :alt="eveningData[selectedDate.getDay()].title" class="mood-image" />
-              </div>
-              <div class="mood-details">
-                <h3>{{ eveningData[selectedDate.getDay()].title }}</h3>
-                <p>{{ eveningData[selectedDate.getDay()].subtitle }}</p>
-              </div>
-            </div>
-            <div v-else class="mood-empty">
-              <i class="fas fa-cloud"></i>
-              <p>Pas d'humeur enregistrée</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- Humeur du Soir -->  
+      <div class="mood-card evening">  
+        <div class="time-label">  
+          <i class="fas fa-moon"></i>  
+          Soir  
+        </div>  
+        <div v-if="eveningData[selectedDate.getDay()]" class="mood-content">  
+          <div class="mood-image-container">  
+            <img  
+              :src="eveningData[selectedDate.getDay()].image"  
+              :alt="eveningData[selectedDate.getDay()].title"  
+              class="mood-image"  
+            />  
+          </div>  
+          <div class="mood-details">  
+            <h3>{{ eveningData[selectedDate.getDay()].title }}</h3>  
+            <p>{{ eveningData[selectedDate.getDay()].subtitle }}</p>  
+          </div>  
+        </div>  
+        <div v-else class="mood-empty">  
+          <i class="fas fa-cloud"></i>  
+          <p>Pas d'humeur enregistrée</p>  
+        </div>  
+      </div>  
+    </div>  
+  </div>  
 
-      <!-- Vue Hebdomadaire -->
-      <div v-if="view === 'weekly'" class="weekly-view">
-        <h2>Résumé de la semaine</h2>
-        <div class="weekly-mood-grid">
-          <div v-for="(day, index) in days" :key="index" class="weekly-mood">
-            <h3>{{ day }}</h3>
-            <div v-if="morningData[index]" class="mood-content">
-              <img :src="morningData[index].image" :alt="morningData[index].title" class="mood-image" />
-              <p>{{ morningData[index].title }}</p>
-            </div>
-            <div v-else class="mood-empty">-</div>
+  <!-- Vue Hebdomadaire -->  
+  <div v-else class="weekly-view">  
+    <div class="week-grid">  
+      <div  
+        v-for="(date, index) in weekDates"  
+        :key="index"  
+        class="day-card"  
+        :class="{ 'current-day': isToday(date) }"  
+      >  
+        <div class="day-header">  
+          <h3>{{ days[date.getDay()] }}</h3>  
+          <p>{{ formatDateShort(date) }}</p>  
+        </div>  
 
-            <div v-if="eveningData[index]" class="mood-content">
-              <img :src="eveningData[index].image" :alt="eveningData[index].title" class="mood-image" />
-              <p>{{ eveningData[index].title }}</p>
-            </div>
-            <div v-else class="mood-empty">-</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
+        <div class="day-moods">  
+          <!-- Matin -->  
+          <div class="mini-mood morning">  
+            <span class="time-indicator">Matin</span>  
+            <div  
+              v-if="morningData[date.getDay()]"  
+              class="mini-mood-content"  
+            >  
+              <img  
+                :src="morningData[date.getDay()].image"  
+                :alt="morningData[date.getDay()].title"  
+              />  
+              <span>{{ morningData[date.getDay()].title }}</span>  
+            </div>  
+            <div v-else class="mini-mood-empty">  
+              <i class="fas fa-minus-circle"></i>  
+            </div>  
+          </div>  
+
+          <!-- Soir -->  
+          <div class="mini-mood evening">  
+            <span class="time-indicator">Soir</span>  
+            <div  
+              v-if="eveningData[date.getDay()]"  
+              class="mini-mood-content"  
+            >  
+              <img  
+                :src="eveningData[date.getDay()].image"  
+                :alt="eveningData[date.getDay()].title"  
+              />  
+              <span>{{ eveningData[date.getDay()].title }}</span>  
+            </div>  
+            <div v-else class="mini-mood-empty">  
+              <i class="fas fa-minus-circle"></i>  
+            </div>  
+          </div>  
+        </div>  
+      </div>  
+    </div>  
+  </div>  
+</div>
+
+  </div>  
+</template> 
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
@@ -200,7 +244,6 @@ const fetchMoodData = async () => {
 
 onMounted(fetchMoodData);
 </script>
-
 
 <style scoped>  
 /* Variables */  
