@@ -2,6 +2,15 @@
   <div class="mood-tracking-page">
     <div class="tracking-header">
       <h1>Suivi des Humeurs</h1>
+      <div class="date-selector">
+        <button class="nav-btn" @click="previousDay">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <h2>{{ formatDate(selectedDate) }}</h2>
+        <button class="nav-btn" @click="nextDay" :disabled="isToday(selectedDate)">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
       <div class="view-toggle">
         <button :class="['toggle-btn', { active: view === 'daily' }]" @click="changeView('daily')">
           <i class="fas fa-calendar-day"></i> Journalier
@@ -19,38 +28,41 @@
 
     <div v-else>
       <div v-if="view === 'daily'" class="daily-view">
-        <div class="date-selector">
-          <button class="nav-btn" @click="previousDay">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <h2>{{ formatDate(selectedDate) }}</h2>
-          <button class="nav-btn" @click="nextDay" :disabled="isToday(selectedDate)">
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </div>
-        <div class="mood-card" v-for="(mood, time) in dailyMoods" :key="time">
-          <h3>
-            <i :class="time === 'morning' ? 'fas fa-sun morning-icon' : 'fas fa-moon evening-icon'"></i>
-            {{ time === 'morning' ? 'Matin (6h - 13h)' : 'Soir (17h - Minuit)' }}
-          </h3>
-          <p v-if="mood">{{ mood.title }}</p>
-          <p v-else>Pas d'humeur enregistrée</p>
+        <div class="moods-column">
+          <div class="mood-card">
+            <h3>
+              <i class="fas fa-sun morning-icon"></i>
+              Matin (6h - 13h)
+            </h3>
+            <p v-if="dailyMoods.morning">{{ dailyMoods.morning.title }}</p>
+            <p v-else>Pas d'humeur enregistrée</p>
+          </div>
+          <div class="mood-card">
+            <h3>
+              <i class="fas fa-moon evening-icon"></i>
+              Soir (17h - Minuit)
+            </h3>
+            <p v-if="dailyMoods.evening">{{ dailyMoods.evening.title }}</p>
+            <p v-else>Pas d'humeur enregistrée</p>
+          </div>
         </div>
       </div>
 
       <div v-if="view === 'weekly'" class="weekly-view">
-        <div class="mood-card" v-for="(mood, index) in weeklyMoods" :key="index">
-          <h3>{{ formatDate(new Date(mood.date)) }}</h3>
-          <p v-if="mood.morning">
-            <i class="fas fa-sun morning-icon"></i>
-            Matin : {{ mood.morning.title }}
-          </p>
-          <p v-else>Matin : Pas d'humeur enregistrée</p>
-          <p v-if="mood.evening">
-            <i class="fas fa-moon evening-icon"></i>
-            Soir : {{ mood.evening.title }}
-          </p>
-          <p v-else>Soir : Pas d'humeur enregistrée</p>
+        <div class="moods-column">
+          <div v-for="day in fullWeek" :key="day.date" class="mood-card">
+            <h3>{{ formatDate(new Date(day.date)) }}</h3>
+            <p v-if="day.morning">
+              <i class="fas fa-sun morning-icon"></i>
+              Matin : {{ day.morning.title }}
+            </p>
+            <p v-else>Matin : Pas d'humeur enregistrée</p>
+            <p v-if="day.evening">
+              <i class="fas fa-moon evening-icon"></i>
+              Soir : {{ day.evening.title }}
+            </p>
+            <p v-else>Soir : Pas d'humeur enregistrée</p>
+          </div>
         </div>
       </div>
     </div>
@@ -66,6 +78,7 @@ const selectedDate = ref(new Date());
 const isLoading = ref(true);
 const dailyMoods = ref({ morning: null, evening: null });
 const weeklyMoods = ref([]);
+const fullWeek = ref([]);
 
 const userId = localStorage.getItem('userId');
 
@@ -90,13 +103,16 @@ const fetchMoods = async () => {
 const fetchWeeklyMoods = (data) => {
   const startOfWeek = new Date(selectedDate.value);
   startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-  const endOfWeek = new Date(startOfWeek);
-  endOfWeek.setDate(endOfWeek.getDate() + 6);
+  const week = [];
 
-  weeklyMoods.value = data.filter(entry => {
-    const entryDate = new Date(entry.date);
-    return entryDate >= startOfWeek && entryDate <= endOfWeek;
-  });
+  for (let i = 0; i < 7; i++) {
+    const day = new Date(startOfWeek);
+    day.setDate(startOfWeek.getDate() + i);
+    const formattedDate = day.toISOString().split('T')[0];
+    const mood = data.find(entry => entry.date === formattedDate) || { date: formattedDate, morning: null, evening: null };
+    week.push(mood);
+  }
+  fullWeek.value = week;
 };
 
 const formatDate = date => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
@@ -129,8 +145,19 @@ onMounted(fetchMoods);
   background: #4caf50;
   color: white;
 }
+.date-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
 .loading-state {
   text-align: center;
+}
+.moods-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .mood-card {
   background: white;
