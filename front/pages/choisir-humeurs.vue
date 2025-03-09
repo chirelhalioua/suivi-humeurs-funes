@@ -80,7 +80,6 @@ const chooseMood = () => {
     return;
   }
   selectedMoodId.value = currentMood.value._id;
-  showNotification("Humeur sélectionnée avec succès !", "success");
 };
 
 const saveMood = async () => {
