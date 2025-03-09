@@ -1,153 +1,129 @@
 <template>
-  <div class="mood-tracking-page">
-    <div class="tracking-header">
-      <h1>Suivi des Humeurs</h1>
-      <div class="date-selector">
-        <button class="nav-btn" @click="previousDay">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <h2>{{ formatDate(selectedDate) }}</h2>
-        <button class="nav-btn" @click="nextDay" :disabled="isToday(selectedDate)">
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
-      <div class="view-toggle">
-        <button :class="['toggle-btn', { active: view === 'daily' }]" @click="changeView('daily')">
-          <i class="fas fa-calendar-day"></i> Journalier
-        </button>
-        <button :class="['toggle-btn', { active: view === 'weekly' }]" @click="changeView('weekly')">
-          <i class="fas fa-calendar-week"></i> Hebdomadaire
-        </button>
-      </div>
-    </div>
+  <div class="suivi-humeurs">
+    <h1>📅 Suivi des Humeurs</h1>
 
-    <div v-if="isLoading" class="loading-state">
-      <p>Chargement...</p>
-    </div>
+    <!-- Affichage quotidien -->
+    <section class="daily-tracking">
+      <h2>📝 Suivi Quotidien</h2>
+      <ul>
+        <li v-for="mood in dailyMoods" :key="mood._id" class="mood-item">
+          <strong>{{ formatDate(mood.date) }}</strong> - {{ mood.humeur.title }}
+          <p>{{ mood.description }}</p>
+        </li>
+      </ul>
+    </section>
 
-    <div v-else>
-      <!-- Affichage journalier -->
-      <div v-if="view === 'daily'" class="daily-view">
-        <div class="mood-card" v-for="(mood, time) in dailyMoods" :key="time">
-          <h3>{{ time === 'morning' ? 'Matin (6h - 13h)' : 'Soir (17h - Minuit)' }}</h3>
-          <p v-if="mood">{{ mood.title }}</p>
-          <p v-else>Pas d'humeur enregistrée</p>
-        </div>
-      </div>
-
-      <!-- Affichage hebdomadaire -->
-      <div v-if="view === 'weekly'" class="weekly-view">
-        <div class="week-container">
-          <div v-for="day in fullWeek" :key="day.date" class="week-day">
-            <h3>{{ formatDate(new Date(day.date)) }}</h3>
-            <p v-if="day.morning">Matin : {{ day.morning.title }}</p>
-            <p v-else>Matin : Pas d'humeur enregistrée</p>
-            <p v-if="day.evening">Soir : {{ day.evening.title }}</p>
-            <p v-else>Soir : Pas d'humeur enregistrée</p>
+    <!-- Affichage hebdomadaire -->
+    <section class="weekly-tracking">
+      <h2>📆 Suivi Hebdomadaire</h2>
+      <div class="calendar">
+        <div v-for="day in weeklyMoods" :key="day.date" class="calendar-day">
+          <div class="date">{{ formatDate(day.date) }}</div>
+          <div v-if="day.mood" class="mood">
+            <img :src="day.mood.image" :alt="day.mood.title" class="mood-image" />
+            <p>{{ day.mood.title }}</p>
           </div>
+          <div v-else class="no-mood">😶 Aucune humeur</div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-const view = ref('daily');
-const selectedDate = ref(new Date());
-const isLoading = ref(false);
-const dailyMoods = ref({ morning: null, evening: null });
-const fullWeek = ref([]);
-
-const userId = localStorage.getItem('userId') || null;
+const userId = localStorage.getItem('userId');
+const dailyMoods = ref([]);
+const weeklyMoods = ref([]);
 
 const fetchMoods = async () => {
-  if (!userId) return;
-  isLoading.value = true;
   try {
-    const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userId}`);
-    const today = selectedDate.value.toISOString().split('T')[0];
-    dailyMoods.value = response.data.find(entry => entry.date === today) || { morning: null, evening: null };
-    fetchWeeklyMoods(response.data);
+    const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs?userId=${userId}`);
+    const moods = response.data;
+    
+    // Trier les humeurs par date (du plus récent au plus ancien)
+    dailyMoods.value = moods.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Récupérer les humeurs des 7 derniers jours
+    const last7Days = getLast7Days();
+    weeklyMoods.value = last7Days.map(date => ({
+      date,
+      mood: moods.find(m => m.date === date) || null
+    }));
   } catch (error) {
-    console.error('Erreur lors de la récupération des humeurs:', error);
-  } finally {
-    isLoading.value = false;
+    console.error("Erreur lors du chargement des humeurs", error);
   }
 };
 
-const fetchWeeklyMoods = (data) => {
-  const startOfWeek = new Date(selectedDate.value);
-  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-  const week = [];
-
-  for (let i = 0; i < 7; i++) {
-    const day = new Date(startOfWeek);
-    day.setDate(startOfWeek.getDate() + i);
-    const formattedDate = day.toISOString().split('T')[0];
-    const mood = data.find(entry => entry.date === formattedDate) || { date: formattedDate, morning: null, evening: null };
-    week.push(mood);
+const getLast7Days = () => {
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    days.push(date.toISOString().split('T')[0]);
   }
-  fullWeek.value = week;
+  return days;
 };
 
-const formatDate = date => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
-const isToday = date => date.toDateString() === new Date().toDateString();
-const previousDay = () => { selectedDate.value.setDate(selectedDate.value.getDate() - 1); fetchMoods(); };
-const nextDay = () => { selectedDate.value.setDate(selectedDate.value.getDate() + 1); fetchMoods(); };
-const changeView = newView => { view.value = newView; fetchMoods(); };
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString('fr-FR', {
+    weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+  });
+};
 
-watch(selectedDate, fetchMoods);
-onMounted(fetchMoods);
+onMounted(() => {
+  fetchMoods();
+});
 </script>
 
 <style scoped>
-.mood-tracking-page {
-  padding: 20px;
-  background: #f4e4bc;
-}
-.tracking-header {
+.suivi-humeurs {
   text-align: center;
+  max-width: 900px;
+  margin: auto;
 }
-.view-toggle button {
-  margin: 5px;
-  padding: 10px 20px;
-  background: white;
-  border: none;
-  border-radius: 20px;
+
+h1, h2 {
+  color: #4CAF50;
 }
-.view-toggle .active {
-  background: #4caf50;
-  color: white;
+
+.daily-tracking ul {
+  list-style: none;
+  padding: 0;
 }
-.date-selector {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.loading-state {
-  text-align: center;
-}
-.daily-view .mood-card {
-  background: white;
+
+.mood-item {
+  background: #f9f9f9;
+  border-left: 5px solid #4CAF50;
   padding: 10px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
 }
-.week-container {
+
+.calendar {
   display: flex;
+  justify-content: space-between;
   overflow-x: auto;
-  gap: 10px;
-}
-.week-day {
-  background: white;
   padding: 10px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-day {
+  flex: 1;
   min-width: 120px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.mood-image {
+  width: 50px;
+  height: 50px;
+}
+
+.no-mood {
+  color: #aaa;
 }
 </style>
