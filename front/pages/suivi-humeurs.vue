@@ -20,6 +20,7 @@
         </button>
       </div>
     </div>
+
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-state">
       <div class="spinner"></div>
@@ -187,7 +188,7 @@ const isLoading = ref(true);
 const morningData = ref([]);
 const eveningData = ref([]);
 const socialsVisible = ref(false);
-const canShareWeek = ref(false); // Détection de si la semaine est complète
+const canShareWeek = ref(false);
 
 const days = [
   "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
