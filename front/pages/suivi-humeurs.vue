@@ -211,7 +211,7 @@ const shareMood = () => {
   
   let shareText = `📅 ${date} - Mon humeur :\n`;
   shareText += moodMorning ? `🌞 Matin : ${moodMorning.title}\n` : "🌞 Matin : Pas d'humeur enregistrée\n";
-  shareText += moodEvening ? `🌙 Soir : ${moodEvening.title}\n" : "🌙 Soir : Pas d'humeur enregistrée\n";
+  shareText += moodEvening ? `🌙 Soir : ${moodEvening.title}\n` : "🌙 Soir : Pas d'humeur enregistrée\n";
   
   if (navigator.share) {
     navigator.share({
@@ -482,7 +482,7 @@ onMounted(fetchMoodData);
 
 .day-header h3 {
   font-size: 1.1rem;
-  color: var (--secondary-color);
+  color: var(--secondary-color);
   margin-bottom: 4px;
 }
 
