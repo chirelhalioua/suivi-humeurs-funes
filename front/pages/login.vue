@@ -256,4 +256,19 @@ const loginUser = async () => {
   background-color: #ffebee;
   color: #c62828;
 }
+
+  .forgot-password {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.forgot-password a {
+  color: #4caf50;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
 </style>
