@@ -19,7 +19,16 @@
           Hebdomadaire  
         </button>  
       </div>  
-    </div>  <!-- Loading State -->  
+    </div>  
+
+     <!-- Bouton de partage -->
+    <div class="share-button-container">
+      <button class="share-btn" @click="shareMood">
+        <i class="fas fa-share-alt"></i> Partager mon humeur
+      </button>
+    </div>
+    
+    <!-- Loading State -->  
 <div v-if="isLoading" class="loading-state">  
   <div class="spinner"></div>  
   <p>Chargement de vos humeurs...</p>  
