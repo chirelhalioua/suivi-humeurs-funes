@@ -54,7 +54,7 @@ const selectedMoodId = ref(null);
 const description = ref('');
 const hasChosenMood = ref(false);
 const moodStatusMessage = ref('');
-const notification = ref({ message: '', type: '' }); // Notification dynamique
+const notification = ref({ message: '', type: '' });
 
 const fetchHumeurs = async () => {
   try {
@@ -62,16 +62,6 @@ const fetchHumeurs = async () => {
     humeurs.value = response.data;
   } catch (error) {
     showNotification("Impossible de charger les humeurs. Veuillez réessayer plus tard.", "error");
-  }
-};
-
-const checkIfMoodAlreadyChosen = () => {
-  const storedMood = JSON.parse(localStorage.getItem('userMoodChoice'));
-  const currentDate = new Date().toISOString().split('T')[0];
-
-  if (storedMood && storedMood.date === currentDate) {
-    hasChosenMood.value = true;
-    moodStatusMessage.value = "Vous avez déjà choisi votre humeur pour aujourd'hui.";
   }
 };
 
@@ -88,7 +78,7 @@ const nextMood = () => {
 const canNavigate = computed(() => humeurs.value.length > 1);
 const canChooseMood = computed(() => {
   const currentHour = new Date().getHours();
-  return (currentHour >= 6 && currentHour < 12) || (currentHour >= 17 && currentHour < 26);
+  return (currentHour >= 6 && currentHour < 12) || (currentHour >= 17 && currentHour <= 23);
 });
 
 const chooseMood = () => {
@@ -105,14 +95,14 @@ const saveMood = async () => {
     return;
   }
 
-  const userId = getUserIdFromLocalStorage();
+  const userId = localStorage.getItem('userId');
   if (!userId) {
     showNotification("Impossible d'enregistrer l'humeur. ID utilisateur manquant.", "error");
     return;
   }
 
   const hours = new Date().getHours();
-  let timeOfDay = hours >= 6 && hours < 12 ? 'morning' : hours < 18 ? 'afternoon' : 'evening';
+  let timeOfDay = hours >= 6 && hours < 12 ? 'morning' : 'evening';
 
   const userMoodChoice = {
     date: new Date().toISOString().split('T')[0],
@@ -128,19 +118,13 @@ const saveMood = async () => {
     if (response.status === 200) {
       localStorage.setItem('userMoodChoice', JSON.stringify(userMoodChoice));
       hasChosenMood.value = true;
-      selectedMoodId.value = null;
-      description.value = '';
-      checkIfMoodAlreadyChosen();
-      showNotification("Votre humeur a été enregistrée avec succès !", "success");
+      moodStatusMessage.value = "Votre humeur a été enregistrée avec succès !";
+      showNotification(moodStatusMessage.value, "success");
     }
   } catch (error) {
     showNotification("Une erreur est survenue lors de l'enregistrement. Veuillez réessayer plus tard.", "error");
   }
 };
-
-function getUserIdFromLocalStorage() {
-  return localStorage.getItem('userId') || null;
-}
 
 function showNotification(message, type) {
   notification.value = { message, type };
@@ -151,7 +135,6 @@ function showNotification(message, type) {
 
 onMounted(() => {
   fetchHumeurs();
-  checkIfMoodAlreadyChosen();
 });
 </script>
 
