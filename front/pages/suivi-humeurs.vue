@@ -99,25 +99,9 @@
           </div>
         </div>
 
-        <!-- Bouton de partage quotidien -->
-        <div v-if="canShareDay" class="share-button-container">
-          <div class="share-btn" @click="toggleSocials">
-            Partager mon humeur
-            <div class="social-icons" v-if="socialsVisible">
-              <a :href="facebookShareLink" target="_blank">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <a :href="twitterShareLink" target="_blank">
-                <i class="fab fa-twitter"></i>
-              </a>
-              <a :href="linkedinShareLink" target="_blank">
-                <i class="fab fa-linkedin-in"></i>
-              </a>
-              <a :href="whatsappShareLink" target="_blank">
-                <i class="fab fa-whatsapp"></i>
-              </a>
-            </div>
-          </div>
+        <!-- Share Button -->
+        <div class="share-button">
+          <button @click="shareMood('daily')">Partager mon humeur</button>
         </div>
       </div>
 
@@ -139,10 +123,7 @@
               <!-- Matin -->
               <div class="mini-mood morning">
                 <span class="time-indicator">Matin</span>
-                <div
-                  v-if="morningData[date.getDay()]"
-                  class="mini-mood-content"
-                >
+                <div v-if="morningData[date.getDay()]" class="mini-mood-content">
                   <img
                     :src="morningData[date.getDay()].image"
                     :alt="morningData[date.getDay()].title"
@@ -157,10 +138,7 @@
               <!-- Soir -->
               <div class="mini-mood evening">
                 <span class="time-indicator">Soir</span>
-                <div
-                  v-if="eveningData[date.getDay()]"
-                  class="mini-mood-content"
-                >
+                <div v-if="eveningData[date.getDay()]" class="mini-mood-content">
                   <img
                     :src="eveningData[date.getDay()].image"
                     :alt="eveningData[date.getDay()].title"
@@ -174,311 +152,382 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Bouton de partage hebdomadaire -->
-    <div v-if="canShareWeek" class="share-button-container">
-      <div class="share-btn" @click="toggleSocials">
-        Partager ma semaine
-        <div class="social-icons" v-if="socialsVisible">
-          <a :href="facebookShareLink" target="_blank">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a :href="twitterShareLink" target="_blank">
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a :href="linkedinShareLink" target="_blank">
-            <i class="fab fa-linkedin-in"></i>
-          </a>
-          <a :href="whatsappShareLink" target="_blank">
-            <i class="fab fa-whatsapp"></i>
-          </a>
+        <!-- Share Button -->
+        <div class="share-button">
+          <button @click="shareMood('weekly')">Partager ma semaine</button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      view: 'daily', // Vue par défaut : 'daily' ou 'weekly'
-      selectedDate: new Date(), // Date sélectionnée pour le suivi des humeurs
-      isLoading: false,
-      morningData: {}, // Données d'humeur du matin (en fonction des jours)
-      eveningData: {}, // Données d'humeur du soir (en fonction des jours)
-      socialsVisible: false, // Afficher ou masquer les boutons de partage
-    };
-  },
-  computed: {
-    days() {
-      return [
-        'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'
-      ];
-    },
-    weekDates() {
-      const startOfWeek = this.getStartOfWeek(this.selectedDate);
-      return Array.from({ length: 7 }, (_, i) => {
-        const date = new Date(startOfWeek);
-        date.setDate(startOfWeek.getDate() + i);
-        return date;
-      });
-    },
-    canShareDay() {
-      return this.morningData[this.selectedDate.getDay()] || this.eveningData[this.selectedDate.getDay()];
-    },
-    canShareWeek() {
-      return this.weekDates.some(date => {
-        return (
-          this.morningData[date.getDay()] || this.eveningData[date.getDay()]
-        );
-      });
-    },
-    facebookShareLink() {
-      return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.currentShareUrl)}`;
-    },
-    twitterShareLink() {
-      return `https://twitter.com/intent/tweet?text=${encodeURIComponent(this.currentShareUrl)}`;
-    },
-    linkedinShareLink() {
-      return `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(this.currentShareUrl)}`;
-    },
-    whatsappShareLink() {
-      return `https://api.whatsapp.com/send?text=${encodeURIComponent(this.currentShareUrl)}`;
-    },
-    currentShareUrl() {
-      return this.view === 'daily'
-        ? `http://example.com/share/daily/${this.formatDate(this.selectedDate)}`
-        : `http://example.com/share/weekly/${this.formatDate(this.selectedDate)}`;
-    },
-  },
-  methods: {
-    // Format les dates
-    formatDate(date) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      return date.toLocaleDateString('fr-FR', options);
-    },
-    formatDateShort(date) {
-      const options = { day: '2-digit', month: 'short' };
-      return date.toLocaleDateString('fr-FR', options);
-    },
-    getStartOfWeek(date) {
-      const day = date.getDay(),
-            diff = date.getDate() - day + (day == 0 ? -6 : 1); // Ajuste pour commencer la semaine le Lundi
-      return new Date(date.setDate(diff));
-    },
-    changeView(view) {
-      this.view = view;
-    },
-    previousDay() {
-      this.selectedDate.setDate(this.selectedDate.getDate() - 1);
-    },
-    nextDay() {
-      this.selectedDate.setDate(this.selectedDate.getDate() + 1);
-    },
-    isToday(date) {
-      const today = new Date();
-      return (
-        today.getDate() === date.getDate() &&
-        today.getMonth() === date.getMonth() &&
-        today.getFullYear() === date.getFullYear()
-      );
-    },
-    toggleSocials() {
-      this.socialsVisible = !this.socialsVisible;
-    },
-  },
-  watch: {
-    selectedDate(newDate) {
-      this.isLoading = true;
-      this.fetchMoodData(newDate).finally(() => {
-        this.isLoading = false;
-      });
-    },
-  },
-  mounted() {
-    this.fetchMoodData(this.selectedDate);
-  },
-  methods: {
-    // Fonction pour récupérer les données d'humeur (en vrai, vous utiliseriez une API pour ça)
-    fetchMoodData(date) {
-      // Exemple de données fictives
-      const weekData = [
-        { title: "Heureux", subtitle: "Bien réveillé", image: "/assets/happy-morning.png" },
-        { title: "Fatigué", subtitle: "Encore un peu de sommeil", image: "/assets/tired-morning.png" },
-        // ... Ajouter des données pour chaque jour de la semaine
-      ];
+<script setup>
+import { ref, onMounted, computed } from "vue";
+import axios from "axios";
 
-      this.morningData = {
-        0: weekData[0], // Dimanche matin
-        1: weekData[1], // Lundi matin
-        // ... Ajoutez d'autres jours ici
-      };
-      this.eveningData = {
-        0: weekData[1], // Dimanche soir
-        1: weekData[0], // Lundi soir
-        // ... Ajoutez d'autres jours ici
-      };
-    },
-  },
+// État
+const view = ref("daily");
+const selectedDate = ref(new Date());
+const isLoading = ref(true);
+const morningData = ref([]);
+const eveningData = ref([]);
+
+// Constantes
+const days = [
+  "Dimanche",
+  "Lundi",
+  "Mardi",
+  "Mercredi",
+  "Jeudi",
+  "Vendredi",
+  "Samedi",
+];
+
+// Dates de la semaine
+const weekDates = computed(() => {
+  const dates = [];
+  const currentDate = new Date(selectedDate.value);
+  const firstDay = new Date(
+    currentDate.setDate(currentDate.getDate() - currentDate.getDay()),
+  );
+
+  for (let i = 0; i < 7; i++) {
+    dates.push(
+      new Date(
+        firstDay.getFullYear(),
+        firstDay.getMonth(),
+        firstDay.getDate() + i,
+      ),
+    );
+  }
+
+  return dates;
+});
+
+// Formatage des dates
+const formatDate = (date) => {
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
 };
+
+const formatDateShort = (date) => {
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "short",
+  }).format(date);
+};
+
+// Vérification si la date est aujourd'hui
+const isToday = (date) => {
+  const today = new Date();
+  return date.toDateString() === today.toDateString();
+};
+
+// Navigation entre les jours
+const previousDay = () => {
+  selectedDate.value = new Date(
+    selectedDate.value.setDate(selectedDate.value.getDate() - 1),
+  );
+};
+
+const nextDay = () => {
+  if (!isToday(selectedDate.value)) {
+    selectedDate.value = new Date(
+      selectedDate.value.setDate(selectedDate.value.getDate() + 1),
+    );
+  }
+};
+
+// Changement de vue
+const changeView = (newView) => {
+  view.value = newView;
+};
+
+// Récupération des données
+const fetchMoodData = async () => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    console.error("Token non trouvé");
+    return;
+  }
+
+  try {
+    isLoading.value = true;
+
+    // Récupérer l'ID utilisateur
+    const userResponse = await axios.get(
+      "https://suivi-humeurs-funes.onrender.com/api/auth/me",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+
+    // Récupérer les humeurs
+    const moodsResponse = await axios.get(
+      `https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userResponse.data._id}`,
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+
+    // Réinitialiser les tableaux
+    morningData.value = Array(7).fill(null);
+    eveningData.value = Array(7).fill(null);
+
+    // Traiter les données
+    for (const entry of moodsResponse.data) {
+      const moodDetails = await axios.get(
+        `https://suivi-humeurs-funes.onrender.com/api/humeurs/${entry.humeurId}`,
+      );
+
+      const dayIndex = new Date(entry.date).getDay();
+
+      if (entry.timeOfDay === "morning") {
+        morningData.value[dayIndex] = moodDetails.data;
+      } else {
+        eveningData.value[dayIndex] = moodDetails.data;
+      }
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération des données:", error);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// Fonction de partage
+const shareMood = (period) => {
+  let shareText = "";
+  let shareUrl = window.location.href;
+
+  if (period === "daily") {
+    shareText = `Mon humeur du jour : ${morningData.value[selectedDate.value.getDay()]?.title || 'Aucune humeur'}`;
+  } else if (period === "weekly") {
+    shareText = "Voici mes humeurs de la semaine!";
+  }
+
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+
+  // Ouvrir les liens de partage dans un nouvel onglet
+  window.open(twitterUrl, "_blank");
+  window.open(facebookUrl, "_blank");
+};
+
+// Initialisation
+onMounted(fetchMoodData);
 </script>
 
 <style scoped>
-  .mood-tracking-page {
-  font-family: 'Roboto', sans-serif;
-  background-color: #f9f9f9;
-  padding: 20px;
+/* Variables */
+:root {
+  --primary-color: #4caf50;
+  --secondary-color: #2c1810;
+  --background-color: #f4e4bc;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
 }
 
+/* Page Layout */
+.mood-tracking-page {
+  min-height: 100vh;
+  background-color: var(--background-color);
+  padding: 40px 20px;
+}
+
+/* Header Styles */
 .tracking-header {
   text-align: center;
+  margin-bottom: 40px;
+}
+
+.tracking-header h1 {
+  font-family: "Sora", sans-serif;
+  color: var(--secondary-color);
+  font-size: 2.5rem;
   margin-bottom: 20px;
 }
 
+/* View Toggle */
 .view-toggle {
   display: flex;
+  gap: 16px;
   justify-content: center;
-  gap: 15px;
+  margin-bottom: 30px;
 }
 
 .toggle-btn {
-  padding: 10px 15px;
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  background: white;
+  color: var(--secondary-color);
+  font-weight: 500;
   cursor: pointer;
-  background-color: #ffffff;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  transition: 0.3s;
+  transition: var(--transition);
 }
 
 .toggle-btn.active {
-  background-color: #007bff;
+  background: #46a34a;
   color: white;
-  border-color: #007bff;
 }
 
-.moods-container {
+.toggle-btn i {
+  font-size: 1.1rem;
+}
+
+/* Loading State */
+.loading-state {
   display: flex;
-  gap: 20px;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+/* Mood Cards */
+.moods-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
 }
 
 .mood-card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 48%;
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0); /* Fond dégradé */
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  padding: 24px;
+  overflow: hidden;
+  transition: var(--transition);
+  position: relative;
+}
+
+.mood-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .mood-card .time-label {
-  font-size: 18px;
-  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.2rem;
 }
 
-.mood-image-container {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-
-.mood-image {
-  width: 100%;
-  height: auto;
-}
-
-.mood-details {
-  text-align: center;
-}
-
-.mood-empty {
-  text-align: center;
-  color: #aaa;
-}
-
-.share-button-container {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.share-btn {
-  cursor: pointer;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
-  font-size: 16px;
-  display: inline-block;
-  transition: 0.3s;
-}
-
-.share-btn:hover {
-  background-color: #0056b3;
-}
-
-.social-icons {
+.mood-card .mood-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
   margin-top: 10px;
+}
+
+.mood-card .mood-image-container {
+  flex-shrink: 0;
+}
+
+.mood-card .mood-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.mood-card .mood-details h3 {
+  font-size: 1.3rem;
+}
+
+.mood-card .mood-details p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.mood-card .mood-empty {
+  text-align: center;
+}
+
+.mood-card .mood-empty i {
+  font-size: 2rem;
+  color: #999;
+}
+
+/* Share Button */
+.share-button {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  margin-top: 20px;
 }
 
-.social-icons a {
-  font-size: 20px;
-  color: #007bff;
-  text-decoration: none;
-  transition: 0.3s;
+.share-button button {
+  background: var(--primary-color);
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: var(--transition);
 }
 
-.social-icons a:hover {
-  color: #0056b3;
+.share-button button:hover {
+  background: #388e3c;
 }
 
-.week-grid {
+/* Week View */
+.weekly-view .week-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 15px;
+  gap: 16px;
 }
 
-.day-card {
-  background: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.day-header {
+.weekly-view .day-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  padding: 16px;
   text-align: center;
-  margin-bottom: 15px;
+  transition: var(--transition);
 }
 
-.mini-mood {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+.weekly-view .day-card.current-day {
+  border: 2px solid var(--primary-color);
 }
 
-.mini-mood-empty {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #aaa;
+.weekly-view .day-header h3 {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
 }
 
-.mini-mood-content {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+.weekly-view .mini-mood {
+  margin-top: 8px;
 }
 
-.current-day {
-  background-color: #007bff;
-  color: white;
+.weekly-view .mini-mood .time-indicator {
+  font-weight: bold;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.weekly-view .mini-mood-content img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.weekly-view .mini-mood-empty i {
+  font-size: 1.2rem;
+  color: #bbb;
 }
 </style>
