@@ -572,7 +572,7 @@ onMounted(fetchMoodData);
 .share-btn {
   background-color: #46A34A;
   color: white;
-  width:50px;
+  width:200px;
   margin-top:20px;
   padding: 12px 24px;
   border: none;
