@@ -574,11 +574,11 @@ onMounted(fetchMoodData);
 }
 
 .share-btn {
-  background-color: var(--primary-color);
+  background-color: #46A34A;
   color: white;
+  padding: 12px 24px;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 50px;
   cursor: pointer;
   transition: var(--transition);
   position: relative;
@@ -600,11 +600,7 @@ onMounted(fetchMoodData);
 
 .social-icons i {
   font-size: 1.5rem;
-  color: white;
+  color: #46A34A;
   transition: var(--transition);
-}
-
-.social-icons i:hover {
-  color: #d4d4d4;
 }
 </style>
