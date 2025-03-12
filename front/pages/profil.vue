@@ -142,10 +142,12 @@ const cancelDelete = () => (showConfirmDelete.value = false);
 // Fonction pour supprimer le profil
 const deleteProfile = async () => {
   const userId = localStorage.getItem("userId");
+  console.log("userId récupéré :", userId);  // Ajoute cette ligne
   if (!userId) {
     router.push("/login");
     return;
   }
+
 
   try {
     const response = await axios.delete(`https://suivi-humeurs-funes.onrender.com/api/auth/profil/${userId}`);
