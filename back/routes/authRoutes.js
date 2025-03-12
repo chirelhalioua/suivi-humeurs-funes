@@ -26,6 +26,6 @@ router.get('/users', getAllUsers);
 router.get('/profil', getUserProfile);
 
 // Supprimer un profil utilisateur
-router.delete('/profil', deleteUserProfile);
+router.delete('/profil/:userId', deleteUserProfile);
 
 module.exports = router;
