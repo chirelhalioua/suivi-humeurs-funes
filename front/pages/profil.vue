@@ -142,16 +142,16 @@ const cancelDelete = () => (showConfirmDelete.value = false);
 // Fonction pour supprimer le profil
 const deleteProfile = async () => {
   const userId = localStorage.getItem("userId");
-  console.log("userId récupéré :", userId);  // Ajoute cette ligne
+  console.log("Supprimer le profil de l'utilisateur avec ID :", userId);  // 🟢 Log de l'ID
+
   if (!userId) {
     router.push("/login");
     return;
   }
 
-
   try {
     const response = await axios.delete(`https://suivi-humeurs-funes.onrender.com/api/auth/profil/${userId}`);
-    console.log(response);
+    console.log("Réponse de la suppression:", response);  // 🟢 Log de la réponse
 
     // Suppression réussie, on nettoie le localStorage et redirige
     localStorage.removeItem("userId");
@@ -161,6 +161,7 @@ const deleteProfile = async () => {
     alert("Une erreur est survenue lors de la suppression du profil.");
   }
 };
+
 
 
 // Récupérer le profil lors du montage du composant
