@@ -148,7 +148,10 @@ const deleteProfile = async () => {
   }
 
   try {
-    await axios.delete(`https://suivi-humeurs-funes.onrender.com/api/auth/profile/${userId}`);
+    await axios.delete(`https://suivi-humeurs-funes.onrender.com/api/auth/profil/${userId}`);
+  .then(response => console.log(response))
+  .catch(error => console.error(error));
+
     localStorage.removeItem("userId");
     router.push("/login");
   } catch (error) {
