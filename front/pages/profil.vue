@@ -327,7 +327,7 @@ onMounted(fetchUserProfile);
 
 .delete-btn {
   background-color: red;
-  color: var(--danger-color);
+  color: white;
 }
 
 .delete-btn:hover {
