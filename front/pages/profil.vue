@@ -148,10 +148,10 @@ const deleteProfile = async () => {
   }
 
   try {
-    await axios.delete(`https://suivi-humeurs-funes.onrender.com/api/auth/profil/${userId}`);
-  .then(response => console.log(response))
-  .catch(error => console.error(error));
+    const response = await axios.delete(`https://suivi-humeurs-funes.onrender.com/api/auth/profil/${userId}`);
+    console.log(response);
 
+    // Suppression réussie, on nettoie le localStorage et redirige
     localStorage.removeItem("userId");
     router.push("/login");
   } catch (error) {
@@ -159,6 +159,7 @@ const deleteProfile = async () => {
     alert("Une erreur est survenue lors de la suppression du profil.");
   }
 };
+
 
 // Récupérer le profil lors du montage du composant
 onMounted(fetchUserProfile);
