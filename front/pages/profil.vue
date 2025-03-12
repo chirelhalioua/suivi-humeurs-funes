@@ -399,7 +399,7 @@ onMounted(fetchUserProfile);
 }
 
 .confirm-btn {
-  background-color: var(--danger-color);
+  background-color: #FF0000;
   color: white;
 }
 
