@@ -227,11 +227,11 @@ const fetchMoodData = async () => {
   }
   try {
     isLoading.value = true;
-    const moodsResponse = await axios.get(`http://localhost:5000/api/humeurs_utilisateurs/${userId}`);
+    const moodsResponse = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userId}`);
     morningData.value = Array(7).fill(null);
     eveningData.value = Array(7).fill(null);
     for (const entry of moodsResponse.data) {
-      const moodDetails = await axios.get(`http://localhost:5000/api/humeurs/${entry.humeurId}`);
+      const moodDetails = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs/${entry.humeurId}`);
       const dayIndex = new Date(entry.date).getDay();
       if (entry.timeOfDay === "morning") {
         morningData.value[dayIndex] = moodDetails.data;
