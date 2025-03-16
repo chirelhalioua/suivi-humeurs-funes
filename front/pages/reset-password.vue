@@ -32,7 +32,7 @@ const isLoading = ref(false);
 const resetPassword = async () => {
   try {
     isLoading.value = true;
-    const response = await axios.post('http://localhost:5000/api/auth/reset-password', { email: email.value });
+    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/reset-password', { email: email.value });
 
     if (response.status === 200) {
       message.value = 'Un email de réinitialisation a été envoyé.';
