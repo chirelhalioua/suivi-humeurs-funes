@@ -1,10 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
-const { OAuth2Client } = require('google-auth-library');
-
-// Initialisation du client Google avec l'ID client défini dans les variables d'environnement
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const mongoose = require('mongoose');
 
 // Inscription d'un nouvel utilisateur
 const registerUser = async (req, res) => {
@@ -97,27 +94,35 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-// Supprimer un profil utilisateur
+// Supprimer le profil
 const deleteUserProfile = async (req, res) => {
-  const { userId } = req.query;
+  console.log("📥 Params reçus :", req.params); // Debugging
+
+  const { userId } = req.params;
 
   if (!userId) {
-    return res.status(400).json({ message: 'L\'ID de l\'utilisateur est requis pour la suppression' });
+    return res.status(400).json({ message: "L'ID de l'utilisateur est requis pour la suppression" });
+  }
+
+  // Vérification du format MongoDB ObjectId
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: "Format d'ID invalide" });
   }
 
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
 
-    await User.findByIdAndDelete(userId); // Suppression de l'utilisateur
-    res.status(200).json({ message: 'Profil utilisateur supprimé avec succès' });
+    await User.findByIdAndDelete(userId);
+    return res.status(200).json({ message: "Profil utilisateur supprimé avec succès" });
   } catch (error) {
-    console.error('Erreur lors de la suppression du profil : ', error);
-    res.status(500).json({ message: 'Erreur du serveur' });
+    console.error("❌ Erreur lors de la suppression :", error);
+    return res.status(500).json({ message: "Erreur serveur" });
   }
 };
+
 
 module.exports = {
   registerUser,

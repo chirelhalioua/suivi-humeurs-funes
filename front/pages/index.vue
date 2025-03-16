@@ -166,7 +166,7 @@ const fetchMoods = async () => {
     isLoading.value = true;
     errorMessage.value = "";
 
-    const response = await fetch("https://suivi-humeurs-funes.onrender.com/api/humeurs", {
+    const response = await fetch("http://localhost:5000/api/humeurs", {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

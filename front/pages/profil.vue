@@ -103,7 +103,7 @@ const fetchUserProfile = async () => {
   }
 
   try {
-    const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/auth/profil`, {
+    const response = await axios.get(`http://localhost:5000/api/auth/profil`, {
       params: { userId } // Passer l'ID utilisateur en paramètre
     });
 
@@ -142,27 +142,26 @@ const cancelDelete = () => (showConfirmDelete.value = false);
 // Fonction pour supprimer le profil
 const deleteProfile = async () => {
   const userId = localStorage.getItem("userId");
-  console.log("Supprimer le profil de l'utilisateur avec ID :", userId);  // 🟢 Log de l'ID
+  console.log("🔍 UserID utilisé pour la suppression :", userId);
 
   if (!userId) {
-    router.push("/login");
+    console.error("❌ Aucun userId trouvé !");
+    alert("Erreur : Aucun utilisateur trouvé !");
     return;
   }
 
   try {
-    const response = await axios.delete(`https://suivi-humeurs-funes.onrender.com/api/auth/profil/${userId}`);
-    console.log("Réponse de la suppression:", response);  // 🟢 Log de la réponse
+    const response = await axios.delete(`http://localhost:5000/api/auth/profil/${userId}`);
+    console.log("✅ Profil supprimé avec succès", response.data);
 
-    // Suppression réussie, on nettoie le localStorage et redirige
+    // Suppression réussie → Nettoyage et redirection
     localStorage.removeItem("userId");
     router.push("/login");
   } catch (error) {
-    console.error("Erreur:", error);
-    alert("Une erreur est survenue lors de la suppression du profil.");
+    console.error("❌ Erreur lors de la suppression du profil :", error.response?.data || error);
+    alert(`Erreur : ${error.response?.data?.message || "Échec de la suppression"}`);
   }
 };
-
-
 
 // Récupérer le profil lors du montage du composant
 onMounted(fetchUserProfile);

@@ -20,7 +20,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: "https://suivi-humeurs-back.onrender.com/api",
+      apiBase: "http://localhost:5000/api",
     },
   },
 

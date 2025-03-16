@@ -114,7 +114,7 @@ const registerUser = async () => {
 
   try {
     isLoading.value = true;
-    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/register', {
+    const response = await axios.post('http://localhost:5000/api/auth/register', {
       name: nom.value,
       email: email.value,
       password: password.value,

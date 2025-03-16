@@ -68,7 +68,7 @@ const loginUser = async () => {
     isLoading.value = true;
     console.log("Tentative de connexion avec l'email:", email.value, "et le mot de passe:", password.value);
 
-    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/login', {
+    const response = await axios.post('http://localhost:5000/api/auth/login', {
       email: email.value,
       password: password.value
     });
