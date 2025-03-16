@@ -103,7 +103,7 @@ const fetchUserProfile = async () => {
   }
 
   try {
-    const response = await axios.get(`http://localhost:5000/api/auth/profil`, {
+    const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/auth/profil`, {
       params: { userId } // Passer l'ID utilisateur en paramètre
     });
 
@@ -151,7 +151,7 @@ const deleteProfile = async () => {
   }
 
   try {
-    const response = await axios.delete(`http://localhost:5000/api/auth/profil/${userId}`);
+    const response = await axios.delete(`https://suivi-humeurs-funes.onrender.com/api/auth/profil/${userId}`);
     console.log("✅ Profil supprimé avec succès", response.data);
 
     // Suppression réussie → Nettoyage et redirection
