@@ -51,7 +51,7 @@ const notification = ref({ message: '', type: '' });
 
 const fetchHumeurs = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/humeurs');
+    const response = await axios.get('https://suivi-humeurs-funes.onrender.com/api/humeurs');
     humeurs.value = response.data;
   } catch (error) {
     showNotification("Impossible de charger les humeurs. Veuillez réessayer plus tard.", "error");
@@ -107,7 +107,7 @@ const saveMood = async () => {
   };
 
   try {
-    const response = await axios.post('http://localhost:5000/api/humeurs_utilisateurs', userMoodChoice);
+    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs', userMoodChoice);
 
     if (response.status === 200 || response.status === 201) {
       localStorage.setItem('userMoodChoice', JSON.stringify(userMoodChoice));
