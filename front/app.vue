@@ -62,6 +62,11 @@
           </NuxtLink>
         </div>
 
+        <!-- Bouton de bascule mode sombre -->
+        <button @click="toggleDarkMode" class="theme-toggle">
+          {{ isDarkMode ? "☀️" : "🌙" }}
+        </button>
+
         <!-- Menu burger -->
         <button
           class="menu-trigger"
@@ -155,6 +160,7 @@ const router = useRouter();
 const isAuthenticated = ref(false);  // Par défaut, on considère que l'utilisateur n'est pas connecté
 const menuOpen = ref(false);
 const hasScrolled = ref(false);
+const isDarkMode = ref(false); // État pour le mode sombre
 
 // Fonction pour vérifier si l'utilisateur est connecté
 const checkAuthentication = () => {
@@ -166,9 +172,20 @@ const handleScroll = () => {
   hasScrolled.value = window.scrollY > 20;
 };
 
+// Fonction pour basculer entre le mode clair et sombre
+const toggleDarkMode = () => {
+  isDarkMode.value = !isDarkMode.value;
+  document.body.classList.toggle("dark-mode", isDarkMode.value);
+  localStorage.setItem("darkMode", isDarkMode.value ? "enabled" : "disabled");
+};
+
 onMounted(() => {
   checkAuthentication();  // Vérifier si l'utilisateur est connecté au montage
   window.addEventListener("scroll", handleScroll);
+  
+  // Récupérer la préférence de mode sombre depuis localStorage
+  isDarkMode.value = localStorage.getItem("darkMode") === "enabled";
+  document.body.classList.toggle("dark-mode", isDarkMode.value);
 });
 
 onUnmounted(() => {
@@ -199,6 +216,34 @@ router.afterEach(() => {
 </script>
 
 <style>
+/* Mode sombre */
+.dark-mode {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark-mode .navbar {
+  background-color: #333;
+}
+
+.dark-mode .nav-link {
+  color: #ffffff;
+}
+
+.dark-mode .footer {
+  background-color: #333;
+}
+
+/* Style du bouton de bascule */
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: inherit;
+  margin-left: 1rem;
+}
+
 /* Reset et styles de base */
 * {
   margin: 0;
@@ -480,4 +525,3 @@ body {
   opacity: 0;
 }
 </style>
-
