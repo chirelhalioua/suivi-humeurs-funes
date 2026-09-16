@@ -6,6 +6,8 @@ const {
   getAllUsers, 
   getUserProfile, 
   deleteUserProfile,
+  updateProfileImage,
+  changePassword,
   requestPasswordReset,
   confirmPasswordReset,
 } = require('../controllers/authController');
@@ -30,6 +32,10 @@ router.get('/users', getAllUsers);
 
 // Récupérer le profil de l'utilisateur (sans token, par userId dans la query)
 router.get('/profil', getUserProfile);
+
+// Modifier la photo et le mot de passe depuis le profil connecté
+router.put("/profil/:userId/photo", updateProfileImage);
+router.put("/profil/:userId/password", changePassword);
 
 // Supprimer un profil utilisateur
 router.delete("/profil/:userId", deleteUserProfile);
