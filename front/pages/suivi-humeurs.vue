@@ -115,17 +115,29 @@
                 </div>
               </div>
 
-              <div v-if="morningMood" class="daily-mood-content">
-                <div class="daily-image">
-                  <img :src="morningMood.image" :alt="morningMood.title" />
+              <div v-if="morningMood" class="daily-mood-wrap">
+                <div class="daily-mood-content">
+                  <div class="daily-image">
+                    <img :src="morningMood.image" :alt="morningMood.title" />
+                  </div>
+                  <div class="daily-copy">
+                    <span v-if="morningMood.film" class="film-tag">{{ morningMood.film }}</span>
+                    <h4>{{ morningMood.title }}</h4>
+                    <p class="film-quote">“{{ morningMood.subtitle }}”</p>
+                    <small v-if="morningMood.description && morningMood.description !== 'Aucune description fournie'" class="mood-description">
+                      {{ morningMood.description }}
+                    </small>
+                  </div>
                 </div>
-                <div class="daily-copy">
-                  <span v-if="morningMood.film" class="film-tag">{{ morningMood.film }}</span>
-                  <h4>{{ morningMood.title }}</h4>
-                  <p class="film-quote">“{{ morningMood.subtitle }}”</p>
-                  <small v-if="morningMood.description && morningMood.description !== 'Aucune description fournie'" class="mood-description">
-                    {{ morningMood.description }}
-                  </small>
+
+                <div class="wellbeing-advice">
+                  <div class="wellbeing-advice-title">
+                    <span>{{ getMoodAdvice(morningMood).icon }}</span>
+                    <strong>Petit conseil bien-être</strong>
+                  </div>
+                  <ul>
+                    <li v-for="tip in getMoodAdvice(morningMood).tips" :key="tip">{{ tip }}</li>
+                  </ul>
                 </div>
               </div>
 
@@ -145,17 +157,29 @@
                 </div>
               </div>
 
-              <div v-if="eveningMood" class="daily-mood-content">
-                <div class="daily-image">
-                  <img :src="eveningMood.image" :alt="eveningMood.title" />
+              <div v-if="eveningMood" class="daily-mood-wrap">
+                <div class="daily-mood-content">
+                  <div class="daily-image">
+                    <img :src="eveningMood.image" :alt="eveningMood.title" />
+                  </div>
+                  <div class="daily-copy">
+                    <span v-if="eveningMood.film" class="film-tag">{{ eveningMood.film }}</span>
+                    <h4>{{ eveningMood.title }}</h4>
+                    <p class="film-quote">“{{ eveningMood.subtitle }}”</p>
+                    <small v-if="eveningMood.description && eveningMood.description !== 'Aucune description fournie'" class="mood-description">
+                      {{ eveningMood.description }}
+                    </small>
+                  </div>
                 </div>
-                <div class="daily-copy">
-                  <span v-if="eveningMood.film" class="film-tag">{{ eveningMood.film }}</span>
-                  <h4>{{ eveningMood.title }}</h4>
-                  <p class="film-quote">“{{ eveningMood.subtitle }}”</p>
-                  <small v-if="eveningMood.description && eveningMood.description !== 'Aucune description fournie'" class="mood-description">
-                    {{ eveningMood.description }}
-                  </small>
+
+                <div class="wellbeing-advice">
+                  <div class="wellbeing-advice-title">
+                    <span>{{ getMoodAdvice(eveningMood).icon }}</span>
+                    <strong>Petit conseil bien-être</strong>
+                  </div>
+                  <ul>
+                    <li v-for="tip in getMoodAdvice(eveningMood).tips" :key="tip">{{ tip }}</li>
+                  </ul>
                 </div>
               </div>
 
@@ -453,6 +477,71 @@ const getMood = (date, period) =>
 
 const morningMood = computed(() => getMood(selectedDate.value, "morning"));
 const eveningMood = computed(() => getMood(selectedDate.value, "evening"));
+
+const moodAdviceSets = {
+  happy: {
+    icon: "☀️",
+    tips: [
+      "Profite de ce qui te fait du bien et garde-en une petite trace.",
+      "Partage cette bonne énergie avec quelqu’un que tu apprécies.",
+    ],
+  },
+  calm: {
+    icon: "🌿",
+    tips: [
+      "Garde ce rythme tranquille et accorde-toi une petite pause.",
+      "Quelques étirements ou une courte marche peuvent prolonger cette sensation.",
+    ],
+  },
+  neutral: {
+    icon: "🌤️",
+    tips: [
+      "Change d’air quelques minutes pour casser la routine.",
+      "Ajoute une petite chose agréable à la suite de ta journée.",
+    ],
+  },
+  sad: {
+    icon: "🤍",
+    tips: [
+      "Sois douce avec toi-même et allège un peu la pression si tu peux.",
+      "Parler à une personne de confiance peut déjà faire du bien.",
+    ],
+  },
+  angry: {
+    icon: "🍃",
+    tips: [
+      "Accorde-toi quelques minutes avant de répondre ou de réagir.",
+      "Bouger un peu ou respirer lentement peut aider à faire redescendre la tension.",
+    ],
+  },
+  tired: {
+    icon: "🌙",
+    tips: [
+      "Pense à boire, manger et faire une vraie petite pause.",
+      "Garde l’essentiel et reporte ce qui peut attendre.",
+    ],
+  },
+  stressed: {
+    icon: "🌬️",
+    tips: [
+      "Ramène ton attention à une seule chose à la fois.",
+      "Éloigne-toi de l’écran quelques minutes et ralentis ta respiration.",
+    ],
+  },
+};
+
+const getMoodAdvice = (mood) => {
+  const value = String(mood?.title || "").toLowerCase();
+
+  if (value.includes("heureux") || value.includes("joyeux") || value.includes("génial")) return moodAdviceSets.happy;
+  if (value.includes("bien") || value.includes("calme")) return moodAdviceSets.calm;
+  if (value.includes("triste") || value.includes("mal") || value.includes("pas top")) return moodAdviceSets.sad;
+  if (value.includes("énerv") || value.includes("ener") || value.includes("colère") || value.includes("nul")) return moodAdviceSets.angry;
+  if (value.includes("fatigu")) return moodAdviceSets.tired;
+  if (value.includes("stress") || value.includes("angoiss")) return moodAdviceSets.stressed;
+
+  return moodAdviceSets.neutral;
+};
 
 const previousDay = () => {
   const next = new Date(selectedDate.value);
@@ -1020,11 +1109,61 @@ onMounted(fetchMoodData);
   font-size: 0.95rem;
 }
 
+.daily-mood-wrap {
+  display: grid;
+  gap: 0.85rem;
+}
+
 .daily-mood-content {
   display: grid;
   grid-template-columns: minmax(120px, 42%) 1fr;
   align-items: center;
   gap: 1rem;
+}
+
+.wellbeing-advice {
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(120, 152, 106, 0.2);
+  border-radius: 15px;
+  background: linear-gradient(145deg, #fff8df, #edf5e9);
+}
+
+.wellbeing-advice-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.5rem;
+}
+
+.wellbeing-advice-title > span {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 28px;
+  border-radius: 9px;
+  background: #ffe59a;
+  font-size: 0.9rem;
+}
+
+.wellbeing-advice-title strong {
+  color: var(--brown);
+  font-family: "Sora", sans-serif;
+  font-size: 0.78rem;
+}
+
+.wellbeing-advice ul {
+  display: grid;
+  gap: 0.38rem;
+  margin: 0;
+  padding-left: 1.05rem;
+}
+
+.wellbeing-advice li {
+  color: rgba(44, 24, 16, 0.68);
+  font-family: "Sora", sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.5;
 }
 
 .daily-image {
@@ -1800,9 +1939,43 @@ onMounted(fetchMoodData);
     font-size: 0.78rem;
   }
 
+  .daily-mood-wrap {
+    gap: 0.6rem;
+  }
+
   .daily-mood-content {
     grid-template-columns: 76px minmax(0, 1fr);
     gap: 0.62rem;
+  }
+
+  .wellbeing-advice {
+    padding: 0.7rem 0.75rem;
+    border-radius: 13px;
+  }
+
+  .wellbeing-advice-title {
+    margin-bottom: 0.42rem;
+  }
+
+  .wellbeing-advice-title > span {
+    width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+    font-size: 0.82rem;
+  }
+
+  .wellbeing-advice-title strong {
+    font-size: 0.7rem;
+  }
+
+  .wellbeing-advice ul {
+    gap: 0.3rem;
+    padding-left: 1rem;
+  }
+
+  .wellbeing-advice li {
+    font-size: 0.66rem;
+    line-height: 1.45;
   }
 
   .daily-image {
