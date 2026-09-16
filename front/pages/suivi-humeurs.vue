@@ -757,17 +757,6 @@ onMounted(fetchMoodData);
   line-height: 1.05;
 }
 
-.tracking-hero h1::after {
-  content: "";
-  display: block;
-  width: 54%;
-  height: 7px;
-  margin-top: -2px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #e9b949 0 58%, #78986a 58% 100%);
-  opacity: 0.78;
-}
-
 .tracking-hero > div:first-child > p {
   max-width: 590px;
   margin: 0.65rem 0 0;
@@ -1550,10 +1539,6 @@ onMounted(fetchMoodData);
 
   .tracking-hero h1 {
     font-size: 1.85rem;
-  }
-
-  .tracking-hero h1::after {
-    height: 5px;
   }
 
   .tracking-hero > div:first-child > p {
