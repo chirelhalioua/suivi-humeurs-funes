@@ -386,7 +386,7 @@ onMounted(fetchUserProfile);
   height: 44px;
   flex: 0 0 44px;
   border-radius: 50%;
-  background: var(--brown);
+  background: linear-gradient(135deg, var(--brown), #3f5f36);
   color: #fff8e9;
   font-family: "Sora", sans-serif;
   font-weight: 800;
@@ -417,7 +417,7 @@ onMounted(fetchUserProfile);
 .dashboard-card {
   border: 1px solid rgba(44, 24, 16, 0.08);
   border-radius: 26px;
-  background: rgba(255, 253, 248, 0.88);
+  background: linear-gradient(145deg, rgba(255, 253, 248, 0.94), rgba(240, 246, 236, 0.78));
   box-shadow: 0 14px 36px rgba(44, 24, 16, 0.055);
 }
 
@@ -547,7 +547,7 @@ onMounted(fetchUserProfile);
   height: 68px;
   flex: 0 0 68px;
   border-radius: 22px;
-  background: #f2e0ad;
+  background: linear-gradient(135deg, #f2e0ad, #dcead6);
   font-size: 1.8rem;
 }
 
@@ -591,8 +591,8 @@ onMounted(fetchUserProfile);
 .week-total {
   padding: 0.45rem 0.65rem;
   border-radius: 999px;
-  background: #f5e8c4;
-  color: var(--brown);
+  background: #e8f1e3;
+  color: #4f6d45;
   font-size: 0.7rem;
   font-weight: 800;
 }
@@ -630,7 +630,7 @@ onMounted(fetchUserProfile);
   width: 100%;
   min-height: 8px;
   border-radius: inherit;
-  background: linear-gradient(180deg, #e9b949, #c9952f);
+  background: linear-gradient(180deg, #8eae82, #6f9364);
   transition: height 0.45s ease;
 }
 
@@ -654,7 +654,7 @@ onMounted(fetchUserProfile);
 .tracking-summary div {
   padding: 0.75rem;
   border-radius: 16px;
-  background: #fffaf0;
+  background: linear-gradient(145deg, #fffaf0, #eef5ea);
 }
 
 .tracking-summary strong,
@@ -775,9 +775,9 @@ onMounted(fetchUserProfile);
 }
 
 .logout-btn {
-  border: 1px solid rgba(44, 24, 16, 0.1);
-  background: #fffaf0;
-  color: var(--brown);
+  border: 1px solid rgba(120, 152, 106, 0.28);
+  background: #f0f6ed;
+  color: #4f6d45;
 }
 
 .delete-btn {
