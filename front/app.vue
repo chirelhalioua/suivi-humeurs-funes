@@ -67,7 +67,7 @@
           </div>
           <div class="footer-section">
             <h3 class="footer-title">Contact</h3>
-            <div class="footer-contact"><a href="mailto:chirelhalioua@gmail.com" class="footer-link">chirelhalioua@gmail.com</a></div>
+            <div class="footer-contact"><a href="mailto:contact@chirelhalioua.fr" class="footer-link">contact@chirelhalioua.fr</a></div>
           </div>
         </div>
         <div class="footer-bottom"><p class="copyright">© 2025 Les Humeurs à la Funès</p></div>
