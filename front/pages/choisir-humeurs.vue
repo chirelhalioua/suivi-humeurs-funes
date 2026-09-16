@@ -734,20 +734,31 @@ onMounted(fetchHumeurs);
 
 @media (max-width: 560px) {
   .choose-mood-page {
-    padding: 1.6rem 0.75rem 3.5rem;
+    padding: 1.05rem 0.7rem 2.4rem;
   }
 
   .mood-header {
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .mood-kicker {
+    margin-bottom: 0.28rem;
+    font-size: 0.58rem;
+  }
+
+  .mood-header h1 {
+    font-size: 1.72rem;
   }
 
   .mood-header p {
-    font-size: 0.84rem;
+    margin-top: 0.45rem;
+    font-size: 0.78rem;
+    line-height: 1.45;
   }
 
   .mood-experience {
-    padding: 0.75rem;
-    border-radius: 22px;
+    padding: 0.62rem;
+    border-radius: 20px;
   }
 
   .mood-stage {
@@ -758,75 +769,163 @@ onMounted(fetchHumeurs);
   .nav-arrow {
     position: absolute;
     z-index: 3;
-    top: 122px;
-    width: 36px;
-    height: 36px;
-    background: rgba(255, 250, 240, 0.92);
+    top: 88px;
+    width: 34px;
+    height: 34px;
+    background: rgba(255, 250, 240, 0.94);
   }
 
   .nav-arrow:first-child {
-    left: 0.6rem;
+    left: 0.5rem;
   }
 
   .nav-arrow:last-child {
-    right: 0.6rem;
+    right: 0.5rem;
   }
 
   .mood-card {
-    border-radius: 18px;
+    border-radius: 17px;
   }
 
   .mood-image-wrap,
   .mood-image {
-    height: 225px;
-    min-height: 225px;
-    max-height: 225px;
+    height: 180px;
+    min-height: 180px;
+    max-height: 180px;
   }
 
   .film-pill {
-    left: 0.65rem;
-    bottom: 0.65rem;
-    max-width: calc(100% - 1.3rem);
+    left: 0.55rem;
+    bottom: 0.55rem;
+    max-width: calc(100% - 1.1rem);
+    padding: 0.32rem 0.5rem;
+    font-size: 0.58rem;
+  }
+
+  .mood-copy {
+    padding: 0.78rem 0.9rem 0.85rem;
+  }
+
+  .mood-meta-row {
+    margin-bottom: 0.38rem;
+  }
+
+  .mood-count {
+    font-size: 0.86rem;
+  }
+
+  .mood-total {
+    font-size: 0.6rem;
   }
 
   .mood-copy h2 {
-    font-size: 1.65rem;
+    margin-bottom: 0.38rem;
+    font-size: 1.48rem;
   }
 
-  .mood-copy p {
-    font-size: 0.82rem;
+  .mood-copy .film-quote {
+    font-size: 1.02rem;
+    line-height: 1.25;
   }
 
   .quick-moods {
-    gap: 0.5rem;
+    gap: 0.42rem;
+    margin-top: 0.5rem;
+    padding: 0.15rem 0.05rem 0.3rem;
   }
 
   .quick-mood {
-    min-width: 78px;
-    flex-basis: 78px;
-    padding: 0.62rem 0.45rem;
-    font-size: 0.62rem;
+    min-width: 70px;
+    flex-basis: 70px;
+    gap: 0.22rem;
+    padding: 0.48rem 0.38rem;
+    border-radius: 14px;
+    font-size: 0.58rem;
   }
 
   .quick-emoji {
-    font-size: 1.25rem;
+    font-size: 1.08rem;
+  }
+
+  .mood-note {
+    margin-top: 0.5rem;
+    padding: 0.72rem 0.78rem;
+    border-radius: 15px;
   }
 
   .note-heading {
     align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .note-heading .note-kicker {
+    margin-bottom: 0.12rem;
+    font-size: 0.54rem;
+  }
+
+  .note-heading label {
+    font-size: 0.7rem;
+  }
+
+  .note-heading > span {
+    font-size: 0.56rem;
+  }
+
+  .mood-note textarea {
+    min-height: 58px;
+    padding: 0.68rem 0.72rem;
+    border-radius: 11px;
+    font-size: 0.74rem;
+    line-height: 1.4;
+  }
+
+  .char-count {
+    margin-top: 0.2rem;
+    font-size: 0.54rem;
+  }
+
+  .save-mood-btn {
+    margin-top: 0.62rem;
+    padding: 0.68rem 0.72rem 0.68rem 0.9rem;
+    border-radius: 13px;
+    font-size: 0.74rem;
+  }
+
+  .save-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+  }
+
+  .availability-note {
+    margin-top: 0.45rem;
+    font-size: 0.6rem;
   }
 }
 
 @media (max-width: 390px) {
+  .choose-mood-page {
+    padding-inline: 0.55rem;
+  }
+
   .mood-image-wrap,
   .mood-image {
-    height: 205px;
-    min-height: 205px;
-    max-height: 205px;
+    height: 165px;
+    min-height: 165px;
+    max-height: 165px;
   }
 
   .nav-arrow {
-    top: 108px;
+    top: 80px;
+  }
+
+  .mood-copy {
+    padding: 0.7rem 0.78rem 0.78rem;
+  }
+
+  .mood-header h1 {
+    font-size: 1.58rem;
   }
 }
 </style>
