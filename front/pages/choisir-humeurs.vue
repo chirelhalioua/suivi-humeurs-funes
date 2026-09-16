@@ -37,7 +37,7 @@
               </div>
 
               <h2>{{ currentMood.title }}</h2>
-              <p>{{ currentMood.subtitle }}</p>
+              <p class="film-quote">“{{ currentMood.subtitle }}”</p>
             </div>
           </article>
 
@@ -437,11 +437,12 @@ onMounted(fetchHumeurs);
   line-height: 1.08;
 }
 
-.mood-copy p {
+.mood-copy .film-quote {
   margin: 0;
   color: rgba(44, 24, 16, 0.64);
-  font-size: 0.84rem;
-  line-height: 1.65;
+  font-family: "Caveat", cursive;
+  font-size: 1.15rem;
+  line-height: 1.35;
 }
 
 .quick-moods {
