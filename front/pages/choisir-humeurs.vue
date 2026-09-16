@@ -376,7 +376,7 @@ onMounted(fetchHumeurs);
   height: 235px;
   min-height: 0;
   overflow: hidden;
-  background: #eee1c6;
+  background: linear-gradient(145deg, #f2e5c9, #e9f0e5);
 }
 
 .mood-image {
@@ -384,7 +384,7 @@ onMounted(fetchHumeurs);
   height: 100%;
   min-height: 0;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 
