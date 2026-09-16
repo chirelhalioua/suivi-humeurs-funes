@@ -759,22 +759,24 @@ onMounted(fetchMoodData);
 .tracking-hero {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 1rem;
   margin-bottom: 1.45rem;
   padding: 0.35rem 0;
+  text-align: center;
 }
 
 .tracking-hero::after {
   content: "";
   position: absolute;
-  right: 25%;
-  top: -6px;
+  left: 50%;
+  top: -10px;
   width: 78px;
   height: 78px;
   border-radius: 50%;
   background: rgba(233, 185, 73, 0.12);
+  transform: translateX(92px);
   pointer-events: none;
 }
 
@@ -790,24 +792,26 @@ onMounted(fetchMoodData);
 .tracking-hero h1 {
   position: relative;
   width: fit-content;
-  margin: 0;
+  margin: 0 auto;
   font-family: "Sora", sans-serif;
-  font-size: clamp(2rem, 5vw, 3.3rem);
-  line-height: 1.05;
+  font-size: clamp(1.8rem, 3.2vw, 2.65rem);
+  line-height: 1.08;
 }
 
 .tracking-hero > div:first-child > p {
-  max-width: 590px;
-  margin: 0.65rem 0 0;
+  max-width: 560px;
+  margin: 0.75rem auto 0;
   color: rgba(44, 24, 16, 0.6);
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   line-height: 1.6;
 }
 
 .summary-cards {
+  width: min(390px, 100%);
   display: grid;
   grid-template-columns: repeat(2, minmax(115px, 1fr));
   gap: 0.65rem;
+  margin: 0 auto;
 }
 
 .summary-card {
@@ -1627,8 +1631,8 @@ onMounted(fetchMoodData);
   }
 
   .tracking-hero h1 {
-    font-size: 1.85rem;
-    line-height: 1.05;
+    font-size: 1.8rem;
+    line-height: 1.08;
   }
 
   .tracking-hero > div:first-child > p {
@@ -2119,7 +2123,7 @@ onMounted(fetchMoodData);
   }
 
   .tracking-hero h1 {
-    font-size: 1.7rem;
+    font-size: 1.65rem;
   }
 
   .view-toggle {
