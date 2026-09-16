@@ -137,8 +137,8 @@ body { font-family: "Inter", sans-serif; line-height: 1.6; background-color: #f4
 .copyright { font-size:.875rem; }
 @media (max-width:768px) {
   .navbar-links { display:none; }
-  .navbar-container { padding-right: 5rem; }
-  .theme-toggle { position:absolute; right:3.75rem; top:50%; transform:translateY(-50%); margin-left:0; }
+  .navbar-container { padding-right: 4.5rem; }
+  .theme-toggle { position:absolute; right:3.25rem; top:50%; transform:translateY(-50%); margin-left:0; }
   .menu-trigger { display:block; right:1rem; }
   .mobile-menu { display:block; }
   .footer-content { grid-template-columns:1fr; gap:2rem; }
