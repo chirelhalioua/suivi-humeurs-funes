@@ -2,6 +2,8 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const mongoose = require('mongoose');
+const crypto = require('crypto');
+const https = require('https');
 
 // Inscription d'un nouvel utilisateur
 const registerUser = async (req, res) => {
@@ -124,10 +126,157 @@ const deleteUserProfile = async (req, res) => {
 };
 
 
+// Envoyer un email transactionnel via Brevo sans dépendance supplémentaire
+const sendResetEmail = (to, resetUrl) => {
+  return new Promise((resolve, reject) => {
+    if (!process.env.BREVO_API_KEY) {
+      return reject(new Error('BREVO_API_KEY manquante'));
+    }
+
+    const payload = JSON.stringify({
+      sender: {
+        name: 'Les Humeurs à la Funès',
+        email: process.env.MAIL_FROM || 'contact@chirelhalioua.fr'
+      },
+      to: [{ email: to }],
+      subject: 'Réinitialisation de votre mot de passe',
+      htmlContent: `
+        <div style="font-family:Arial,sans-serif;color:#2c1810;line-height:1.6">
+          <h2>Réinitialisation du mot de passe</h2>
+          <p>Vous avez demandé à modifier votre mot de passe.</p>
+          <p>
+            <a href="${resetUrl}" style="display:inline-block;padding:12px 18px;background:#2c1810;color:#fff8e9;text-decoration:none;border-radius:999px;font-weight:700">
+              Choisir un nouveau mot de passe
+            </a>
+          </p>
+          <p>Ce lien est valable pendant 15 minutes.</p>
+          <p>Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet email.</p>
+          <p style="font-size:12px;color:#7a655d">Pensez à vérifier vos courriers indésirables si besoin.</p>
+        </div>
+      `
+    });
+
+    const req = https.request({
+      hostname: 'api.brevo.com',
+      path: '/v3/smtp/email',
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-key': process.env.BREVO_API_KEY,
+        'content-type': 'application/json',
+        'content-length': Buffer.byteLength(payload)
+      }
+    }, (response) => {
+      let body = '';
+      response.on('data', chunk => body += chunk);
+      response.on('end', () => {
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+          resolve(body);
+        } else {
+          reject(new Error(`Brevo a répondu ${response.statusCode}: ${body}`));
+        }
+      });
+    });
+
+    req.on('error', reject);
+    req.write(payload);
+    req.end();
+  });
+};
+
+// Demander un lien de réinitialisation
+const requestPasswordReset = async (req, res) => {
+  const email = String(req.body.email || '').trim().toLowerCase();
+
+  if (!validator.isEmail(email)) {
+    return res.status(400).json({ message: 'Veuillez saisir une adresse email valide.' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+
+    // Même réponse si l'adresse n'existe pas afin de ne pas révéler les comptes inscrits.
+    if (!user) {
+      return res.status(200).json({
+        message: 'Si cette adresse est associée à un compte, un email de réinitialisation vient d’être envoyé.'
+      });
+    }
+
+    const rawToken = crypto.randomBytes(32).toString('hex');
+    user.resetPasswordToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+    user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
+    await user.save();
+
+    const frontendUrl = (process.env.FRONTEND_URL || 'https://suivi-humeurs-funes.vercel.app').replace(/\/$/, '');
+    const resetUrl = `${frontendUrl}/new-password?token=${encodeURIComponent(rawToken)}`;
+
+    try {
+      await sendResetEmail(user.email, resetUrl);
+    } catch (emailError) {
+      // Ne pas laisser un token actif si l'envoi a échoué.
+      user.resetPasswordToken = null;
+      user.resetPasswordExpires = null;
+      await user.save();
+
+      console.error('Erreur lors de l’envoi de l’email de réinitialisation :', emailError);
+      return res.status(500).json({
+        message: 'L’email n’a pas pu être envoyé pour le moment. Réessayez dans quelques instants.'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Un email de réinitialisation a été envoyé. Vérifiez aussi vos spams.'
+    });
+  } catch (error) {
+    console.error('Erreur lors de la demande de réinitialisation :', error);
+    return res.status(500).json({ message: 'Erreur du serveur.' });
+  }
+};
+
+// Enregistrer le nouveau mot de passe à partir du token reçu par email
+const confirmPasswordReset = async (req, res) => {
+  const token = String(req.body.token || '');
+  const password = String(req.body.password || '');
+
+  if (!token) {
+    return res.status(400).json({ message: 'Lien de réinitialisation invalide.' });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({ message: 'Le mot de passe doit comporter au moins 6 caractères.' });
+  }
+
+  try {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: new Date() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Ce lien est invalide ou a expiré. Demandez un nouveau lien.' });
+    }
+
+    user.password = await bcrypt.hash(password, 10);
+    user.resetPasswordToken = null;
+    user.resetPasswordExpires = null;
+    await user.save();
+
+    return res.status(200).json({ message: 'Votre mot de passe a bien été modifié.' });
+  } catch (error) {
+    console.error('Erreur lors de la confirmation de réinitialisation :', error);
+    return res.status(500).json({ message: 'Erreur du serveur.' });
+  }
+};
+
+
 module.exports = {
   registerUser,
   loginUser,
   getAllUsers,
   getUserProfile,
   deleteUserProfile,
+  requestPasswordReset,
+  confirmPasswordReset,
 };
