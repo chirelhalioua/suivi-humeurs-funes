@@ -373,7 +373,8 @@ onMounted(fetchHumeurs);
 
 .mood-image-wrap {
   position: relative;
-  min-height: 270px;
+  height: 235px;
+  min-height: 0;
   overflow: hidden;
   background: #eee1c6;
 }
@@ -381,9 +382,10 @@ onMounted(fetchHumeurs);
 .mood-image {
   width: 100%;
   height: 100%;
-  min-height: 270px;
+  min-height: 0;
   display: block;
   object-fit: cover;
+  object-position: center;
 }
 
 .film-pill {
@@ -718,8 +720,9 @@ onMounted(fetchHumeurs);
 
   .mood-image-wrap,
   .mood-image {
+    height: 250px;
     min-height: 250px;
-    max-height: 320px;
+    max-height: 250px;
   }
 
   .mood-copy {
@@ -773,8 +776,9 @@ onMounted(fetchHumeurs);
 
   .mood-image-wrap,
   .mood-image {
-    min-height: 245px;
-    max-height: 245px;
+    height: 225px;
+    min-height: 225px;
+    max-height: 225px;
   }
 
   .film-pill {
@@ -814,8 +818,9 @@ onMounted(fetchHumeurs);
 @media (max-width: 390px) {
   .mood-image-wrap,
   .mood-image {
-    min-height: 220px;
-    max-height: 220px;
+    height: 205px;
+    min-height: 205px;
+    max-height: 205px;
   }
 
   .nav-arrow {
