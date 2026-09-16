@@ -1527,31 +1527,29 @@ onMounted(fetchMoodData);
 
 @media (max-width: 680px) {
   .tracking-page {
-    padding: 0.9rem 0.65rem 2.4rem;
+    padding: 1rem 0.7rem 2.4rem;
   }
 
   .tracking-hero {
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: 0.7rem;
-    margin-bottom: 0.75rem;
+    display: block;
+    margin-bottom: 0.8rem;
     padding: 0;
   }
 
   .tracking-hero::after {
-    right: 3%;
-    top: -8px;
-    width: 54px;
-    height: 54px;
+    right: 0.2rem;
+    top: -0.4rem;
+    width: 52px;
+    height: 52px;
   }
 
   .tracking-kicker {
-    margin-bottom: 0.18rem;
-    font-size: 0.56rem;
+    margin-bottom: 0.2rem;
+    font-size: 0.58rem;
   }
 
   .tracking-hero h1 {
-    font-size: 1.75rem;
+    font-size: 1.85rem;
   }
 
   .tracking-hero h1::after {
@@ -1559,35 +1557,38 @@ onMounted(fetchMoodData);
   }
 
   .tracking-hero > div:first-child > p {
-    max-width: 230px;
-    margin-top: 0.35rem;
-    font-size: 0.72rem;
-    line-height: 1.35;
+    max-width: 100%;
+    margin-top: 0.4rem;
+    font-size: 0.76rem;
+    line-height: 1.4;
   }
 
   .summary-cards {
-    width: auto;
-    display: flex;
-    gap: 0.38rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+    margin-top: 0.7rem;
   }
 
   .summary-card {
-    min-width: 66px;
-    padding: 0.52rem 0.58rem;
-    border-radius: 13px;
+    min-width: 0;
+    padding: 0.58rem 0.7rem;
+    border-radius: 14px;
   }
 
   .summary-card span {
-    font-size: 0.5rem;
+    font-size: 0.56rem;
   }
 
   .summary-card strong {
-    margin: 0.04rem 0;
-    font-size: 1rem;
+    margin: 0.03rem 0;
+    font-size: 1.05rem;
   }
 
   .summary-card small {
-    font-size: 0.48rem;
+    max-width: 100%;
+    font-size: 0.52rem;
   }
 
   .view-toggle {
@@ -1599,7 +1600,7 @@ onMounted(fetchMoodData);
     gap: 0.15rem;
     margin: 0 auto 0.7rem;
     padding: 0.22rem;
-    background: rgba(255, 250, 240, 0.94);
+    background: rgba(255, 250, 240, 0.95);
     backdrop-filter: blur(10px);
   }
 
@@ -1607,8 +1608,8 @@ onMounted(fetchMoodData);
     flex: 1;
     justify-content: center;
     gap: 0.28rem;
-    padding: 0.52rem 0.38rem;
-    font-size: 0.61rem;
+    padding: 0.55rem 0.28rem;
+    font-size: 0.62rem;
   }
 
   .view-toggle button i {
@@ -1618,14 +1619,14 @@ onMounted(fetchMoodData);
   .daily-view,
   .weekly-view,
   .annual-view {
-    padding: 0.65rem;
+    padding: 0.72rem;
     border-radius: 20px;
   }
 
   .period-nav {
     grid-template-columns: 34px minmax(0, 1fr) 34px;
-    gap: 0.38rem;
-    margin-bottom: 0.65rem;
+    gap: 0.4rem;
+    margin-bottom: 0.72rem;
   }
 
   .nav-btn {
@@ -1635,36 +1636,38 @@ onMounted(fetchMoodData);
   }
 
   .period-copy span {
-    font-size: 0.52rem;
+    font-size: 0.54rem;
   }
 
   .period-copy h2 {
-    font-size: 0.95rem;
+    font-size: 0.98rem;
   }
 
   .period-copy small {
-    font-size: 0.56rem;
+    font-size: 0.57rem;
   }
 
+  /* Mobile journalier : deux vraies cartes compactes, sans carrousel horizontal */
   .day-moods {
-    display: flex;
-    gap: 0.6rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 0.25rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+    overflow: visible;
   }
 
   .daily-card {
-    min-width: 82%;
-    flex: 0 0 82%;
-    padding: 0.72rem;
+    width: 100%;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0.7rem;
     border-radius: 17px;
-    scroll-snap-align: start;
+    box-sizing: border-box;
   }
 
   .daily-card-header {
     gap: 0.5rem;
-    margin-bottom: 0.55rem;
+    margin-bottom: 0.5rem;
   }
 
   .time-icon {
@@ -1676,155 +1679,154 @@ onMounted(fetchMoodData);
   }
 
   .daily-card-header h3 {
-    font-size: 0.78rem;
+    font-size: 0.82rem;
   }
 
   .daily-card-header span {
-    font-size: 0.5rem;
+    font-size: 0.52rem;
   }
 
   .daily-mood-content {
-    grid-template-columns: 92px 1fr;
+    grid-template-columns: 88px minmax(0, 1fr);
     gap: 0.7rem;
   }
 
   .daily-image {
-    height: 110px;
-    border-radius: 13px;
+    height: 92px;
+    border-radius: 12px;
   }
 
   .film-tag {
-    margin-bottom: 0.25rem;
-    padding: 0.22rem 0.38rem;
+    margin-bottom: 0.22rem;
+    padding: 0.2rem 0.35rem;
     font-size: 0.5rem;
   }
 
   .daily-copy h4 {
     margin-bottom: 0.2rem;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
   }
 
   .daily-copy p {
     display: -webkit-box;
     overflow: hidden;
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     line-height: 1.35;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
 
   .daily-copy small {
-    margin-top: 0.35rem;
-    font-size: 0.82rem;
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
   }
 
   .empty-mood {
-    min-height: 110px;
+    min-height: 86px;
   }
 
+  /* Mobile hebdo : 7 jours visibles d'un coup, façon app */
   .week-overview {
-    display: flex;
-    gap: 0.42rem;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    padding-bottom: 0.3rem;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.28rem;
+    overflow: visible;
+    padding-bottom: 0;
   }
 
   .day-card {
-    min-width: 98px;
-    flex: 0 0 98px;
-    padding: 0.58rem 0.5rem;
-    border-radius: 14px;
-    scroll-snap-align: start;
+    min-width: 0;
+    padding: 0.45rem 0.15rem 0.5rem;
+    border-radius: 12px;
+    text-align: center;
   }
 
   .day-card-header {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .day-card-header span {
+    font-size: 0.46rem;
+  }
+
+  .day-card-header strong {
+    font-size: 0.78rem;
+  }
+
+  .mini-period {
+    position: relative;
+    min-height: 20px;
+    display: grid;
+    place-items: center;
   }
 
   .mini-period + .mini-period {
-    margin-top: 0.45rem;
-    padding-top: 0.45rem;
+    margin-top: 0.22rem;
+    padding-top: 0.22rem;
+    border-top: 0;
   }
 
-  .mini-label {
-    margin-bottom: 0.25rem;
-    font-size: 0.5rem;
-  }
-
-  .mini-mood img {
-    width: 34px;
-    height: 34px;
-    margin-bottom: 0.2rem;
-    border-radius: 10px;
-  }
-
-  .mini-mood strong {
-    font-size: 0.52rem;
-  }
-
+  .mini-label,
+  .mini-mood img,
+  .mini-mood strong,
   .mini-empty {
-    min-height: 34px;
+    display: none;
+  }
+
+  .mini-period::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    display: block;
+    border-radius: 50%;
+    background: #d4d4cf;
+  }
+
+  .mini-period:has(.mini-mood)::before {
+    background: #78986a;
+    box-shadow: 0 0 0 3px rgba(120, 152, 106, 0.12);
   }
 
   .week-progress-card {
-    margin-top: 0.65rem;
-    padding: 0.72rem 0.75rem;
+    margin-top: 0.6rem;
+    padding: 0.7rem 0.75rem;
+    border-radius: 15px;
   }
 
   .progress-copy {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .progress-copy .tracking-kicker {
+    display: none;
   }
 
   .progress-copy h3 {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
   }
 
   .progress-copy p {
-    font-size: 0.58rem;
+    font-size: 0.6rem;
   }
 
   .progress-day {
-    grid-template-rows: 30px auto;
+    grid-template-rows: 28px auto;
   }
 
   .progress-line.active {
-    height: 18px;
+    height: 17px;
   }
 
   .progress-line.full {
-    height: 30px;
+    height: 28px;
   }
 
   .progress-day small {
-    font-size: 0.48rem;
-  }
-
-  .annual-summary {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.38rem;
-    margin-bottom: 0.65rem;
-  }
-
-  .annual-summary > div {
-    padding: 0.5rem 0.48rem;
-    border-radius: 12px;
-  }
-
-  .annual-summary span {
     font-size: 0.5rem;
   }
 
-  .annual-summary strong {
-    margin: 0.05rem 0;
-    font-size: 0.95rem;
-  }
-
-  .annual-summary small {
-    font-size: 0.46rem;
-  }
-
+  /* Annuel : lisible et compact */
   .annual-view .year-nav {
     margin-bottom: 0.45rem;
   }
@@ -1896,8 +1898,8 @@ onMounted(fetchMoodData);
     grid-template-columns: 1fr auto;
     gap: 0.6rem;
     margin-top: 0.65rem;
-    padding: 0.7rem 0.75rem;
-    border-radius: 16px;
+    padding: 0.68rem 0.72rem;
+    border-radius: 15px;
   }
 
   .share-copy .tracking-kicker,
@@ -1911,7 +1913,7 @@ onMounted(fetchMoodData);
 
   .share-main {
     width: auto;
-    padding: 0.58rem 0.7rem;
+    padding: 0.56rem 0.68rem;
     font-size: 0.62rem;
   }
 
@@ -1926,44 +1928,46 @@ onMounted(fetchMoodData);
 }
 
 @media (max-width: 430px) {
-  .tracking-hero {
-    grid-template-columns: minmax(0, 1fr) auto;
+  .tracking-page {
+    padding-inline: 0.58rem;
   }
 
-  .tracking-hero > div:first-child > p {
-    max-width: 190px;
-    font-size: 0.66rem;
-  }
-
-  .summary-card {
-    min-width: 58px;
-    padding: 0.46rem 0.5rem;
+  .tracking-hero h1 {
+    font-size: 1.7rem;
   }
 
   .view-toggle button {
-    padding-inline: 0.25rem;
-    font-size: 0.56rem;
+    font-size: 0.57rem;
+    padding-inline: 0.18rem;
   }
 
-  .daily-card {
-    min-width: 88%;
-    flex-basis: 88%;
+  .summary-card {
+    padding: 0.52rem 0.58rem;
   }
 
   .daily-mood-content {
-    grid-template-columns: 82px 1fr;
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 0.6rem;
   }
 
   .daily-image {
-    height: 98px;
+    height: 82px;
   }
 
-  .annual-summary {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .day-card {
+    padding-inline: 0.08rem;
+  }
+
+  .day-card-header span {
+    font-size: 0.42rem;
+  }
+
+  .day-card-header strong {
+    font-size: 0.72rem;
   }
 
   .annual-chart {
-    gap: 0.38rem 0.18rem;
+    gap: 0.36rem 0.16rem;
   }
 
   .month-column {
