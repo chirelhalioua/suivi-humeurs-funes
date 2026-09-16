@@ -247,7 +247,7 @@ const goToRegister = async () => {
 /* CONCEPT */
 .concept-flow{
   position:relative;
-  max-width:760px;
+  max-width:920px;
   margin:auto;
   padding:.35rem 0;
 }
@@ -266,18 +266,51 @@ const goToRegister = async () => {
   display:grid;
   grid-template-columns:1fr 72px 1fr;
   align-items:center;
-  min-height:126px;
+  min-height:138px;
 }
 .concept-step:nth-child(odd) .concept-step-content{
   grid-column:1;
   text-align:right;
-  padding-right:1.2rem;
+  padding:1rem 1.15rem;
+  margin-right:1.2rem;
 }
 .concept-step:nth-child(even) .concept-step-content{
   grid-column:3;
   text-align:left;
-  padding-left:1.2rem;
+  padding:1rem 1.15rem;
+  margin-left:1.2rem;
 }
+.concept-step-content{
+  position:relative;
+  border-radius:18px;
+  background:rgba(255,255,255,.78);
+  border:1px solid rgba(44,24,16,.075);
+  box-shadow:0 8px 20px rgba(44,24,16,.035);
+  transition:transform .25s,box-shadow .25s;
+}
+.concept-step-content::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  padding:2px;
+  box-sizing:border-box;
+  border-radius:inherit;
+  background:conic-gradient(from var(--border-angle),transparent 0 62%,var(--green) 72%,#a8c99b 82%,transparent 92%);
+  opacity:0;
+  pointer-events:none;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+}
+.concept-step:hover .concept-step-content{
+  transform:translateY(-3px);
+  box-shadow:0 12px 26px rgba(44,24,16,.06);
+}
+.concept-step:hover .concept-step-content::before{
+  opacity:1;
+  animation:greenBorderTrace 1.25s linear infinite;
+}
+
 .concept-marker{
   grid-column:2;
   grid-row:1;
@@ -323,7 +356,7 @@ const goToRegister = async () => {
   font-size:1rem;
 }
 .concept-step p{
-  max-width:275px;
+  max-width:340px;
   margin:0;
   color:rgba(44,24,16,.62);
   font-size:.77rem;
@@ -745,7 +778,7 @@ const goToRegister = async () => {
 /* RESPONSIVE */
 @media(max-width:1024px){
   .hero-section{background-attachment:scroll}
-  .concept-flow{max-width:700px}
+  .concept-flow{max-width:860px}
   .preview-stage{
     max-width:760px;
     grid-template-columns:.72fr 1fr .88fr;
@@ -781,7 +814,8 @@ const goToRegister = async () => {
     grid-column:2;
     grid-row:1;
     text-align:left;
-    padding:0 0 0 .8rem;
+    padding:.85rem .95rem;
+    margin:0 0 0 .8rem;
   }
   .concept-marker{
     grid-column:1;
