@@ -39,6 +39,14 @@
           <i class="fas fa-calendar-week"></i>
           Hebdomadaire
         </button>
+        <button
+          type="button"
+          :class="{ active: view === 'annual' }"
+          @click="changeView('annual')"
+        >
+          <i class="fas fa-calendar-alt"></i>
+          Annuel
+        </button>
       </div>
 
       <div v-if="isLoading" class="loading-state">
@@ -129,7 +137,7 @@
           </div>
         </section>
 
-        <section v-else class="weekly-view">
+        <section v-else-if="view === 'weekly'" class="weekly-view">
           <div class="period-nav week-nav">
             <button class="nav-btn" type="button" @click="previousWeek" aria-label="Semaine précédente">←</button>
             <div class="period-copy">
@@ -208,6 +216,85 @@
           </div>
         </section>
 
+        <section v-else class="annual-view">
+          <div class="period-nav year-nav">
+            <button class="nav-btn" type="button" @click="previousYear" aria-label="Année précédente">←</button>
+            <div class="period-copy">
+              <span>ANNÉE</span>
+              <h2>{{ selectedYear }}</h2>
+              <small v-if="isCurrentYear">Cette année</small>
+            </div>
+            <button
+              class="nav-btn"
+              type="button"
+              @click="nextYear"
+              :disabled="isCurrentYear"
+              aria-label="Année suivante"
+            >
+              →
+            </button>
+          </div>
+
+          <div class="annual-summary">
+            <div>
+              <span>Humeurs</span>
+              <strong>{{ annualTotal }}</strong>
+              <small>enregistrées</small>
+            </div>
+            <div>
+              <span>Jours suivis</span>
+              <strong>{{ annualDays }}</strong>
+              <small>sur l’année</small>
+            </div>
+            <div>
+              <span>Mois actifs</span>
+              <strong>{{ annualActiveMonths }}</strong>
+              <small>sur 12 mois</small>
+            </div>
+          </div>
+
+          <div class="annual-chart" aria-label="Suivi des humeurs par mois">
+            <div
+              v-for="month in annualMonthStats"
+              :key="month.index"
+              class="month-column"
+              :class="{ empty: month.count === 0 }"
+            >
+              <div class="month-bar-track">
+                <span
+                  class="month-bar-fill"
+                  :style="{ height: month.height }"
+                ></span>
+              </div>
+              <strong>{{ month.short }}</strong>
+              <small>{{ month.count }}</small>
+            </div>
+          </div>
+
+          <div class="months-grid">
+            <article
+              v-for="month in annualMonthStats"
+              :key="'card-' + month.index"
+              class="month-card"
+              :class="{ active: month.count > 0 }"
+            >
+              <div class="month-card-top">
+                <div>
+                  <span>{{ month.name }}</span>
+                  <strong>{{ month.count }} humeur{{ month.count > 1 ? "s" : "" }}</strong>
+                </div>
+                <span class="month-dot" :class="{ filled: month.count > 0 }"></span>
+              </div>
+
+              <div class="month-card-details">
+                <span>{{ month.days }} jour{{ month.days > 1 ? "s" : "" }} suivi{{ month.days > 1 ? "s" : "" }}</span>
+                <span v-if="month.favorite">Le + fréquent : {{ month.favorite }}</span>
+                <span v-else>Aucune humeur enregistrée</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
         <section class="share-section">
           <div class="share-copy">
             <span class="tracking-kicker">PARTAGER</span>
@@ -265,6 +352,21 @@ const days = [
 ];
 
 const shortDays = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+const monthNames = [
+  "Janvier",
+  "Février",
+  "Mars",
+  "Avril",
+  "Mai",
+  "Juin",
+  "Juillet",
+  "Août",
+  "Septembre",
+  "Octobre",
+  "Novembre",
+  "Décembre",
+];
+const monthShortNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc"];
 
 const dateKey = (date) => {
   const d = new Date(date);
@@ -388,6 +490,77 @@ const currentWeekCount = computed(() =>
 
 const currentWeekDays = computed(
   () => currentWeekDates.value.filter((date) => dayMoodCount(date) > 0).length
+);
+
+const selectedYear = computed(() => selectedDate.value.getFullYear());
+const isCurrentYear = computed(() => selectedYear.value === new Date().getFullYear());
+
+const previousYear = () => {
+  const next = new Date(selectedDate.value);
+  next.setFullYear(next.getFullYear() - 1);
+  selectedDate.value = next;
+};
+
+const nextYear = () => {
+  if (isCurrentYear.value) return;
+  const next = new Date(selectedDate.value);
+  next.setFullYear(next.getFullYear() + 1);
+
+  if (next.getFullYear() >= new Date().getFullYear()) {
+    selectedDate.value = new Date();
+  } else {
+    selectedDate.value = next;
+  }
+};
+
+const annualMonthStats = computed(() => {
+  const entries = Array.from(moodMap.value.values()).filter(
+    (entry) => new Date(entry.date).getFullYear() === selectedYear.value
+  );
+
+  const raw = monthNames.map((name, index) => {
+    const monthEntries = entries.filter(
+      (entry) => new Date(entry.date).getMonth() === index
+    );
+    const uniqueDays = new Set(monthEntries.map((entry) => dateKey(entry.date)));
+
+    const titleCounts = monthEntries.reduce((acc, entry) => {
+      if (entry.title) acc[entry.title] = (acc[entry.title] || 0) + 1;
+      return acc;
+    }, {});
+
+    const favorite = Object.entries(titleCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "";
+
+    return {
+      index,
+      name,
+      short: monthShortNames[index],
+      count: monthEntries.length,
+      days: uniqueDays.size,
+      favorite,
+    };
+  });
+
+  const maxCount = Math.max(...raw.map((month) => month.count), 1);
+
+  return raw.map((month) => ({
+    ...month,
+    height: month.count === 0
+      ? "8%"
+      : `${Math.max(24, Math.round((month.count / maxCount) * 100))}%`,
+  }));
+});
+
+const annualTotal = computed(() =>
+  annualMonthStats.value.reduce((sum, month) => sum + month.count, 0)
+);
+
+const annualDays = computed(() =>
+  annualMonthStats.value.reduce((sum, month) => sum + month.days, 0)
+);
+
+const annualActiveMonths = computed(
+  () => annualMonthStats.value.filter((month) => month.count > 0).length
 );
 
 const fetchMoodData = async () => {
@@ -623,7 +796,8 @@ onMounted(fetchMoodData);
 }
 
 .daily-view,
-.weekly-view {
+.weekly-view,
+.annual-view {
   padding: clamp(1rem, 3vw, 1.45rem);
   border: 1px solid rgba(44, 24, 16, 0.07);
   border-radius: 28px;
@@ -998,6 +1172,171 @@ onMounted(fetchMoodData);
   line-height: 1;
 }
 
+.year-nav {
+  margin-bottom: 1.2rem;
+}
+
+.annual-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.annual-summary > div {
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(44, 24, 16, 0.07);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.annual-summary span,
+.annual-summary strong,
+.annual-summary small {
+  display: block;
+}
+
+.annual-summary span {
+  color: rgba(44, 24, 16, 0.48);
+  font-size: 0.62rem;
+}
+
+.annual-summary strong {
+  margin: 0.12rem 0;
+  font-family: "Sora", sans-serif;
+  font-size: 1.25rem;
+}
+
+.annual-summary small {
+  color: rgba(44, 24, 16, 0.45);
+  font-size: 0.6rem;
+}
+
+.annual-chart {
+  height: 185px;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: end;
+  gap: 0.45rem;
+  padding: 1rem 0.25rem 0.35rem;
+  border-bottom: 1px solid rgba(44, 24, 16, 0.08);
+}
+
+.month-column {
+  min-width: 0;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  align-items: end;
+  gap: 0.28rem;
+  text-align: center;
+}
+
+.month-bar-track {
+  width: min(24px, 72%);
+  height: 128px;
+  display: flex;
+  align-items: flex-end;
+  justify-self: center;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e1e1dc;
+}
+
+.month-bar-fill {
+  width: 100%;
+  min-height: 7px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #8eae82, #64845a);
+  transition: height 0.3s ease;
+}
+
+.month-column.empty .month-bar-fill {
+  background: #cfcfca;
+}
+
+.month-column strong {
+  color: rgba(44, 24, 16, 0.58);
+  font-size: 0.56rem;
+}
+
+.month-column small {
+  color: rgba(44, 24, 16, 0.38);
+  font-size: 0.54rem;
+}
+
+.months-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.month-card {
+  padding: 0.8rem;
+  border: 1px solid rgba(44, 24, 16, 0.07);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.month-card.active {
+  border-color: rgba(120, 152, 106, 0.22);
+  background: rgba(239, 246, 235, 0.82);
+}
+
+.month-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.month-card-top span,
+.month-card-top strong {
+  display: block;
+}
+
+.month-card-top span:first-child {
+  color: rgba(44, 24, 16, 0.48);
+  font-size: 0.62rem;
+}
+
+.month-card-top strong {
+  margin-top: 0.12rem;
+  font-family: "Sora", sans-serif;
+  font-size: 0.78rem;
+}
+
+.month-dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  margin-top: 0.2rem;
+  border-radius: 50%;
+  background: #d1d1cc;
+}
+
+.month-dot.filled {
+  background: #78986a;
+}
+
+.month-card-details {
+  margin-top: 0.65rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(44, 24, 16, 0.06);
+}
+
+.month-card-details span {
+  display: block;
+  color: rgba(44, 24, 16, 0.5);
+  font-size: 0.6rem;
+  line-height: 1.4;
+}
+
+.month-card-details span + span {
+  margin-top: 0.16rem;
+}
+
 .share-section {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -1144,7 +1483,8 @@ onMounted(fetchMoodData);
   }
 
   .daily-view,
-  .weekly-view {
+  .weekly-view,
+  .annual-view {
     padding: 0.8rem;
     border-radius: 22px;
   }
@@ -1181,6 +1521,24 @@ onMounted(fetchMoodData);
     margin-top: 0.75rem;
   }
 
+  .annual-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .annual-chart {
+    gap: 0.3rem;
+    overflow-x: auto;
+  }
+
+  .month-column {
+    min-width: 42px;
+  }
+
+  .months-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .share-section {
     grid-template-columns: 1fr;
   }
@@ -1209,6 +1567,14 @@ onMounted(fetchMoodData);
   .nav-btn {
     width: 38px;
     height: 38px;
+  }
+
+  .annual-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .months-grid {
+    grid-template-columns: 1fr;
   }
 
   .daily-mood-content {
