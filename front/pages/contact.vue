@@ -16,8 +16,8 @@
             </div>
             <h3>Email</h3>
             <p>Envoyez-nous un email</p>
-            <a href="mailto:chirelhalioua@gmail.com" class="contact-link">
-              chirelhalioua@gmail.com
+            <a href="mailto:contact@chirelhalioua.fr" class="contact-link">
+              contact@chirelhalioua.fr
             </a>
           </div>
 
