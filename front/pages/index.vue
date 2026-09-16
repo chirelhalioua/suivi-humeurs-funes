@@ -124,6 +124,18 @@
         </article>
       </div>
     </section>
+
+    <section class="final-cta-section">
+      <div class="final-cta-card">
+        <span class="final-cta-note">Et toi, aujourd’hui ?</span>
+        <h2>Quelle est ton humeur ?</h2>
+        <p>Choisis ton humeur, suis son évolution et retrouve une touche de Louis de Funès au quotidien.</p>
+        <button class="final-cta-button" @click="goToRegister" :disabled="isNavigating">
+          <span>{{ isNavigating ? 'Chargement...' : "Commencer l’aventure" }}</span>
+          <span>→</span>
+        </button>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -193,7 +205,7 @@ const goToRegister = async () => {
 .wheel{width:3px;height:7px;background:white;border-radius:3px;animation:scrollWheel 1.5s infinite}
 
 /* COMMON SECTIONS */
-.concept-section,.app-preview-section,.mood-section{
+.concept-section,.app-preview-section,.mood-section,.final-cta-section{
   padding:clamp(3.8rem,6vw,5.5rem) 1rem;
 }
 .concept-section{background:#fffaf0}
@@ -635,6 +647,101 @@ const goToRegister = async () => {
   line-height:1.25;
 }
 
+/* FINAL CTA */
+.final-cta-section{
+  background:#fffaf0;
+  padding-top:3.2rem;
+  padding-bottom:4.2rem;
+}
+.final-cta-card{
+  position:relative;
+  max-width:760px;
+  margin:auto;
+  padding:2.4rem 1.5rem;
+  text-align:center;
+  border-radius:28px;
+  background:linear-gradient(145deg,#2d160f,#482317);
+  color:#fff8e9;
+  box-shadow:0 18px 38px rgba(44,24,16,.14);
+  overflow:hidden;
+}
+.final-cta-card::before,
+.final-cta-card::after{
+  content:'';
+  position:absolute;
+  border-radius:50%;
+  border:1px solid rgba(255,243,212,.12);
+}
+.final-cta-card::before{
+  width:180px;
+  height:180px;
+  right:-70px;
+  top:-85px;
+}
+.final-cta-card::after{
+  width:120px;
+  height:120px;
+  left:-45px;
+  bottom:-70px;
+}
+.final-cta-note{
+  position:relative;
+  z-index:1;
+  display:inline-block;
+  margin-bottom:.35rem;
+  font-family:'Caveat',cursive;
+  font-size:1.2rem;
+  color:#f4e4bc;
+  transform:rotate(-2deg);
+}
+.final-cta-card h2{
+  position:relative;
+  z-index:1;
+  margin:0 0 .6rem;
+  font-size:clamp(1.7rem,3vw,2.35rem);
+  line-height:1.1;
+}
+.final-cta-card p{
+  position:relative;
+  z-index:1;
+  max-width:520px;
+  margin:0 auto 1.4rem;
+  color:rgba(255,248,233,.76);
+  font-size:.86rem;
+  line-height:1.6;
+}
+.final-cta-button{
+  position:relative;
+  z-index:1;
+  display:inline-flex;
+  align-items:center;
+  gap:.65rem;
+  border:0;
+  border-radius:999px;
+  padding:.72rem 1rem .72rem 1.15rem;
+  background:#f4e4bc;
+  color:#2c1810;
+  font:inherit;
+  font-size:.82rem;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 9px 20px rgba(0,0,0,.12);
+  transition:transform .25s,background .25s;
+}
+.final-cta-button:hover{
+  transform:translateY(-3px);
+  background:#fff2cf;
+}
+.final-cta-button span:last-child{
+  display:grid;
+  place-items:center;
+  width:23px;
+  height:23px;
+  border-radius:50%;
+  background:#2c1810;
+  color:#f4e4bc;
+}
+
 /* RESPONSIVE */
 @media(max-width:1024px){
   .hero-section{background-attachment:scroll}
@@ -649,7 +756,7 @@ const goToRegister = async () => {
 }
 
 @media(max-width:760px){
-  .concept-section,.app-preview-section,.mood-section{
+  .concept-section,.app-preview-section,.mood-section,.final-cta-section{
     padding:3rem .85rem;
   }
   .section-header{margin-bottom:1.8rem}
@@ -759,6 +866,14 @@ const goToRegister = async () => {
 }
 
 @media(max-width:420px){
+  .final-cta-card{
+    padding:2rem 1rem;
+    border-radius:22px;
+  }
+  .final-cta-note{font-size:1.05rem}
+  .final-cta-card p{font-size:.8rem}
+  .final-cta-button{font-size:.76rem}
+
   .concept-flow,.mood-list,.preview-stage{max-width:100%}
   .mood-row{
     grid-template-columns:1fr;
