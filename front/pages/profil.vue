@@ -227,13 +227,31 @@ const fetchMoodSummary = async (userId) => {
       `https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userId}`
     );
 
-    moodEntries.value = Array.isArray(response.data) ? response.data : [];
+    const rawEntries = Array.isArray(response.data) ? response.data : [];
+
+    // Les anciennes versions pouvaient créer plusieurs entrées pour le même jour/créneau.
+    // On garde uniquement la plus récente pour chaque jour + matin/soir.
+    const uniqueEntries = new Map();
+
+    rawEntries.forEach((entry) => {
+      const dayKey = new Date(entry.date).toISOString().slice(0, 10);
+      const key = `${dayKey}-${entry.timeOfDay}`;
+      const current = uniqueEntries.get(key);
+
+      if (!current || String(entry._id) > String(current._id)) {
+        uniqueEntries.set(key, entry);
+      }
+    });
+
+    moodEntries.value = Array.from(uniqueEntries.values());
 
     if (!moodEntries.value.length) return;
 
-    const latestEntry = [...moodEntries.value].sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
-    )[0];
+    const latestEntry = [...moodEntries.value].sort((a, b) => {
+      const dateDiff = new Date(b.date) - new Date(a.date);
+      if (dateDiff !== 0) return dateDiff;
+      return String(b._id).localeCompare(String(a._id));
+    })[0];
 
     const moodResponse = await axios.get(
       `https://suivi-humeurs-funes.onrender.com/api/humeurs/${latestEntry.humeurId}`
