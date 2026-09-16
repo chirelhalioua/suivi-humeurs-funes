@@ -1789,55 +1789,71 @@ onMounted(fetchMoodData);
     font-size: 0.46rem;
   }
 
-  .annual-chart {
-    height: 130px;
-    gap: 0.28rem;
-    overflow-x: auto;
-    padding: 0.55rem 0 0.25rem;
+  .annual-view .year-nav {
+    margin-bottom: 0.45rem;
   }
 
-  .month-column {
-    min-width: 34px;
+  .annual-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.3rem;
+    margin-bottom: 0.45rem;
   }
 
-  .month-bar-track {
-    width: 18px;
-    height: 82px;
+  .annual-summary > div {
+    padding: 0.42rem 0.38rem;
+    border-radius: 11px;
+    text-align: center;
   }
 
-  .month-column strong,
-  .month-column small {
+  .annual-summary span {
     font-size: 0.48rem;
   }
 
-  .months-grid {
-    display: flex;
-    gap: 0.45rem;
-    margin-top: 0.65rem;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    padding-bottom: 0.25rem;
+  .annual-summary strong {
+    margin: 0.02rem 0;
+    font-size: 0.9rem;
   }
 
-  .month-card {
-    min-width: 150px;
-    flex: 0 0 150px;
-    padding: 0.62rem;
-    border-radius: 13px;
-    scroll-snap-align: start;
+  .annual-summary small {
+    font-size: 0.43rem;
   }
 
-  .month-card-top strong {
-    font-size: 0.68rem;
+  .annual-chart {
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: end;
+    gap: 0.45rem 0.28rem;
+    overflow: visible;
+    padding: 0.35rem 0.15rem 0.2rem;
+    border-bottom: 0;
   }
 
-  .month-card-details {
-    margin-top: 0.45rem;
-    padding-top: 0.45rem;
+  .month-column {
+    min-width: 0;
+    height: auto;
+    grid-template-rows: 54px auto auto;
+    gap: 0.18rem;
   }
 
-  .month-card-details span {
+  .month-bar-track {
+    width: 16px;
+    height: 54px;
+    border-radius: 999px;
+  }
+
+  .month-column strong {
     font-size: 0.52rem;
+    line-height: 1;
+  }
+
+  .month-column small {
+    font-size: 0.46rem;
+    line-height: 1;
+  }
+
+  .months-grid {
+    display: none;
   }
 
   .share-section {
@@ -1910,9 +1926,25 @@ onMounted(fetchMoodData);
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .month-card {
-    min-width: 138px;
-    flex-basis: 138px;
+  .annual-chart {
+    gap: 0.38rem 0.18rem;
+  }
+
+  .month-column {
+    grid-template-rows: 48px auto auto;
+  }
+
+  .month-bar-track {
+    width: 14px;
+    height: 48px;
+  }
+
+  .month-column strong {
+    font-size: 0.48rem;
+  }
+
+  .month-column small {
+    font-size: 0.44rem;
   }
 }
 </style>
