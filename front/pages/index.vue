@@ -127,7 +127,6 @@
 
     <section class="final-cta-section">
       <div class="final-cta-card">
-        <span class="final-cta-green-border" aria-hidden="true"></span>
         <span class="final-cta-note">Et toi, aujourd’hui ?</span>
         <h2>Quelle est ton humeur ?</h2>
         <p>Choisis ton humeur, suis son évolution et retrouve une touche de Louis de Funès au quotidien.</p>
@@ -712,11 +711,12 @@ const goToRegister = async () => {
   padding:2.5rem 1.8rem;
   text-align:center;
   border-radius:28px;
+  border:2px solid transparent;
   background:linear-gradient(145deg,#2d160f,#482317);
   color:#fff8e9;
   box-shadow:0 18px 38px rgba(44,24,16,.14);
   overflow:hidden;
-  transition:transform .25s,box-shadow .25s;
+  transition:transform .25s,box-shadow .25s,border-color .25s;
 }
 .final-cta-card::before,
 .final-cta-card::after{
@@ -737,56 +737,6 @@ const goToRegister = async () => {
   left:-45px;
   bottom:-70px;
 }
-
-.final-cta-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 22px 44px rgba(44,24,16,.18);
-}
-.final-cta-card .final-cta-border{
-  display:none;
-}
-.final-cta-card::selection{background:transparent}
-.final-cta-card{
-  --final-border-angle:0deg;
-}
-.final-cta-card > *{
-  position:relative;
-  z-index:1;
-}
-.final-cta-card::before{
-  z-index:0;
-}
-.final-cta-card::after{
-  z-index:0;
-}
-.final-cta-section{
-  position:relative;
-}
-.final-cta-section::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-}
-.final-cta-green-border{
-  position:absolute;
-  inset:0;
-  z-index:2;
-  padding:2px;
-  box-sizing:border-box;
-  border-radius:inherit;
-  background:conic-gradient(from var(--border-angle),transparent 0 62%,var(--green) 72%,#a8c99b 82%,transparent 92%);
-  opacity:0;
-  pointer-events:none;
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-  mask-composite:exclude;
-}
-.final-cta-card:hover .final-cta-green-border{
-  opacity:1;
-  animation:greenBorderTrace 1.25s linear infinite;
-}
-
 .final-cta-note{
   position:relative;
   z-index:1;
@@ -830,6 +780,11 @@ const goToRegister = async () => {
   cursor:pointer;
   box-shadow:0 9px 20px rgba(0,0,0,.12);
   transition:transform .25s,background .25s;
+}
+.final-cta-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(120,152,106,.75);
+  box-shadow:0 22px 44px rgba(44,24,16,.18);
 }
 .final-cta-button:hover{
   transform:translateY(-3px);
