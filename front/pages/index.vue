@@ -55,7 +55,7 @@
 
                 <div class="preview-mood-card">
                   <div class="preview-movie-image">
-                    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Louis_de_Fun%C3%A8s_%E2%80%94_Tournage_Le_Gendarme_et_les_Extra-terrestres_%E2%80%94_Saint-Tropez%2C_1978.jpg" alt="Louis de Funès en couleur" />
+                    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/RabbiJacob-couleur.png" alt="Louis de Funès dans Rabbi Jacob" />
                   </div>
 
                   <p class="preview-caption">« Une humeur, une expression… »</p>
@@ -82,6 +82,11 @@
         </div>
 
         <div class="preview-side">
+          <div class="preview-side-header">
+            <span class="section-kicker">APERÇU</span>
+            <h3>Dans l’application</h3>
+          </div>
+
           <p class="preview-handwritten">Et aujourd’hui,<br>quelle est ton humeur ? <span>↙</span></p>
 
           <div class="preview-benefits">
@@ -191,10 +196,10 @@ const goToRegister = async () => {
   radial-gradient(circle at 7% 24%,rgba(246,190,53,.13) 0 13%,transparent 13.5%),
   radial-gradient(circle at 94% 12%,rgba(246,190,53,.12) 0 18%,transparent 18.5%),
   #fffdf8;box-shadow:0 22px 54px rgba(67,42,18,.07);display:grid;grid-template-columns:.78fr 1.2fr .82fr;align-items:center;gap:1.4rem}
-.preview-quote-card{position:relative;align-self:end;margin-bottom:3rem;padding:1.15rem 1.2rem;border-radius:22px;background:linear-gradient(145deg,#2d160f,#482317);color:#fff7e8;box-shadow:0 16px 30px rgba(44,24,16,.2);transform:rotate(-3deg)}
-.preview-quote-card .quote-mark{position:absolute;right:14px;top:5px;font-size:2.8rem;opacity:.65}
-.preview-quote-card p{font-family:'Caveat',cursive;font-size:1.22rem;line-height:1.18;margin:.2rem 1.5rem .7rem 0}
-.preview-quote-card small{font-size:.7rem;opacity:.8}
+.preview-quote-card{position:relative;align-self:end;justify-self:center;width:185px;margin-bottom:3rem;padding:.78rem .88rem;border-radius:17px;background:linear-gradient(145deg,#2d160f,#482317);color:#fff7e8;box-shadow:0 12px 24px rgba(44,24,16,.18);transform:rotate(-3deg)}
+.preview-quote-card .quote-mark{position:absolute;right:10px;top:2px;font-size:2rem;opacity:.58}
+.preview-quote-card p{font-family:'Caveat',cursive;font-size:.94rem;line-height:1.14;margin:.1rem 1rem .45rem 0}
+.preview-quote-card small{font-size:.58rem;opacity:.78}
 .preview-phone-wrap{display:flex;justify-content:center;align-items:center}
 .preview-phone{position:relative;width:330px;height:590px;border:9px solid #141111;border-radius:49px;background:#111;padding:7px;box-shadow:0 28px 56px rgba(44,24,16,.22);transform:rotate(-2deg)}
 .preview-notch{position:absolute;z-index:5;top:7px;left:50%;transform:translateX(-50%);width:110px;height:24px;border-radius:0 0 17px 17px;background:#111}
@@ -204,8 +209,8 @@ const goToRegister = async () => {
 .preview-body h3{font-size:1.02rem;margin:0}
 .preview-question{font-size:.7rem;margin:.18rem 0 .75rem}
 .preview-mood-card,.preview-track{background:#fff;border:1px solid #eee5d8;border-radius:20px;padding:11px;box-shadow:0 7px 18px rgba(44,24,16,.055)}
-.preview-movie-image{height:150px;border-radius:15px;overflow:hidden;background:#f3e6c5}
-.preview-movie-image img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 34%;filter:saturate(1.06) contrast(1.02)}
+.preview-movie-image{height:158px;border-radius:15px;overflow:hidden;background:#f3e6c5}
+.preview-movie-image img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 18%;filter:saturate(1.05) contrast(1.02)}
 .preview-caption{text-align:center;font-family:'Caveat',cursive;font-size:.84rem;margin:.42rem 0}
 .preview-emojis{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
 .preview-emojis span{display:flex;flex-direction:column;align-items:center;padding:5px 1px;background:#fff9e9;border:1px solid rgba(233,185,73,.18);border-radius:10px;font-size:1rem}
@@ -219,7 +224,7 @@ const goToRegister = async () => {
 .preview-bars{height:68px;display:flex;align-items:flex-end;justify-content:space-around;padding-top:8px}
 .preview-bars i{width:15px;border-radius:5px 5px 2px 2px;background:#f2bd45}
 .preview-bars i:nth-child(1){height:28%}.preview-bars i:nth-child(2){height:62%;background:#91b97f}.preview-bars i:nth-child(3){height:43%;background:#b99bd4}.preview-bars i:nth-child(4){height:78%;background:#75c8c2}.preview-bars i:nth-child(5){height:53%}
-.preview-side{align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:1.5rem}
+.preview-side{align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:1.05rem}.preview-side-header{text-align:center}.preview-side-header .section-kicker{margin-bottom:.45rem}.preview-side-header h3{margin:0;font-size:1.25rem;font-weight:800;color:var(--brown)}
 .preview-handwritten{font-family:'Caveat',cursive;font-size:1.55rem;line-height:1.05;text-align:center;transform:rotate(-6deg);margin:0}
 .preview-handwritten span{display:block;font-family:'Sora',sans-serif;font-size:1.8rem;margin-top:.35rem}
 .preview-benefits{display:flex;flex-direction:column;gap:.85rem}
@@ -274,8 +279,9 @@ const goToRegister = async () => {
   .concept-card p{font-size:.74rem;line-height:1.45}
 
   .preview-stage{display:flex;flex-direction:column;min-height:unset;padding:1.5rem .85rem;border-radius:28px;gap:1rem}
-  .preview-side{display:flex;flex-direction:column;order:1;width:100%;gap:1rem}
-  .preview-handwritten{font-size:1.2rem;order:0}
+  .preview-side{display:flex;flex-direction:column;order:1;width:100%;gap:.8rem}
+  .preview-side-header h3{font-size:1.05rem}
+  .preview-handwritten{font-size:1.15rem;order:0}
   .preview-handwritten span{font-size:1.35rem}
   .preview-phone-wrap{order:2;width:100%}
   .preview-phone{width:245px;height:455px;border-width:7px;border-radius:39px}
@@ -285,7 +291,7 @@ const goToRegister = async () => {
   .preview-body{padding:12px 10px}
   .preview-body h3{font-size:.8rem}
   .preview-question{font-size:.53rem;margin-bottom:.55rem}
-  .preview-movie-image{height:106px}
+  .preview-movie-image{height:118px}
   .preview-caption{font-size:.67rem;margin:.3rem 0}
   .preview-emojis span{font-size:.82rem;padding:4px 1px}
   .preview-emojis small{font-size:.34rem}
@@ -296,8 +302,8 @@ const goToRegister = async () => {
   .preview-tabs>*{padding:4px}
   .preview-bars{height:44px}
   .preview-bars i{width:10px}
-  .preview-quote-card{order:3;width:min(260px,88%);margin:0 auto;transform:rotate(-2deg);padding:.9rem 1rem}
-  .preview-quote-card p{font-size:1rem}
+  .preview-quote-card{order:3;width:170px;margin:0 auto;transform:rotate(-2deg);padding:.72rem .8rem}
+  .preview-quote-card p{font-size:.82rem}
   .preview-benefits{order:4;display:grid;grid-template-columns:1fr 1fr;width:100%;max-width:360px;margin:auto;gap:.6rem}
   .preview-benefit{padding:.65rem;border-radius:15px;font-size:.68rem;text-align:left}
   .preview-benefit:last-child{grid-column:1/-1;justify-self:center;width:calc(50% - .3rem)}
