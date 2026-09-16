@@ -690,11 +690,25 @@ onMounted(fetchMoodData);
 }
 
 .tracking-hero {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
   gap: 2rem;
   margin-bottom: 1.45rem;
+  padding: 0.35rem 0;
+}
+
+.tracking-hero::after {
+  content: "";
+  position: absolute;
+  right: 25%;
+  top: -6px;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: rgba(233, 185, 73, 0.12);
+  pointer-events: none;
 }
 
 .tracking-kicker {
@@ -707,10 +721,23 @@ onMounted(fetchMoodData);
 }
 
 .tracking-hero h1 {
+  position: relative;
+  width: fit-content;
   margin: 0;
   font-family: "Sora", sans-serif;
   font-size: clamp(2rem, 5vw, 3.3rem);
   line-height: 1.05;
+}
+
+.tracking-hero h1::after {
+  content: "";
+  display: block;
+  width: 54%;
+  height: 7px;
+  margin-top: -2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #e9b949 0 58%, #78986a 58% 100%);
+  opacity: 0.78;
 }
 
 .tracking-hero > div:first-child > p {
@@ -730,15 +757,15 @@ onMounted(fetchMoodData);
 .summary-card {
   min-width: 120px;
   padding: 0.85rem 0.95rem;
-  border: 1px solid rgba(44, 24, 16, 0.08);
+  border: 1px solid rgba(233, 185, 73, 0.24);
   border-radius: 17px;
-  background: rgba(255, 253, 248, 0.82);
+  background: linear-gradient(145deg, #fff9e7, #fff2c8);
   box-shadow: 0 8px 22px rgba(44, 24, 16, 0.05);
 }
 
 .summary-card.green {
-  background: #edf5e9;
-  border-color: rgba(120, 152, 106, 0.18);
+  background: linear-gradient(145deg, #eff7eb, #dfeeda);
+  border-color: rgba(120, 152, 106, 0.26);
 }
 
 .summary-card span,
@@ -790,22 +817,22 @@ onMounted(fetchMoodData);
 }
 
 .view-toggle button.active {
-  background: var(--brown);
-  color: #fff8e9;
-  box-shadow: 0 5px 14px rgba(44, 24, 16, 0.13);
+  background: linear-gradient(135deg, #5f7f55, #78986a);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(95, 127, 85, 0.2);
 }
 
 .daily-view,
 .weekly-view,
 .annual-view {
+  position: relative;
+  overflow: hidden;
   padding: clamp(1rem, 3vw, 1.45rem);
   border: 1px solid rgba(44, 24, 16, 0.07);
   border-radius: 28px;
-  background: linear-gradient(
-    145deg,
-    rgba(255, 253, 248, 0.94),
-    rgba(240, 246, 236, 0.78)
-  );
+  background:
+    radial-gradient(circle at 95% 8%, rgba(233, 185, 73, 0.12), transparent 18%),
+    linear-gradient(145deg, rgba(255, 253, 248, 0.96), rgba(240, 246, 236, 0.8));
   box-shadow: 0 16px 42px rgba(44, 24, 16, 0.06);
 }
 
@@ -878,9 +905,10 @@ onMounted(fetchMoodData);
 .daily-card {
   min-width: 0;
   padding: 1rem;
-  border: 1px solid rgba(44, 24, 16, 0.075);
+  border: 1px solid rgba(120, 152, 106, 0.13);
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 8px 22px rgba(44, 24, 16, 0.035);
 }
 
 .daily-card-header {
@@ -1030,9 +1058,9 @@ onMounted(fetchMoodData);
 }
 
 .day-card.today {
-  border-color: rgba(120, 152, 106, 0.5);
-  background: #f1f7ee;
-  box-shadow: 0 6px 16px rgba(120, 152, 106, 0.1);
+  border-color: rgba(120, 152, 106, 0.55);
+  background: linear-gradient(145deg, #f4f9f1, #e3efde);
+  box-shadow: 0 7px 18px rgba(120, 152, 106, 0.13);
 }
 
 .day-card-header {
@@ -1100,8 +1128,9 @@ onMounted(fetchMoodData);
 .week-progress-card {
   margin-top: 1rem;
   padding: 1rem 1.1rem 1.05rem;
+  border: 1px solid rgba(233, 185, 73, 0.14);
   border-radius: 18px;
-  background: rgba(255, 250, 240, 0.72);
+  background: linear-gradient(145deg, rgba(255, 250, 240, 0.86), rgba(250, 246, 229, 0.9));
 }
 
 .progress-copy {
@@ -1280,8 +1309,9 @@ onMounted(fetchMoodData);
 }
 
 .month-card.active {
-  border-color: rgba(120, 152, 106, 0.22);
-  background: rgba(239, 246, 235, 0.82);
+  border-color: rgba(120, 152, 106, 0.28);
+  background: linear-gradient(145deg, rgba(239, 246, 235, 0.92), rgba(226, 239, 220, 0.92));
+  box-shadow: 0 6px 16px rgba(120, 152, 106, 0.08);
 }
 
 .month-card-top {
@@ -1461,128 +1491,428 @@ onMounted(fetchMoodData);
 
 @media (max-width: 680px) {
   .tracking-page {
-    padding: 1.6rem 0.75rem 3.5rem;
+    padding: 0.9rem 0.65rem 2.4rem;
   }
 
   .tracking-hero {
-    gap: 1rem;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.75rem;
+    padding: 0;
+  }
+
+  .tracking-hero::after {
+    right: 3%;
+    top: -8px;
+    width: 54px;
+    height: 54px;
+  }
+
+  .tracking-kicker {
+    margin-bottom: 0.18rem;
+    font-size: 0.56rem;
+  }
+
+  .tracking-hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .tracking-hero h1::after {
+    height: 5px;
+  }
+
+  .tracking-hero > div:first-child > p {
+    max-width: 230px;
+    margin-top: 0.35rem;
+    font-size: 0.72rem;
+    line-height: 1.35;
   }
 
   .summary-cards {
-    grid-template-columns: 1fr 1fr;
+    width: auto;
+    display: flex;
+    gap: 0.38rem;
+  }
+
+  .summary-card {
+    min-width: 66px;
+    padding: 0.52rem 0.58rem;
+    border-radius: 13px;
+  }
+
+  .summary-card span {
+    font-size: 0.5rem;
+  }
+
+  .summary-card strong {
+    margin: 0.04rem 0;
+    font-size: 1rem;
+  }
+
+  .summary-card small {
+    font-size: 0.48rem;
   }
 
   .view-toggle {
+    position: sticky;
+    top: 0.45rem;
+    z-index: 10;
     width: 100%;
     box-sizing: border-box;
+    gap: 0.15rem;
+    margin: 0 auto 0.7rem;
+    padding: 0.22rem;
+    background: rgba(255, 250, 240, 0.94);
+    backdrop-filter: blur(10px);
   }
 
   .view-toggle button {
     flex: 1;
     justify-content: center;
+    gap: 0.28rem;
+    padding: 0.52rem 0.38rem;
+    font-size: 0.61rem;
+  }
+
+  .view-toggle button i {
+    font-size: 0.72rem;
   }
 
   .daily-view,
   .weekly-view,
   .annual-view {
-    padding: 0.8rem;
-    border-radius: 22px;
+    padding: 0.65rem;
+    border-radius: 20px;
+  }
+
+  .period-nav {
+    grid-template-columns: 34px minmax(0, 1fr) 34px;
+    gap: 0.38rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .nav-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 0.85rem;
+  }
+
+  .period-copy span {
+    font-size: 0.52rem;
+  }
+
+  .period-copy h2 {
+    font-size: 0.95rem;
+  }
+
+  .period-copy small {
+    font-size: 0.56rem;
   }
 
   .day-moods {
-    grid-template-columns: 1fr;
+    display: flex;
+    gap: 0.6rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.25rem;
+  }
+
+  .daily-card {
+    min-width: 82%;
+    flex: 0 0 82%;
+    padding: 0.72rem;
+    border-radius: 17px;
+    scroll-snap-align: start;
+  }
+
+  .daily-card-header {
+    gap: 0.5rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .time-icon {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+    border-radius: 11px;
+    font-size: 0.9rem;
+  }
+
+  .daily-card-header h3 {
+    font-size: 0.78rem;
+  }
+
+  .daily-card-header span {
+    font-size: 0.5rem;
   }
 
   .daily-mood-content {
-    grid-template-columns: 125px 1fr;
+    grid-template-columns: 92px 1fr;
+    gap: 0.7rem;
   }
 
   .daily-image {
-    height: 155px;
+    height: 110px;
+    border-radius: 13px;
+  }
+
+  .film-tag {
+    margin-bottom: 0.25rem;
+    padding: 0.22rem 0.38rem;
+    font-size: 0.5rem;
+  }
+
+  .daily-copy h4 {
+    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+  }
+
+  .daily-copy p {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 0.65rem;
+    line-height: 1.35;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .daily-copy small {
+    margin-top: 0.35rem;
+    font-size: 0.82rem;
+  }
+
+  .empty-mood {
+    min-height: 110px;
   }
 
   .week-overview {
     display: flex;
-    gap: 0.55rem;
+    gap: 0.42rem;
     overflow-x: auto;
-    padding-bottom: 0.45rem;
+    scroll-snap-type: x proximity;
+    padding-bottom: 0.3rem;
   }
 
   .day-card {
-    min-width: 125px;
-    flex: 0 0 125px;
+    min-width: 98px;
+    flex: 0 0 98px;
+    padding: 0.58rem 0.5rem;
+    border-radius: 14px;
+    scroll-snap-align: start;
+  }
+
+  .day-card-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .mini-period + .mini-period {
+    margin-top: 0.45rem;
+    padding-top: 0.45rem;
+  }
+
+  .mini-label {
+    margin-bottom: 0.25rem;
+    font-size: 0.5rem;
+  }
+
+  .mini-mood img {
+    width: 34px;
+    height: 34px;
+    margin-bottom: 0.2rem;
+    border-radius: 10px;
+  }
+
+  .mini-mood strong {
+    font-size: 0.52rem;
+  }
+
+  .mini-empty {
+    min-height: 34px;
+  }
+
+  .week-progress-card {
+    margin-top: 0.65rem;
+    padding: 0.72rem 0.75rem;
   }
 
   .progress-copy {
     display: block;
+    margin-bottom: 0.5rem;
   }
 
-  .progress-bars {
-    margin-top: 0.75rem;
+  .progress-copy h3 {
+    font-size: 0.78rem;
+  }
+
+  .progress-copy p {
+    font-size: 0.58rem;
+  }
+
+  .progress-day {
+    grid-template-rows: 30px auto;
+  }
+
+  .progress-line.active {
+    height: 18px;
+  }
+
+  .progress-line.full {
+    height: 30px;
+  }
+
+  .progress-day small {
+    font-size: 0.48rem;
   }
 
   .annual-summary {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.5rem;
+    gap: 0.38rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .annual-summary > div {
+    padding: 0.5rem 0.48rem;
+    border-radius: 12px;
+  }
+
+  .annual-summary span {
+    font-size: 0.5rem;
+  }
+
+  .annual-summary strong {
+    margin: 0.05rem 0;
+    font-size: 0.95rem;
+  }
+
+  .annual-summary small {
+    font-size: 0.46rem;
   }
 
   .annual-chart {
-    gap: 0.3rem;
+    height: 130px;
+    gap: 0.28rem;
     overflow-x: auto;
+    padding: 0.55rem 0 0.25rem;
   }
 
   .month-column {
-    min-width: 42px;
+    min-width: 34px;
+  }
+
+  .month-bar-track {
+    width: 18px;
+    height: 82px;
+  }
+
+  .month-column strong,
+  .month-column small {
+    font-size: 0.48rem;
   }
 
   .months-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    gap: 0.45rem;
+    margin-top: 0.65rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-bottom: 0.25rem;
+  }
+
+  .month-card {
+    min-width: 150px;
+    flex: 0 0 150px;
+    padding: 0.62rem;
+    border-radius: 13px;
+    scroll-snap-align: start;
+  }
+
+  .month-card-top strong {
+    font-size: 0.68rem;
+  }
+
+  .month-card-details {
+    margin-top: 0.45rem;
+    padding-top: 0.45rem;
+  }
+
+  .month-card-details span {
+    font-size: 0.52rem;
   }
 
   .share-section {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
+    gap: 0.6rem;
+    margin-top: 0.65rem;
+    padding: 0.7rem 0.75rem;
+    border-radius: 16px;
+  }
+
+  .share-copy .tracking-kicker,
+  .share-copy p {
+    display: none;
+  }
+
+  .share-copy h3 {
+    font-size: 0.76rem;
   }
 
   .share-main {
-    width: 100%;
-    justify-content: space-between;
+    width: auto;
+    padding: 0.58rem 0.7rem;
+    font-size: 0.62rem;
+  }
+
+  .share-main span {
+    display: none;
   }
 
   .social-icons {
-    left: 0;
-    right: auto;
+    left: auto;
+    right: 0;
   }
 }
 
 @media (max-width: 430px) {
+  .tracking-hero {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .tracking-hero > div:first-child > p {
+    max-width: 190px;
+    font-size: 0.66rem;
+  }
+
   .summary-card {
-    min-width: 0;
+    min-width: 58px;
+    padding: 0.46rem 0.5rem;
   }
 
-  .period-nav {
-    grid-template-columns: 38px minmax(0, 1fr) 38px;
-    gap: 0.45rem;
+  .view-toggle button {
+    padding-inline: 0.25rem;
+    font-size: 0.56rem;
   }
 
-  .nav-btn {
-    width: 38px;
-    height: 38px;
-  }
-
-  .annual-summary {
-    grid-template-columns: 1fr;
-  }
-
-  .months-grid {
-    grid-template-columns: 1fr;
+  .daily-card {
+    min-width: 88%;
+    flex-basis: 88%;
   }
 
   .daily-mood-content {
-    grid-template-columns: 1fr;
+    grid-template-columns: 82px 1fr;
   }
 
   .daily-image {
-    height: 210px;
+    height: 98px;
+  }
+
+  .annual-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .month-card {
+    min-width: 138px;
+    flex-basis: 138px;
   }
 }
 </style>
