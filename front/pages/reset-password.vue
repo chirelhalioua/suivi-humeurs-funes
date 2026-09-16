@@ -24,7 +24,8 @@
 import { ref } from 'vue';
 import axios from 'axios';
 
-const email = ref('');
+const route = useRoute();
+const email = ref(String(route.query.email || ''));
 const message = ref('');
 const messageClass = ref('');
 const isLoading = ref(false);
