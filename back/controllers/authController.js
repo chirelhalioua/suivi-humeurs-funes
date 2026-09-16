@@ -126,6 +126,88 @@ const deleteUserProfile = async (req, res) => {
 };
 
 
+// Modifier la photo de profil
+const updateProfileImage = async (req, res) => {
+  const { userId } = req.params;
+  const profileImage = String(req.body.profileImage || '');
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: "Utilisateur invalide." });
+  }
+
+  if (!profileImage.startsWith('data:image/')) {
+    return res.status(400).json({ message: "Format d'image invalide." });
+  }
+
+  if (profileImage.length > 700000) {
+    return res.status(400).json({ message: "L'image est trop volumineuse." });
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { profileImage },
+      { new: true }
+    ).select('-password -resetPasswordToken -resetPasswordExpires');
+
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé." });
+    }
+
+    return res.status(200).json({
+      message: "Photo de profil mise à jour.",
+      user
+    });
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour de la photo :", error);
+    return res.status(500).json({ message: "Erreur du serveur." });
+  }
+};
+
+// Modifier directement le mot de passe depuis un compte connecté
+const changePassword = async (req, res) => {
+  const { userId } = req.params;
+  const currentPassword = String(req.body.currentPassword || '');
+  const newPassword = String(req.body.newPassword || '');
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: "Utilisateur invalide." });
+  }
+
+  if (!currentPassword) {
+    return res.status(400).json({ message: "Saisissez votre mot de passe actuel." });
+  }
+
+  if (newPassword.length < 6) {
+    return res.status(400).json({ message: "Le nouveau mot de passe doit comporter au moins 6 caractères." });
+  }
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé." });
+    }
+
+    const validPassword = await bcrypt.compare(currentPassword, user.password);
+
+    if (!validPassword) {
+      return res.status(400).json({ message: "Le mot de passe actuel est incorrect." });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetPasswordToken = null;
+    user.resetPasswordExpires = null;
+    await user.save();
+
+    return res.status(200).json({ message: "Votre mot de passe a bien été modifié." });
+  } catch (error) {
+    console.error("Erreur lors de la modification du mot de passe :", error);
+    return res.status(500).json({ message: "Erreur du serveur." });
+  }
+};
+
+
 // Envoyer un email transactionnel via Brevo sans dépendance supplémentaire
 const sendResetEmail = (to, resetUrl) => {
   return new Promise((resolve, reject) => {
@@ -287,6 +369,8 @@ module.exports = {
   getAllUsers,
   getUserProfile,
   deleteUserProfile,
+  updateProfileImage,
+  changePassword,
   requestPasswordReset,
   confirmPasswordReset,
 };
