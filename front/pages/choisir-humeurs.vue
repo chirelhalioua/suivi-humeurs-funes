@@ -281,13 +281,13 @@ onMounted(fetchHumeurs);
 }
 
 .mood-shell {
-  width: min(980px, 100%);
+  width: min(820px, 100%);
   margin: 0 auto;
 }
 
 .mood-header {
-  max-width: 680px;
-  margin: 0 auto 1.8rem;
+  max-width: 600px;
+  margin: 0 auto 1.35rem;
   text-align: center;
 }
 
@@ -304,7 +304,7 @@ onMounted(fetchHumeurs);
 .mood-header h1 {
   margin: 0;
   font-family: "Sora", sans-serif;
-  font-size: clamp(2rem, 5vw, 3.3rem);
+  font-size: clamp(1.8rem, 3.2vw, 2.65rem);
   line-height: 1.08;
 }
 
@@ -317,7 +317,7 @@ onMounted(fetchHumeurs);
 }
 
 .mood-experience {
-  padding: clamp(1rem, 3vw, 1.6rem);
+  padding: clamp(0.9rem, 2vw, 1.15rem);
   border: 1px solid rgba(44, 24, 16, 0.07);
   border-radius: 30px;
   background: linear-gradient(
@@ -330,14 +330,14 @@ onMounted(fetchHumeurs);
 
 .mood-stage {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) 48px;
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .nav-arrow {
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
   border: 1px solid rgba(44, 24, 16, 0.08);
@@ -363,7 +363,7 @@ onMounted(fetchHumeurs);
 .mood-card {
   min-width: 0;
   display: grid;
-  grid-template-columns: minmax(260px, 1.05fr) minmax(220px, 0.95fr);
+  grid-template-columns: minmax(230px, 1.02fr) minmax(200px, 0.98fr);
   overflow: hidden;
   border: 1px solid rgba(44, 24, 16, 0.08);
   border-radius: 24px;
@@ -373,7 +373,7 @@ onMounted(fetchHumeurs);
 
 .mood-image-wrap {
   position: relative;
-  min-height: 330px;
+  min-height: 270px;
   overflow: hidden;
   background: #eee1c6;
 }
@@ -381,7 +381,7 @@ onMounted(fetchHumeurs);
 .mood-image {
   width: 100%;
   height: 100%;
-  min-height: 330px;
+  min-height: 270px;
   display: block;
   object-fit: cover;
 }
@@ -404,7 +404,7 @@ onMounted(fetchHumeurs);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(1.35rem, 4vw, 2.3rem);
+  padding: clamp(1.1rem, 2.5vw, 1.55rem);
   text-align: left;
 }
 
@@ -431,21 +431,21 @@ onMounted(fetchHumeurs);
 .mood-copy h2 {
   margin: 0 0 0.65rem;
   font-family: "Sora", sans-serif;
-  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  font-size: clamp(1.45rem, 2.8vw, 2rem);
   line-height: 1.08;
 }
 
 .mood-copy p {
   margin: 0;
   color: rgba(44, 24, 16, 0.64);
-  font-size: 0.92rem;
+  font-size: 0.84rem;
   line-height: 1.65;
 }
 
 .quick-moods {
   display: flex;
-  gap: 0.65rem;
-  margin: 1rem 0 0;
+  gap: 0.55rem;
+  margin: 0.75rem 0 0;
   padding: 0.25rem 0.15rem 0.45rem;
   overflow-x: auto;
   scrollbar-width: thin;
@@ -453,13 +453,13 @@ onMounted(fetchHumeurs);
 }
 
 .quick-mood {
-  min-width: 92px;
-  flex: 1 0 92px;
+  min-width: 82px;
+  flex: 1 0 82px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.7rem 0.55rem;
+  padding: 0.58rem 0.5rem;
   border: 1px solid rgba(44, 24, 16, 0.08);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.62);
@@ -484,13 +484,13 @@ onMounted(fetchHumeurs);
 }
 
 .quick-emoji {
-  font-size: 1.45rem;
+  font-size: 1.25rem;
   line-height: 1;
 }
 
 .mood-note {
   position: relative;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   padding: 1rem;
   border: 1px solid rgba(44, 24, 16, 0.07);
   border-radius: 18px;
@@ -530,7 +530,7 @@ onMounted(fetchHumeurs);
 
 .mood-note textarea {
   width: 100%;
-  min-height: 90px;
+  min-height: 76px;
   box-sizing: border-box;
   padding: 0.85rem 0.9rem;
   resize: vertical;
