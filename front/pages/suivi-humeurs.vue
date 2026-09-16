@@ -9,16 +9,44 @@
         </div>
 
         <div class="summary-cards">
-          <div class="summary-card">
-            <span>Cette semaine</span>
-            <strong>{{ currentWeekCount }}</strong>
-            <small>humeur{{ currentWeekCount > 1 ? "s" : "" }}</small>
-          </div>
-          <div class="summary-card green">
-            <span>Jours suivis</span>
-            <strong>{{ currentWeekDays }}</strong>
-            <small>sur 7 jours</small>
-          </div>
+          <template v-if="view === 'daily'">
+            <div class="summary-card">
+              <span>Matin</span>
+              <strong>{{ morningMood ? "✓" : "—" }}</strong>
+              <small>{{ morningMood ? morningMood.title : "non renseigné" }}</small>
+            </div>
+            <div class="summary-card green">
+              <span>Soir</span>
+              <strong>{{ eveningMood ? "✓" : "—" }}</strong>
+              <small>{{ eveningMood ? eveningMood.title : "non renseigné" }}</small>
+            </div>
+          </template>
+
+          <template v-else-if="view === 'weekly'">
+            <div class="summary-card">
+              <span>Cette semaine</span>
+              <strong>{{ weekTrackedSlots }}</strong>
+              <small>humeur{{ weekTrackedSlots > 1 ? "s" : "" }}</small>
+            </div>
+            <div class="summary-card green">
+              <span>Jours suivis</span>
+              <strong>{{ weekTrackedDays }}</strong>
+              <small>sur 7 jours</small>
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="summary-card">
+              <span>Cette année</span>
+              <strong>{{ annualTotal }}</strong>
+              <small>humeur{{ annualTotal > 1 ? "s" : "" }}</small>
+            </div>
+            <div class="summary-card green">
+              <span>Mois actifs</span>
+              <strong>{{ annualActiveMonths }}</strong>
+              <small>sur 12 mois</small>
+            </div>
+          </template>
         </div>
       </header>
 
@@ -786,8 +814,13 @@ onMounted(fetchMoodData);
 }
 
 .summary-card small {
+  display: block;
+  max-width: 110px;
+  overflow: hidden;
   color: rgba(44, 24, 16, 0.48);
   font-size: 0.62rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .view-toggle {
@@ -962,14 +995,15 @@ onMounted(fetchMoodData);
   height: 180px;
   overflow: hidden;
   border-radius: 17px;
-  background: #eee1c6;
+  background: linear-gradient(145deg, #f4ead3, #edf3e9);
 }
 
 .daily-image img {
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
 }
 
 .daily-copy {
@@ -1105,7 +1139,9 @@ onMounted(fetchMoodData);
   display: block;
   margin: 0 auto 0.3rem;
   border-radius: 13px;
-  object-fit: cover;
+  background: #eef3e9;
+  object-fit: contain;
+  object-position: center;
 }
 
 .mini-mood strong {
