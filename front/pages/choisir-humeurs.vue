@@ -824,8 +824,8 @@ onMounted(fetchHumeurs);
   }
 
   .mood-copy .film-quote {
-    font-size: 1.06rem;
-    line-height: 1.25;
+    font-size: 1.15rem;
+    line-height: 1.35;
   }
 
   .quick-moods {
