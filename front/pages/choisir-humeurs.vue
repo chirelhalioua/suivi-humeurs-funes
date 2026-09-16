@@ -65,6 +65,23 @@
           </button>
         </div>
 
+        <div class="wellbeing-tips">
+          <div class="wellbeing-tip-heading">
+            <span class="wellbeing-tip-icon">{{ currentMoodAdvice.icon }}</span>
+            <div>
+              <span>PETITS CONSEILS</span>
+              <strong>Pour cette humeur</strong>
+            </div>
+          </div>
+
+          <div class="wellbeing-tip-list">
+            <div v-for="tip in currentMoodAdvice.tips" :key="tip" class="wellbeing-tip">
+              <span>•</span>
+              <p>{{ tip }}</p>
+            </div>
+          </div>
+        </div>
+
         <div class="mood-note">
           <div class="note-heading">
             <div>
@@ -185,6 +202,75 @@ const moodEmoji = (title = "", index = 0) => {
 
   return ["🙂", "😄", "😐", "😢", "😡", "😴"][index % 6];
 };
+
+const moodAdviceSets = {
+  happy: {
+    icon: "☀️",
+    tips: [
+      "Profite de ce qui te fait du bien et garde-en une petite trace.",
+      "Partage cette bonne énergie avec quelqu’un que tu apprécies.",
+    ],
+  },
+  calm: {
+    icon: "🌿",
+    tips: [
+      "Garde ce rythme tranquille et pense à faire une petite pause.",
+      "Quelques étirements ou une courte marche peuvent prolonger cette sensation.",
+    ],
+  },
+  neutral: {
+    icon: "🌤️",
+    tips: [
+      "Change d’air quelques minutes pour casser la routine.",
+      "Choisis une petite chose agréable à ajouter à ta journée.",
+    ],
+  },
+  sad: {
+    icon: "🤍",
+    tips: [
+      "Sois douce avec toi-même et allège un peu la pression si tu peux.",
+      "Parler à une personne de confiance peut faire du bien.",
+    ],
+  },
+  angry: {
+    icon: "🍃",
+    tips: [
+      "Accorde-toi quelques minutes avant de répondre ou de réagir.",
+      "Bouger un peu ou respirer lentement peut aider à faire redescendre la tension.",
+    ],
+  },
+  tired: {
+    icon: "🌙",
+    tips: [
+      "Pense à boire, manger et faire une vraie petite pause.",
+      "Garde l’essentiel et reporte ce qui peut attendre.",
+    ],
+  },
+  stressed: {
+    icon: "🌬️",
+    tips: [
+      "Ramène ton attention à une seule chose à la fois.",
+      "Éloigne-toi de l’écran quelques minutes et ralentis ta respiration.",
+    ],
+  },
+};
+
+const getMoodAdviceKey = (title = "") => {
+  const value = title.toLowerCase();
+
+  if (value.includes("heureux") || value.includes("joyeux") || value.includes("génial")) return "happy";
+  if (value.includes("bien") || value.includes("calme")) return "calm";
+  if (value.includes("triste") || value.includes("mal") || value.includes("pas top")) return "sad";
+  if (value.includes("énerv") || value.includes("ener") || value.includes("colère") || value.includes("nul")) return "angry";
+  if (value.includes("fatigu")) return "tired";
+  if (value.includes("stress") || value.includes("angoiss")) return "stressed";
+
+  return "neutral";
+};
+
+const currentMoodAdvice = computed(
+  () => moodAdviceSets[getMoodAdviceKey(currentMood.value?.title)] || moodAdviceSets.neutral
+);
 
 const saveMood = async () => {
   if (!currentMood.value) {
@@ -490,6 +576,77 @@ onMounted(fetchHumeurs);
 .quick-emoji {
   font-size: 1.25rem;
   line-height: 1;
+}
+
+.wellbeing-tips {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: 0.35rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(120, 152, 106, 0.15);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(255, 249, 229, 0.9), rgba(239, 246, 235, 0.86));
+}
+
+.wellbeing-tip-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 140px;
+}
+
+.wellbeing-tip-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  border-radius: 11px;
+  background: #ffe79d;
+  font-size: 1rem;
+}
+
+.wellbeing-tip-heading div > span,
+.wellbeing-tip-heading strong {
+  display: block;
+}
+
+.wellbeing-tip-heading div > span {
+  color: #9b6d1f;
+  font-size: 0.52rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.wellbeing-tip-heading strong {
+  margin-top: 0.08rem;
+  font-size: 0.72rem;
+}
+
+.wellbeing-tip-list {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.wellbeing-tip {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  gap: 0.28rem;
+  align-items: start;
+}
+
+.wellbeing-tip > span {
+  color: var(--green);
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.wellbeing-tip p {
+  margin: 0;
+  color: rgba(44, 24, 16, 0.58);
+  font-size: 0.67rem;
+  line-height: 1.45;
 }
 
 .mood-note {
@@ -810,6 +967,29 @@ onMounted(fetchHumeurs);
 
   .quick-emoji {
     font-size: 1.25rem;
+  }
+
+  .wellbeing-tips {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+    margin-top: 0.25rem;
+    padding: 0.7rem 0.75rem;
+    border-radius: 14px;
+  }
+
+  .wellbeing-tip-heading {
+    min-width: 0;
+  }
+
+  .wellbeing-tip-icon {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+    font-size: 0.9rem;
+  }
+
+  .wellbeing-tip p {
+    font-size: 0.62rem;
   }
 
   .note-heading {
