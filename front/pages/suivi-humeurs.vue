@@ -545,7 +545,7 @@ const moodWellbeingSets = {
     actions: [
       { icon: "💧", label: "Boire" },
       { icon: "🛋️", label: "Se poser" },
-      { icon: "🫧", label: "Lever le pied" },
+      { icon: "🧘", label: "Lever le pied" },
     ],
   },
   stressed: {
