@@ -30,19 +30,28 @@ const messageClass = ref('');
 const isLoading = ref(false);
 
 const resetPassword = async () => {
+  const normalizedEmail = email.value.trim().toLowerCase();
+
+  if (!normalizedEmail) {
+    message.value = 'Veuillez écrire votre adresse email.';
+    messageClass.value = 'error';
+    return;
+  }
+
   try {
     isLoading.value = true;
-    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/reset-password', { email: email.value });
+    message.value = '';
+    const response = await axios.post('https://suivi-humeurs-funes.onrender.com/api/auth/reset-password', { email: normalizedEmail });
 
     if (response.status === 200) {
-      message.value = 'Un email de réinitialisation a été envoyé.';
+      message.value = response.data?.message || 'Un email de réinitialisation a été envoyé. Vérifiez aussi vos spams.';
       messageClass.value = 'success';
     } else {
       message.value = 'Erreur lors de l’envoi de l’email.';
       messageClass.value = 'error';
     }
   } catch (error) {
-    message.value = error.response?.data.message || 'Une erreur est survenue.';
+    message.value = error.response?.data?.message || 'Impossible d’envoyer l’email pour le moment.';
     messageClass.value = 'error';
   } finally {
     isLoading.value = false;
