@@ -5,7 +5,9 @@ const {
   loginUser, 
   getAllUsers, 
   getUserProfile, 
-  deleteUserProfile,  
+  deleteUserProfile,
+  requestPasswordReset,
+  confirmPasswordReset,
 } = require('../controllers/authController');
 const authMiddleware = require('../middleware/authMiddleware');
 const User = require('../models/User');
@@ -18,6 +20,10 @@ router.post('/register', (req, res) => {
 
 // Connexion classique
 router.post('/login', loginUser);
+
+// Réinitialisation du mot de passe
+router.post('/reset-password', requestPasswordReset);
+router.post('/reset-password/confirm', confirmPasswordReset);
 
 // Récupérer tous les utilisateurs
 router.get('/users', getAllUsers);
