@@ -918,23 +918,42 @@ const goToRegister = async () => {
   }
 
   .concept-flow{
-    padding-left:4px;
+    max-width:100%;
+    padding-left:2px;
+    display:flex;
+    flex-direction:column;
+    gap:.55rem;
   }
   .concept-flow::before{
-    left:25px;
+    left:22px;
   }
   .concept-step{
-    grid-template-columns:46px 1fr;
-    min-height:108px;
+    grid-template-columns:44px 1fr;
+    min-height:122px;
+    align-items:flex-start;
   }
   .concept-marker{
-    width:40px;
-    height:40px;
+    width:38px;
+    height:38px;
+    margin-top:10px;
+  }
+  .concept-marker span{
+    font-size:.95rem;
   }
   .concept-step:nth-child(odd) .concept-step-content,
   .concept-step:nth-child(even) .concept-step-content{
-    margin-left:.45rem;
-    padding:.8rem .85rem;
+    margin-left:.7rem;
+    padding:1rem 1rem;
+    border-radius:18px;
+  }
+  .concept-step h3{
+    font-size:1rem;
+    margin-bottom:.35rem;
+  }
+  .concept-step p{
+    max-width:none;
+    font-size:.8rem;
+    line-height:1.5;
   }
 
   .mood-list{
