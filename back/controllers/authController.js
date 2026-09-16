@@ -133,8 +133,15 @@ const sendResetEmail = (to, resetUrl) => {
     const mailFrom = String(process.env.MAIL_FROM || 'contact@chirelhalioua.fr').trim();
 
     if (!brevoApiKey) {
+      console.error('Diagnostic Brevo : BREVO_API_KEY absente');
       return reject(new Error('BREVO_API_KEY manquante'));
     }
+
+    console.log('Diagnostic Brevo :', {
+      longueurCle: brevoApiKey.length,
+      formatXkeysib: brevoApiKey.startsWith('xkeysib-'),
+      mailFrom
+    });
 
     const payload = JSON.stringify({
       sender: {
