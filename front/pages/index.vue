@@ -61,10 +61,12 @@
 
                 <div class="preview-mood-card">
                   <div class="preview-movie-image">
-                    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/RabbiJacob-couleur.png" alt="Louis de Funès dans Rabbi Jacob" />
+                    <img src="https://media.gettyimages.com/id/1193495368/fr/photo/lacteur-fran%C3%A7ais-louis-de-funes-invit%C3%A9-de-l%C3%A9mission-les-rendez-vous-du-dimanche-pr%C3%A9sent%C3%A9e-par.jpg?s=2048x2048&w=gi&k=20&c=UljXJU8EOKgAe2_bIQ9TXxO9lMOvvJ76fJRoNw4KdWo=" alt="Louis de Funès" />
+                    <div class="preview-image-label">
+                      <span>Humeur du jour</span>
+                      <b>Heureux</b>
+                    </div>
                   </div>
-
-                  <p class="preview-caption">« Une humeur, une expression… »</p>
 
                   <div class="preview-emojis">
                     <span>🤩<small>Génial</small></span>
@@ -407,7 +409,8 @@ const goToRegister = async () => {
   box-shadow:0 7px 18px rgba(44,24,16,.055);
 }
 .preview-movie-image{
-  height:110px;
+  position:relative;
+  height:122px;
   border-radius:14px;
   overflow:hidden;
   background:#f3e6c5;
@@ -417,15 +420,24 @@ const goToRegister = async () => {
   height:100%;
   display:block;
   object-fit:cover;
-  object-position:center 18%;
-  filter:saturate(1.05) contrast(1.02);
+  object-position:center 32%;
+  filter:saturate(1.02) contrast(1.01);
 }
-.preview-caption{
-  text-align:center;
-  font-family:'Caveat',cursive;
-  font-size:.68rem;
-  margin:.42rem 0;
+.preview-image-label{
+  position:absolute;
+  left:7px;
+  bottom:7px;
+  display:flex;
+  align-items:center;
+  gap:.35rem;
+  padding:.28rem .45rem;
+  border-radius:999px;
+  background:rgba(44,24,16,.82);
+  color:#fff8e9;
+  backdrop-filter:blur(5px);
 }
+.preview-image-label span{font-size:.34rem;opacity:.8}
+.preview-image-label b{font-size:.43rem}
 .preview-emojis{
   display:grid;
   grid-template-columns:repeat(5,1fr);
@@ -638,7 +650,7 @@ const goToRegister = async () => {
   .preview-body{padding:10px 8px}
   .preview-body h3{font-size:.75rem}
   .preview-question{font-size:.5rem;margin-bottom:.5rem}
-  .preview-movie-image{height:92px}
+  .preview-movie-image{height:98px}
   .preview-caption{font-size:.62rem;margin:.3rem 0}
   .preview-emojis span{font-size:.72rem;padding:3px 1px}
   .preview-emojis small{font-size:.31rem}
