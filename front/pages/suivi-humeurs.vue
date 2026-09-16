@@ -263,64 +263,74 @@
             </button>
           </div>
 
-          <div class="annual-summary">
-            <div>
-              <span>Humeurs</span>
-              <strong>{{ annualTotal }}</strong>
-              <small>enregistrées</small>
-            </div>
-            <div>
-              <span>Jours suivis</span>
-              <strong>{{ annualDays }}</strong>
-              <small>sur l’année</small>
-            </div>
-            <div>
-              <span>Mois actifs</span>
-              <strong>{{ annualActiveMonths }}</strong>
-              <small>sur 12 mois</small>
-            </div>
-          </div>
-
-          <div class="annual-chart" aria-label="Suivi des humeurs par mois">
-            <div
-              v-for="month in annualMonthStats"
-              :key="month.index"
-              class="month-column"
-              :class="{ empty: month.count === 0 }"
-            >
-              <div class="month-bar-track">
-                <span
-                  class="month-bar-fill"
-                  :style="{ height: month.height }"
-                ></span>
+          <div class="annual-chart-card">
+            <div class="annual-chart-head">
+              <div>
+                <span class="tracking-kicker">TON ANNÉE EN UN COUP D’ŒIL</span>
+                <h3>Évolution mois par mois</h3>
               </div>
-              <strong>{{ month.short }}</strong>
-              <small>{{ month.count }}</small>
+              <small>{{ annualDays }} jour{{ annualDays > 1 ? "s" : "" }} suivi{{ annualDays > 1 ? "s" : "" }}</small>
             </div>
-          </div>
 
-          <div class="months-grid">
-            <article
-              v-for="month in annualMonthStats"
-              :key="'card-' + month.index"
-              class="month-card"
-              :class="{ active: month.count > 0 }"
-            >
-              <div class="month-card-top">
-                <div>
-                  <span>{{ month.name }}</span>
-                  <strong>{{ month.count }} humeur{{ month.count > 1 ? "s" : "" }}</strong>
+            <div class="annual-chart" aria-label="Suivi des humeurs par mois">
+              <button
+                v-for="month in annualMonthStats"
+                :key="month.index"
+                type="button"
+                :class="[
+                  'month-column',
+                  {
+                    empty: month.count === 0,
+                    selected: selectedAnnualMonth === month.index
+                  }
+                ]"
+                @click="selectedAnnualMonth = month.index"
+                :aria-label="`Voir le détail de ${month.name}`"
+              >
+                <div class="month-bar-track">
+                  <span
+                    class="month-bar-fill"
+                    :style="{ height: month.height }"
+                  ></span>
                 </div>
-                <span class="month-dot" :class="{ filled: month.count > 0 }"></span>
-              </div>
+                <strong>{{ month.short }}</strong>
+                <small>{{ month.count }}</small>
+              </button>
+            </div>
 
-              <div class="month-card-details">
-                <span>{{ month.days }} jour{{ month.days > 1 ? "s" : "" }} suivi{{ month.days > 1 ? "s" : "" }}</span>
-                <span v-if="month.favorite">Le + fréquent : {{ month.favorite }}</span>
-                <span v-else>Aucune humeur enregistrée</span>
-              </div>
-            </article>
+            <p class="annual-chart-hint">Sélectionne un mois pour voir son détail.</p>
           </div>
+
+          <article class="annual-month-detail">
+            <div class="annual-month-main">
+              <div>
+                <span>{{ selectedAnnualMonthData.name }}</span>
+                <h3>
+                  {{ selectedAnnualMonthData.count }}
+                  humeur{{ selectedAnnualMonthData.count > 1 ? "s" : "" }}
+                </h3>
+              </div>
+              <span
+                class="month-dot"
+                :class="{ filled: selectedAnnualMonthData.count > 0 }"
+              ></span>
+            </div>
+
+            <div v-if="selectedAnnualMonthData.count > 0" class="annual-month-meta">
+              <div>
+                <span>Jours suivis</span>
+                <strong>{{ selectedAnnualMonthData.days }}</strong>
+              </div>
+              <div>
+                <span>Humeur la + fréquente</span>
+                <strong>{{ selectedAnnualMonthData.favorite || "—" }}</strong>
+              </div>
+            </div>
+
+            <p v-else class="annual-month-empty">
+              Aucune humeur enregistrée pour ce mois.
+            </p>
+          </article>
         </section>
 
         <section class="share-section">
@@ -368,6 +378,7 @@ const selectedDate = ref(new Date());
 const isLoading = ref(true);
 const socialsVisible = ref(false);
 const moodMap = ref(new Map());
+const selectedAnnualMonth = ref(new Date().getMonth());
 
 const days = [
   "Dimanche",
@@ -589,6 +600,19 @@ const annualDays = computed(() =>
 
 const annualActiveMonths = computed(
   () => annualMonthStats.value.filter((month) => month.count > 0).length
+);
+
+const selectedAnnualMonthData = computed(
+  () =>
+    annualMonthStats.value[selectedAnnualMonth.value] || {
+      index: 0,
+      name: "",
+      short: "",
+      count: 0,
+      days: 0,
+      favorite: "",
+      height: "8%",
+    }
 );
 
 const fetchMoodData = async () => {
@@ -1227,53 +1251,49 @@ onMounted(fetchMoodData);
 }
 
 .year-nav {
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.9rem;
 }
 
-.annual-summary {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.annual-summary > div {
-  padding: 0.85rem 0.95rem;
+.annual-chart-card {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 1rem 1.05rem 0.8rem;
   border: 1px solid rgba(44, 24, 16, 0.07);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.62);
+  border-radius: 19px;
+  background: rgba(255, 255, 255, 0.58);
 }
 
-.annual-summary span,
-.annual-summary strong,
-.annual-summary small {
-  display: block;
+.annual-chart-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.65rem;
 }
 
-.annual-summary span {
+.annual-chart-head .tracking-kicker {
+  margin-bottom: 0.15rem;
+}
+
+.annual-chart-head h3 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: 0.95rem;
+}
+
+.annual-chart-head > small {
   color: rgba(44, 24, 16, 0.48);
   font-size: 0.62rem;
-}
-
-.annual-summary strong {
-  margin: 0.12rem 0;
-  font-family: "Sora", sans-serif;
-  font-size: 1.25rem;
-}
-
-.annual-summary small {
-  color: rgba(44, 24, 16, 0.45);
-  font-size: 0.6rem;
+  white-space: nowrap;
 }
 
 .annual-chart {
-  height: 185px;
+  height: 145px;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   align-items: end;
   gap: 0.45rem;
-  padding: 1rem 0.25rem 0.35rem;
-  border-bottom: 1px solid rgba(44, 24, 16, 0.08);
+  padding: 0.35rem 0.15rem 0;
 }
 
 .month-column {
@@ -1282,13 +1302,30 @@ onMounted(fetchMoodData);
   display: grid;
   grid-template-rows: 1fr auto auto;
   align-items: end;
-  gap: 0.28rem;
+  gap: 0.22rem;
+  padding: 0.2rem 0.08rem 0.28rem;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
   text-align: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.month-column:hover,
+.month-column.selected {
+  background: rgba(120, 152, 106, 0.08);
+}
+
+.month-column:hover {
+  transform: translateY(-2px);
 }
 
 .month-bar-track {
-  width: min(24px, 72%);
-  height: 128px;
+  width: min(22px, 70%);
+  height: 96px;
   display: flex;
   align-items: flex-end;
   justify-self: center;
@@ -1309,57 +1346,54 @@ onMounted(fetchMoodData);
   background: #cfcfca;
 }
 
+.month-column.selected .month-bar-track {
+  box-shadow: 0 0 0 3px rgba(120, 152, 106, 0.13);
+}
+
 .month-column strong {
-  color: rgba(44, 24, 16, 0.58);
+  color: rgba(44, 24, 16, 0.62);
   font-size: 0.56rem;
 }
 
 .month-column small {
-  color: rgba(44, 24, 16, 0.38);
-  font-size: 0.54rem;
+  color: rgba(44, 24, 16, 0.4);
+  font-size: 0.52rem;
 }
 
-.months-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.7rem;
-  margin-top: 1rem;
+.annual-chart-hint {
+  margin: 0.45rem 0 0;
+  color: rgba(44, 24, 16, 0.4);
+  font-size: 0.58rem;
+  text-align: center;
 }
 
-.month-card {
-  padding: 0.8rem;
-  border: 1px solid rgba(44, 24, 16, 0.07);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.52);
+.annual-month-detail {
+  max-width: 820px;
+  margin: 0.65rem auto 0;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(120, 152, 106, 0.17);
+  border-radius: 17px;
+  background: linear-gradient(145deg, rgba(244, 249, 241, 0.92), rgba(255, 250, 240, 0.8));
 }
 
-.month-card.active {
-  border-color: rgba(120, 152, 106, 0.28);
-  background: linear-gradient(145deg, rgba(239, 246, 235, 0.92), rgba(226, 239, 220, 0.92));
-  box-shadow: 0 6px 16px rgba(120, 152, 106, 0.08);
-}
-
-.month-card-top {
+.annual-month-main {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 0.6rem;
+  gap: 1rem;
 }
 
-.month-card-top span,
-.month-card-top strong {
+.annual-month-main > div > span {
   display: block;
-}
-
-.month-card-top span:first-child {
+  margin-bottom: 0.12rem;
   color: rgba(44, 24, 16, 0.48);
   font-size: 0.62rem;
 }
 
-.month-card-top strong {
-  margin-top: 0.12rem;
+.annual-month-main h3 {
+  margin: 0;
   font-family: "Sora", sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.95rem;
 }
 
 .month-dot {
@@ -1375,21 +1409,37 @@ onMounted(fetchMoodData);
   background: #78986a;
 }
 
-.month-card-details {
-  margin-top: 0.65rem;
-  padding-top: 0.6rem;
+.annual-month-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-top: 0.7rem;
+}
+
+.annual-month-meta > div {
+  padding-top: 0.55rem;
   border-top: 1px solid rgba(44, 24, 16, 0.06);
 }
 
-.month-card-details span {
+.annual-month-meta span,
+.annual-month-meta strong {
   display: block;
-  color: rgba(44, 24, 16, 0.5);
-  font-size: 0.6rem;
-  line-height: 1.4;
 }
 
-.month-card-details span + span {
-  margin-top: 0.16rem;
+.annual-month-meta span {
+  color: rgba(44, 24, 16, 0.45);
+  font-size: 0.58rem;
+}
+
+.annual-month-meta strong {
+  margin-top: 0.12rem;
+  font-size: 0.7rem;
+}
+
+.annual-month-empty {
+  margin: 0.55rem 0 0;
+  color: rgba(44, 24, 16, 0.5);
+  font-size: 0.65rem;
 }
 
 .share-section {
@@ -1811,72 +1861,99 @@ onMounted(fetchMoodData);
     font-size: 0.5rem;
   }
 
-  /* Annuel : lisible et compact */
+  /* Annuel : une vue courte, avec un seul mois détaillé */
   .annual-view .year-nav {
     margin-bottom: 0.45rem;
   }
 
-  .annual-summary {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.3rem;
-    margin-bottom: 0.45rem;
+  .annual-chart-card {
+    padding: 0.68rem 0.58rem 0.58rem;
+    border-radius: 15px;
   }
 
-  .annual-summary > div {
-    padding: 0.42rem 0.38rem;
-    border-radius: 11px;
-    text-align: center;
+  .annual-chart-head {
+    align-items: center;
+    margin-bottom: 0.35rem;
   }
 
-  .annual-summary span {
-    font-size: 0.48rem;
+  .annual-chart-head .tracking-kicker {
+    display: none;
   }
 
-  .annual-summary strong {
-    margin: 0.02rem 0;
-    font-size: 0.9rem;
+  .annual-chart-head h3 {
+    font-size: 0.78rem;
   }
 
-  .annual-summary small {
-    font-size: 0.43rem;
+  .annual-chart-head > small {
+    font-size: 0.52rem;
   }
 
   .annual-chart {
     height: auto;
-    display: grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));
-    align-items: end;
-    gap: 0.45rem 0.28rem;
-    overflow: visible;
-    padding: 0.35rem 0.15rem 0.2rem;
-    border-bottom: 0;
+    gap: 0.34rem 0.2rem;
+    padding: 0.18rem 0 0;
   }
 
   .month-column {
-    min-width: 0;
     height: auto;
-    grid-template-rows: 54px auto auto;
-    gap: 0.18rem;
+    grid-template-rows: 45px auto auto;
+    gap: 0.14rem;
+    padding: 0.1rem 0 0.18rem;
+    border-radius: 9px;
   }
 
   .month-bar-track {
-    width: 16px;
-    height: 54px;
-    border-radius: 999px;
+    width: 14px;
+    height: 45px;
   }
 
   .month-column strong {
-    font-size: 0.52rem;
-    line-height: 1;
+    font-size: 0.48rem;
   }
 
   .month-column small {
-    font-size: 0.46rem;
-    line-height: 1;
+    font-size: 0.43rem;
   }
 
-  .months-grid {
+  .annual-chart-hint {
     display: none;
+  }
+
+  .annual-month-detail {
+    margin-top: 0.5rem;
+    padding: 0.68rem 0.72rem;
+    border-radius: 14px;
+  }
+
+  .annual-month-main > div > span {
+    font-size: 0.54rem;
+  }
+
+  .annual-month-main h3 {
+    font-size: 0.82rem;
+  }
+
+  .annual-month-meta {
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+  }
+
+  .annual-month-meta > div {
+    padding-top: 0.42rem;
+  }
+
+  .annual-month-meta span {
+    font-size: 0.5rem;
+  }
+
+  .annual-month-meta strong {
+    font-size: 0.62rem;
+  }
+
+  .annual-month-empty {
+    margin-top: 0.4rem;
+    font-size: 0.56rem;
   }
 
   .share-section {
@@ -1952,24 +2029,24 @@ onMounted(fetchMoodData);
   }
 
   .annual-chart {
-    gap: 0.36rem 0.16rem;
+    gap: 0.3rem 0.12rem;
   }
 
   .month-column {
-    grid-template-rows: 48px auto auto;
+    grid-template-rows: 41px auto auto;
   }
 
   .month-bar-track {
-    width: 14px;
-    height: 48px;
+    width: 13px;
+    height: 41px;
   }
 
   .month-column strong {
-    font-size: 0.48rem;
+    font-size: 0.46rem;
   }
 
   .month-column small {
-    font-size: 0.44rem;
+    font-size: 0.41rem;
   }
 }
 </style>
