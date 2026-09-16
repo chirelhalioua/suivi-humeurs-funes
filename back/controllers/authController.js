@@ -129,14 +129,17 @@ const deleteUserProfile = async (req, res) => {
 // Envoyer un email transactionnel via Brevo sans dépendance supplémentaire
 const sendResetEmail = (to, resetUrl) => {
   return new Promise((resolve, reject) => {
-    if (!process.env.BREVO_API_KEY) {
+    const brevoApiKey = String(process.env.BREVO_API_KEY || '').trim();
+    const mailFrom = String(process.env.MAIL_FROM || 'contact@chirelhalioua.fr').trim();
+
+    if (!brevoApiKey) {
       return reject(new Error('BREVO_API_KEY manquante'));
     }
 
     const payload = JSON.stringify({
       sender: {
         name: 'Les Humeurs à la Funès',
-        email: process.env.MAIL_FROM || 'contact@chirelhalioua.fr'
+        email: mailFrom
       },
       to: [{ email: to }],
       subject: 'Réinitialisation de votre mot de passe',
@@ -162,7 +165,7 @@ const sendResetEmail = (to, resetUrl) => {
       method: 'POST',
       headers: {
         'accept': 'application/json',
-        'api-key': process.env.BREVO_API_KEY,
+        'api-key': brevoApiKey,
         'content-type': 'application/json',
         'content-length': Buffer.byteLength(payload)
       }
