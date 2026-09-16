@@ -141,8 +141,8 @@ input[type="text"]{
 }
 input:focus{
   outline:none;
-  border-color:#8e6d59;
-  box-shadow:0 0 0 3px rgba(142,109,89,.12);
+  border-color:#78986a;
+  box-shadow:0 0 0 3px rgba(120,152,106,.16);
 }
 .show-password{
   display:flex;
