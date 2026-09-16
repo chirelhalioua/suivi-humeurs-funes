@@ -296,7 +296,7 @@ onMounted(fetchHumeurs);
   display: inline-block;
   margin-bottom: 0.45rem;
   color: #9b6d1f;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.16em;
 }
@@ -523,7 +523,7 @@ onMounted(fetchHumeurs);
 .note-heading label {
   display: block;
   color: var(--brown);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 700;
 }
 
@@ -734,11 +734,11 @@ onMounted(fetchHumeurs);
 
 @media (max-width: 560px) {
   .choose-mood-page {
-    padding: 1.05rem 0.7rem 2.4rem;
+    padding: 1.15rem 0.7rem 2.6rem;
   }
 
   .mood-header {
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.9rem;
   }
 
   .mood-kicker {
@@ -747,7 +747,7 @@ onMounted(fetchHumeurs);
   }
 
   .mood-header h1 {
-    font-size: 1.72rem;
+    font-size: 1.78rem;
   }
 
   .mood-header p {
@@ -769,7 +769,7 @@ onMounted(fetchHumeurs);
   .nav-arrow {
     position: absolute;
     z-index: 3;
-    top: 88px;
+    top: 93px;
     width: 34px;
     height: 34px;
     background: rgba(255, 250, 240, 0.94);
@@ -789,9 +789,9 @@ onMounted(fetchHumeurs);
 
   .mood-image-wrap,
   .mood-image {
-    height: 180px;
-    min-height: 180px;
-    max-height: 180px;
+    height: 190px;
+    min-height: 190px;
+    max-height: 190px;
   }
 
   .film-pill {
@@ -803,7 +803,7 @@ onMounted(fetchHumeurs);
   }
 
   .mood-copy {
-    padding: 0.78rem 0.9rem 0.85rem;
+    padding: 0.84rem 0.92rem 0.9rem;
   }
 
   .mood-meta-row {
@@ -820,11 +820,11 @@ onMounted(fetchHumeurs);
 
   .mood-copy h2 {
     margin-bottom: 0.38rem;
-    font-size: 1.48rem;
+    font-size: 1.52rem;
   }
 
   .mood-copy .film-quote {
-    font-size: 1.02rem;
+    font-size: 1.06rem;
     line-height: 1.25;
   }
 
@@ -835,21 +835,21 @@ onMounted(fetchHumeurs);
   }
 
   .quick-mood {
-    min-width: 70px;
-    flex-basis: 70px;
+    min-width: 73px;
+    flex-basis: 73px;
     gap: 0.22rem;
-    padding: 0.48rem 0.38rem;
+    padding: 0.52rem 0.4rem;
     border-radius: 14px;
-    font-size: 0.58rem;
+    font-size: 0.6rem;
   }
 
   .quick-emoji {
-    font-size: 1.08rem;
+    font-size: 1.12rem;
   }
 
   .mood-note {
     margin-top: 0.5rem;
-    padding: 0.72rem 0.78rem;
+    padding: 0.78rem 0.82rem;
     border-radius: 15px;
   }
 
@@ -873,10 +873,10 @@ onMounted(fetchHumeurs);
   }
 
   .mood-note textarea {
-    min-height: 58px;
+    min-height: 62px;
     padding: 0.68rem 0.72rem;
     border-radius: 11px;
-    font-size: 0.74rem;
+    font-size: 0.76rem;
     line-height: 1.4;
   }
 
@@ -887,9 +887,9 @@ onMounted(fetchHumeurs);
 
   .save-mood-btn {
     margin-top: 0.62rem;
-    padding: 0.68rem 0.72rem 0.68rem 0.9rem;
+    padding: 0.72rem 0.76rem 0.72rem 0.92rem;
     border-radius: 13px;
-    font-size: 0.74rem;
+    font-size: 0.76rem;
   }
 
   .save-icon {
@@ -911,21 +911,21 @@ onMounted(fetchHumeurs);
 
   .mood-image-wrap,
   .mood-image {
-    height: 165px;
-    min-height: 165px;
-    max-height: 165px;
+    height: 172px;
+    min-height: 172px;
+    max-height: 172px;
   }
 
   .nav-arrow {
-    top: 80px;
+    top: 84px;
   }
 
   .mood-copy {
-    padding: 0.7rem 0.78rem 0.78rem;
+    padding: 0.74rem 0.8rem 0.82rem;
   }
 
   .mood-header h1 {
-    font-size: 1.58rem;
+    font-size: 1.63rem;
   }
 }
 </style>
