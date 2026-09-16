@@ -63,7 +63,6 @@
                   <div class="preview-movie-image">
                     <img src="https://media.gettyimages.com/id/1193495368/fr/photo/lacteur-fran%C3%A7ais-louis-de-funes-invit%C3%A9-de-l%C3%A9mission-les-rendez-vous-du-dimanche-pr%C3%A9sent%C3%A9e-par.jpg?s=2048x2048&w=gi&k=20&c=UljXJU8EOKgAe2_bIQ9TXxO9lMOvvJ76fJRoNw4KdWo=" alt="Louis de Funès" />
                     <div class="preview-image-label">
-                      <span>Humeur du jour</span>
                       <b>Heureux</b>
                     </div>
                   </div>
@@ -425,19 +424,17 @@ const goToRegister = async () => {
 }
 .preview-image-label{
   position:absolute;
-  left:7px;
-  bottom:7px;
+  right:6px;
+  bottom:6px;
   display:flex;
   align-items:center;
-  gap:.35rem;
-  padding:.28rem .45rem;
+  padding:.2rem .36rem;
   border-radius:999px;
-  background:rgba(44,24,16,.82);
+  background:rgba(44,24,16,.62);
   color:#fff8e9;
-  backdrop-filter:blur(5px);
+  backdrop-filter:blur(4px);
 }
-.preview-image-label span{font-size:.34rem;opacity:.8}
-.preview-image-label b{font-size:.43rem}
+.preview-image-label b{font-size:.38rem;font-weight:700}
 .preview-emojis{
   display:grid;
   grid-template-columns:repeat(5,1fr);
