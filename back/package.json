@@ -21,7 +21,7 @@
     "validator": "^13.12.0"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": "22.x"
   },
   "license": "ISC"
 }
