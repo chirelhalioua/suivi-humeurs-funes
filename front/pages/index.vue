@@ -599,29 +599,47 @@ const goToRegister = async () => {
   background:linear-gradient(180deg,#fff 0%,#fffaf0 100%);
 }
 .mood-list{
-  max-width:780px;
+  max-width:920px;
   margin:auto;
   display:flex;
   flex-direction:column;
-  gap:.85rem;
+  gap:.9rem;
 }
 .mood-row{
   position:relative;
   display:grid;
-  grid-template-columns:54px 220px 1fr;
+  grid-template-columns:58px 250px 1fr;
   align-items:center;
-  gap:1rem;
-  min-height:150px;
-  padding:.75rem 1rem .75rem .75rem;
+  gap:1.15rem;
+  min-height:160px;
+  padding:.8rem 1.15rem .8rem .8rem;
   background:#fffdf8;
   border:1px solid rgba(44,24,16,.075);
   border-radius:20px;
   box-shadow:0 8px 22px rgba(44,24,16,.045);
   transition:transform .25s,box-shadow .25s;
 }
+.mood-row::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  padding:2px;
+  box-sizing:border-box;
+  border-radius:inherit;
+  background:conic-gradient(from var(--border-angle),transparent 0 62%,var(--green) 72%,#a8c99b 82%,transparent 92%);
+  opacity:0;
+  pointer-events:none;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+}
 .mood-row:hover{
   transform:translateY(-3px);
   box-shadow:0 12px 28px rgba(44,24,16,.075);
+}
+.mood-row:hover::before{
+  opacity:1;
+  animation:greenBorderTrace 1.25s linear infinite;
 }
 .mood-row-number{
   align-self:start;
@@ -638,7 +656,7 @@ const goToRegister = async () => {
 }
 .mood-image-wrapper{
   position:relative;
-  height:126px;
+  height:136px;
   overflow:hidden;
   border-radius:15px;
   background:linear-gradient(145deg,#efe6d2,#f8f3e8);
@@ -785,7 +803,7 @@ const goToRegister = async () => {
     padding:1.4rem;
     gap:1rem;
   }
-  .mood-list{max-width:720px}
+  .mood-list{max-width:860px}
 }
 
 @media(max-width:760px){
