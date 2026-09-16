@@ -2123,7 +2123,7 @@ onMounted(fetchMoodData);
   }
 
   .tracking-hero h1 {
-    font-size: 1.65rem;
+    font-size: 1.8rem;
   }
 
   .view-toggle {
