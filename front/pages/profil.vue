@@ -1,65 +1,143 @@
 <template>
   <div class="profile-page">
-    <!-- Loading State -->
     <div v-if="isLoading" class="loading-state">
       <div class="spinner"></div>
-      <p>Chargement de votre profil...</p>
+      <p>Chargement de ton espace...</p>
     </div>
 
-    <!-- Profile Content -->
     <div v-else-if="user" class="profile-container">
-      <!-- Profile Header -->
-      <div class="profile-header">
-        <div class="profile-avatar">
-          {{ user.name.charAt(0).toUpperCase() }}
+      <header class="dashboard-header">
+        <div class="welcome-copy">
+          <span class="dashboard-kicker">MON ESPACE</span>
+          <h1>Bonjour, {{ firstName }} <span aria-hidden="true">👋</span></h1>
+          <p>Alors, quelle est ton humeur aujourd’hui ?</p>
         </div>
-        <h1>Bienvenue, {{ user.name }} !</h1>
-      </div>
 
-      <!-- Profile Info Card -->
-      <div class="info-card">
-        <div class="info-item">
-          <i class="fas fa-user"></i>
-          <div class="info-content">
-            <label>Nom et Prénom</label>
-            <p>{{ user.name }}</p>
+        <div class="user-pill">
+          <div class="profile-avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
+          <div>
+            <strong>{{ user.name }}</strong>
+            <span>{{ user.email }}</span>
           </div>
         </div>
-        <div class="info-item">
-          <i class="fas fa-envelope"></i>
-          <div class="info-content">
-            <label>Email</label>
-            <p>{{ user.email }}</p>
+      </header>
+
+      <section class="dashboard-grid">
+        <article class="dashboard-card mood-card-main">
+          <div class="card-heading">
+            <div>
+              <span class="card-kicker">AUJOURD’HUI</span>
+              <h2>Mon humeur</h2>
+            </div>
+            <button class="mini-action" @click="goToHumeursChoice">
+              {{ recentMood ? 'Changer' : 'Choisir' }}
+              <span>→</span>
+            </button>
           </div>
-        </div>
-      </div>
 
-      <!-- Action Buttons -->
-      <div class="action-cards">
-        <button class="action-card" @click="goToHumeursChoice">
-          <i class="fas fa-smile"></i>
-          <span>Choix des Humeurs</span>
-        </button>
-        <button class="action-card" @click="goToMoodTracking">
-          <i class="fas fa-chart-line"></i>
-          <span>Suivi des Humeurs</span>
-        </button>
-      </div>
+          <div v-if="recentMood" class="current-mood">
+            <div class="current-mood-image">
+              <img :src="recentMood.image" :alt="recentMood.title" />
+            </div>
+            <div class="current-mood-copy">
+              <span class="mood-meta">
+                {{ recentMoodPeriod }} · {{ formatMoodDate(recentMood.date) }}
+              </span>
+              <h3>{{ recentMood.title }}</h3>
+              <p>{{ recentMood.subtitle }}</p>
+              <small v-if="recentMood.film">🎬 {{ recentMood.film }}</small>
+            </div>
+          </div>
 
-      <!-- Account Actions -->
-      <div class="account-actions">
-        <button class="logout-btn" @click="logout">
-          <i class="fas fa-sign-out-alt"></i>
-          <span>Se déconnecter</span>
-        </button>
-        <button class="delete-btn" @click="confirmDelete">
-          <i class="fas fa-trash-alt"></i>
-          <span>Supprimer le profil</span>
-        </button>
-      </div>
+          <div v-else class="empty-mood">
+            <div class="empty-mood-icon">🙂</div>
+            <div>
+              <h3>Pas encore d’humeur enregistrée</h3>
+              <p>Choisis celle qui te ressemble le plus aujourd’hui.</p>
+            </div>
+          </div>
+
+          <p class="handwritten-dashboard">
+            Une humeur, une expression…
+            <span>↗</span>
+          </p>
+        </article>
+
+        <article class="dashboard-card tracking-card">
+          <div class="card-heading tracking-heading">
+            <div>
+              <span class="card-kicker">MON SUIVI</span>
+              <h2>Cette semaine</h2>
+            </div>
+            <span class="week-total">{{ weekCount }} humeur{{ weekCount > 1 ? 's' : '' }}</span>
+          </div>
+
+          <div class="week-chart" aria-label="Humeurs enregistrées sur les sept derniers jours">
+            <div v-for="bar in weeklyBars" :key="bar.key" class="bar-column">
+              <div class="bar-track">
+                <span
+                  class="bar-fill"
+                  :class="{ empty: bar.count === 0 }"
+                  :style="{ height: bar.height }"
+                ></span>
+              </div>
+              <span class="bar-label">{{ bar.label }}</span>
+            </div>
+          </div>
+
+          <div class="tracking-summary">
+            <div>
+              <strong>{{ activeDays }}</strong>
+              <span>jours suivis</span>
+            </div>
+            <div>
+              <strong>{{ moodEntries.length }}</strong>
+              <span>humeurs au total</span>
+            </div>
+          </div>
+
+          <button class="secondary-action" @click="goToMoodTracking">
+            Voir tout mon suivi
+            <span>→</span>
+          </button>
+        </article>
+
+        <aside class="quote-card">
+          <span class="quote-mark">“</span>
+          <p>Le bonheur, ça se cultive aussi dans les petits moments.</p>
+          <span class="quote-signature">À la manière de Louis de Funès</span>
+        </aside>
+
+        <article class="dashboard-card account-card">
+          <div class="account-copy">
+            <span class="card-kicker">MON COMPTE</span>
+            <h2>Mes informations</h2>
+            <div class="account-details">
+              <div>
+                <span>Nom et prénom</span>
+                <strong>{{ user.name }}</strong>
+              </div>
+              <div>
+                <span>Email</span>
+                <strong>{{ user.email }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="account-actions">
+            <button class="logout-btn" @click="logout">
+              <i class="fas fa-sign-out-alt"></i>
+              Se déconnecter
+            </button>
+            <button class="delete-btn" @click="confirmDelete">
+              <i class="fas fa-trash-alt"></i>
+              Supprimer le profil
+            </button>
+          </div>
+        </article>
+      </section>
     </div>
 
-    <!-- Delete Confirmation Modal -->
     <Transition name="modal">
       <div v-if="showConfirmDelete" class="modal-overlay" @click="cancelDelete">
         <div class="modal-content" @click.stop>
@@ -67,14 +145,12 @@
             <i class="fas fa-exclamation-triangle"></i>
           </div>
           <h2>Supprimer le profil ?</h2>
-          <p>Cette action est irréversible. Toutes vos données seront définitivement supprimées.</p>
+          <p>Cette action est irréversible. Toutes tes données seront définitivement supprimées.</p>
           <div class="modal-actions">
             <button class="cancel-btn" @click="cancelDelete">
-              <i class="fas fa-times"></i>
               Annuler
             </button>
             <button class="confirm-btn" @click="deleteProfile">
-              <i class="fas fa-trash-alt"></i>
               Confirmer la suppression
             </button>
           </div>
@@ -85,7 +161,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
@@ -93,218 +169,594 @@ const router = useRouter();
 const user = ref(null);
 const isLoading = ref(true);
 const showConfirmDelete = ref(false);
+const moodEntries = ref([]);
+const recentMood = ref(null);
 
-// Fonction pour récupérer les informations du profil
+const firstName = computed(() => user.value?.name?.trim().split(/\s+/)[0] || "toi");
+
+const recentMoodPeriod = computed(() => {
+  if (!recentMood.value) return "";
+  return recentMood.value.timeOfDay === "morning" ? "Matin" : "Soir";
+});
+
+const normalizeDay = (date) => {
+  const d = new Date(date);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+};
+
+const lastSevenDays = computed(() => {
+  const today = normalizeDay(new Date());
+
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - (6 - index));
+    return date;
+  });
+});
+
+const weeklyBars = computed(() => {
+  const labels = ["D", "L", "M", "M", "J", "V", "S"];
+
+  return lastSevenDays.value.map((date) => {
+    const count = moodEntries.value.filter((entry) => {
+      return normalizeDay(entry.date).getTime() === date.getTime();
+    }).length;
+
+    return {
+      key: date.toISOString(),
+      label: labels[date.getDay()],
+      count,
+      height: count === 0 ? "12%" : count === 1 ? "56%" : "100%",
+    };
+  });
+});
+
+const weekCount = computed(() => weeklyBars.value.reduce((sum, bar) => sum + bar.count, 0));
+const activeDays = computed(() => weeklyBars.value.filter((bar) => bar.count > 0).length);
+
+const formatMoodDate = (date) => {
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "short",
+  }).format(new Date(date));
+};
+
+const fetchMoodSummary = async (userId) => {
+  try {
+    const response = await axios.get(
+      `https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userId}`
+    );
+
+    moodEntries.value = Array.isArray(response.data) ? response.data : [];
+
+    if (!moodEntries.value.length) return;
+
+    const latestEntry = [...moodEntries.value].sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    )[0];
+
+    const moodResponse = await axios.get(
+      `https://suivi-humeurs-funes.onrender.com/api/humeurs/${latestEntry.humeurId}`
+    );
+
+    recentMood.value = {
+      ...moodResponse.data,
+      date: latestEntry.date,
+      timeOfDay: latestEntry.timeOfDay,
+    };
+  } catch (error) {
+    if (error.response?.status !== 404) {
+      console.error("Erreur lors du chargement du résumé des humeurs :", error);
+    }
+  }
+};
+
 const fetchUserProfile = async () => {
-  const userId = localStorage.getItem("userId"); // Récupérer l'ID utilisateur depuis localStorage
+  const userId = localStorage.getItem("userId");
+
   if (!userId) {
-    router.push("/login"); // Rediriger vers la page de connexion si l'utilisateur n'est pas authentifié
+    router.push("/login");
     return;
   }
 
   try {
-    const response = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/auth/profil`, {
-      params: { userId } // Passer l'ID utilisateur en paramètre
-    });
+    const [profileResponse] = await Promise.all([
+      axios.get("https://suivi-humeurs-funes.onrender.com/api/auth/profil", {
+        params: { userId },
+      }),
+      fetchMoodSummary(userId),
+    ]);
 
-    if (response.data?.user) {
-      user.value = response.data.user; // Mettre à jour le profil de l'utilisateur
-    } else {
+    if (!profileResponse.data?.user) {
       throw new Error("Profil non trouvé");
     }
+
+    user.value = profileResponse.data.user;
   } catch (error) {
-    console.error("Erreur:", error);
-    router.push("/login"); // Rediriger vers la page de connexion en cas d'erreur
+    console.error("Erreur lors du chargement du profil :", error);
+    router.push("/login");
   } finally {
     isLoading.value = false;
   }
 };
 
-
-// Fonction pour se déconnecter
 const logout = () => {
   localStorage.removeItem("userId");
   router.push("/login");
 };
 
-// Fonction pour naviguer vers le choix des humeurs
 const goToHumeursChoice = () => router.push("/choisir-humeurs");
-
-// Fonction pour naviguer vers le suivi des humeurs
 const goToMoodTracking = () => router.push("/suivi-humeurs");
-
-// Fonction pour afficher la confirmation de suppression
 const confirmDelete = () => (showConfirmDelete.value = true);
-
-// Fonction pour annuler la suppression
 const cancelDelete = () => (showConfirmDelete.value = false);
 
-// Fonction pour supprimer le profil
 const deleteProfile = async () => {
   const userId = localStorage.getItem("userId");
-  console.log("🔍 UserID utilisé pour la suppression :", userId);
 
   if (!userId) {
-    console.error("❌ Aucun userId trouvé !");
-    alert("Erreur : Aucun utilisateur trouvé !");
+    router.push("/login");
     return;
   }
 
   try {
-    const response = await axios.delete(`https://suivi-humeurs-funes.onrender.com/api/auth/profil/${userId}`);
-    console.log("✅ Profil supprimé avec succès", response.data);
-
-    // Suppression réussie → Nettoyage et redirection
+    await axios.delete(
+      `https://suivi-humeurs-funes.onrender.com/api/auth/profil/${userId}`
+    );
     localStorage.removeItem("userId");
     router.push("/login");
   } catch (error) {
-    console.error("❌ Erreur lors de la suppression du profil :", error.response?.data || error);
-    alert(`Erreur : ${error.response?.data?.message || "Échec de la suppression"}`);
+    console.error("Erreur lors de la suppression du profil :", error.response?.data || error);
+    alert(error.response?.data?.message || "Échec de la suppression du profil.");
   }
 };
 
-// Récupérer le profil lors du montage du composant
 onMounted(fetchUserProfile);
 </script>
 
 <style scoped>
-/* Variables */
-:root {
-  --primary-color: #4caf50;
-  --danger-color: #dc3545;
-  --warning-color: #ffc107;
-  --text-color: #2c1810;
-  --bg-color: #f4e4bc;
-  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --transition: all 0.3s ease;
-}
-
-/* Page Layout */
 .profile-page {
+  --brown: #2c1810;
+  --brown-soft: #6b4b3e;
+  --cream: #f4e4bc;
+  --cream-light: #fffaf0;
+  --gold: #e9b949;
+  --green: #78986a;
   min-height: 100vh;
-  background-color: var(--bg-color);
-  padding: 40px 20px;
+  padding: clamp(2rem, 5vw, 4.5rem) 1rem 5rem;
+  background:
+    radial-gradient(circle at 8% 8%, rgba(233, 185, 73, 0.16), transparent 24%),
+    radial-gradient(circle at 92% 16%, rgba(120, 152, 106, 0.09), transparent 20%),
+    linear-gradient(180deg, #fffaf0 0%, #f7edcf 100%);
+  color: var(--brown);
 }
 
 .profile-container {
-  max-width: 800px;
+  width: min(1120px, 100%);
   margin: 0 auto;
-  animation: fadeIn 0.5s ease;
+  animation: fadeIn 0.45s ease;
 }
 
-/* Profile Header */
-.profile-header {
-  text-align: center;
-  margin-bottom: 40px;
+.dashboard-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-kicker,
+.card-kicker {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #9b6d1f;
+}
+
+.welcome-copy h1 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.06;
+}
+
+.welcome-copy p {
+  margin: 0.65rem 0 0;
+  color: rgba(44, 24, 16, 0.62);
+  font-size: 1rem;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 260px;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid rgba(44, 24, 16, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 10px 30px rgba(44, 24, 16, 0.05);
 }
 
 .profile-avatar {
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(135deg, #4caf50, #45a049);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
   border-radius: 50%;
+  background: var(--brown);
+  color: #fff8e9;
+  font-family: "Sora", sans-serif;
+  font-weight: 800;
+}
+
+.user-pill strong,
+.user-pill span {
+  display: block;
+}
+
+.user-pill strong {
+  font-size: 0.9rem;
+}
+
+.user-pill span {
+  margin-top: 0.12rem;
+  color: rgba(44, 24, 16, 0.55);
+  font-size: 0.72rem;
+  word-break: break-word;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.18fr 0.82fr;
+  gap: 1.2rem;
+}
+
+.dashboard-card {
+  border: 1px solid rgba(44, 24, 16, 0.08);
+  border-radius: 26px;
+  background: rgba(255, 253, 248, 0.88);
+  box-shadow: 0 14px 36px rgba(44, 24, 16, 0.055);
+}
+
+.mood-card-main {
+  position: relative;
+  min-height: 370px;
+  padding: clamp(1.3rem, 3vw, 2rem);
+  overflow: hidden;
+}
+
+.mood-card-main::after {
+  content: "";
+  position: absolute;
+  right: -55px;
+  bottom: -70px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(233, 185, 73, 0.13);
+  pointer-events: none;
+}
+
+.card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-heading h2,
+.account-card h2 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+}
+
+.mini-action,
+.secondary-action {
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.mini-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.58rem 0.82rem;
+  border-radius: 999px;
+  background: var(--brown);
+  color: #fff8e9;
+  font-size: 0.76rem;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mini-action:hover,
+.secondary-action:hover {
+  transform: translateY(-2px);
+}
+
+.current-mood {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(180px, 42%) 1fr;
+  align-items: center;
+  gap: 1.35rem;
+}
+
+.current-mood-image {
+  min-height: 220px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #f1e4c7;
+}
+
+.current-mood-image img {
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  display: block;
+  object-fit: cover;
+}
+
+.mood-meta {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  color: var(--green);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.current-mood-copy h3 {
+  margin: 0 0 0.45rem;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(1.45rem, 2.5vw, 2rem);
+}
+
+.current-mood-copy p {
+  margin: 0 0 0.7rem;
+  color: rgba(44, 24, 16, 0.68);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.current-mood-copy small {
+  color: rgba(44, 24, 16, 0.58);
+}
+
+.empty-mood {
+  min-height: 210px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
-  color: white;
-  margin: 0 auto 20px;
-  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+  gap: 1rem;
+  text-align: left;
 }
 
-.profile-header h1 {
-  font-family: "Sora", sans-serif;
-  color: var(--text-color);
-  font-size: 2rem;
-  margin: 0;
-}
-
-/* Info Card */
-.info-card {
-  background: white;
-  border-radius: 16px;
-  padding: 30px;
-  margin-bottom: 30px;
-  box-shadow: var(--card-shadow);
-}
-
-.info-item {
-  display: flex;
-  align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.info-item:last-child {
-  border-bottom: none;
-}
-
-.info-item i {
-  font-size: 24px;
-  color: var(--primary-color);
-  width: 40px;
-}
-
-.info-content {
-  margin-left: 15px;
-}
-
-.info-content label {
-  font-size: 0.9rem;
-  color: #666;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.info-content p {
-  font-size: 1.1rem;
-  color: var(--text-color);
-  margin: 0;
-}
-
-/* Action Cards */
-.action-cards {
+.empty-mood-icon {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  flex: 0 0 68px;
+  border-radius: 22px;
+  background: #f2e0ad;
+  font-size: 1.8rem;
 }
 
-.action-card {
-  background: white;
-  border: none;
-  border-radius: 16px;
-  padding: 30px;
+.empty-mood h3 {
+  margin: 0 0 0.35rem;
+  font-family: "Sora", sans-serif;
+  font-size: 1.1rem;
+}
+
+.empty-mood p {
+  margin: 0;
+  color: rgba(44, 24, 16, 0.6);
+  font-size: 0.86rem;
+}
+
+.handwritten-dashboard {
+  position: relative;
+  z-index: 1;
+  margin: 1.15rem 0 0;
+  text-align: right;
+  font-family: "Caveat", cursive;
+  font-size: 1.25rem;
+  color: var(--brown-soft);
+  transform: rotate(-1deg);
+}
+
+.handwritten-dashboard span {
+  display: inline-block;
+  margin-left: 0.25rem;
+  color: var(--green);
+}
+
+.tracking-card {
+  padding: clamp(1.3rem, 3vw, 1.8rem);
+}
+
+.tracking-heading {
+  align-items: center;
+}
+
+.week-total {
+  padding: 0.45rem 0.65rem;
+  border-radius: 999px;
+  background: #f5e8c4;
+  color: var(--brown);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.week-chart {
+  height: 165px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: end;
+  gap: 0.55rem;
+  padding: 1rem 0 0.45rem;
+  border-bottom: 1px solid rgba(44, 24, 16, 0.08);
+}
+
+.bar-column {
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: center;
-  gap: 15px;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: var(--card-shadow);
+  gap: 0.5rem;
 }
 
-.action-card i {
-  font-size: 32px;
-  color: var(--primary-color);
+.bar-track {
+  width: min(28px, 70%);
+  height: 118px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(44, 24, 16, 0.055);
 }
 
-.action-card span {
-  font-size: 1.1rem;
-  color: var(--text-color);
-  font-weight: 500;
+.bar-fill {
+  width: 100%;
+  min-height: 8px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #e9b949, #c9952f);
+  transition: height 0.45s ease;
 }
 
-.action-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+.bar-fill.empty {
+  background: rgba(120, 152, 106, 0.35);
 }
 
-/* Account Actions */
+.bar-label {
+  color: rgba(44, 24, 16, 0.52);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.tracking-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 1.2rem 0;
+}
+
+.tracking-summary div {
+  padding: 0.75rem;
+  border-radius: 16px;
+  background: #fffaf0;
+}
+
+.tracking-summary strong,
+.tracking-summary span {
+  display: block;
+}
+
+.tracking-summary strong {
+  font-family: "Sora", sans-serif;
+  font-size: 1.2rem;
+}
+
+.tracking-summary span {
+  margin-top: 0.15rem;
+  color: rgba(44, 24, 16, 0.55);
+  font-size: 0.7rem;
+}
+
+.secondary-action {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.78rem 0.9rem;
+  border-radius: 14px;
+  background: var(--brown);
+  color: #fff8e9;
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+}
+
+.quote-card {
+  position: relative;
+  min-height: 205px;
+  padding: 1.7rem;
+  overflow: hidden;
+  border-radius: 26px;
+  background: linear-gradient(145deg, #2b1710, #4a2a1d);
+  color: #fff7e8;
+  box-shadow: 0 14px 34px rgba(44, 24, 16, 0.13);
+}
+
+.quote-mark {
+  position: absolute;
+  top: -0.55rem;
+  left: 1.1rem;
+  font-family: Georgia, serif;
+  font-size: 5rem;
+  color: rgba(233, 185, 73, 0.35);
+}
+
+.quote-card p {
+  position: relative;
+  z-index: 1;
+  max-width: 430px;
+  margin: 1.55rem 0 1.15rem;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.5;
+}
+
+.quote-signature {
+  color: rgba(255, 247, 232, 0.62);
+  font-size: 0.72rem;
+}
+
+.account-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.6rem;
+}
+
+.account-details {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.account-details span,
+.account-details strong {
+  display: block;
+}
+
+.account-details span {
+  margin-bottom: 0.18rem;
+  color: rgba(44, 24, 16, 0.5);
+  font-size: 0.68rem;
+}
+
+.account-details strong {
+  font-size: 0.82rem;
+  word-break: break-word;
+}
+
 .account-actions {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 0.55rem;
+  min-width: 175px;
 }
 
 .logout-btn,
@@ -312,141 +764,129 @@ onMounted(fetchUserProfile);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 15px;
-  border: none;
+  gap: 0.5rem;
+  padding: 0.72rem 0.85rem;
   border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 500;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: var(--transition);
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .logout-btn {
-  background-color: #f8f9fa;
-  color: #666;
-}
-
-.logout-btn:hover {
-  background-color: #e9ecef;
+  border: 1px solid rgba(44, 24, 16, 0.1);
+  background: #fffaf0;
+  color: var(--brown);
 }
 
 .delete-btn {
-  background-color: red;
-  color: white;
+  border: 1px solid rgba(163, 58, 46, 0.14);
+  background: #fff5f2;
+  color: #9a382e;
 }
 
+.logout-btn:hover,
 .delete-btn:hover {
-  background-color: #f9837a;
+  transform: translateY(-1px);
 }
 
-/* Modal */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 16px;
-  padding: 30px;
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
-}
-
-.modal-icon {
-  font-size: 48px;
-  color: var(--warning-color);
-  margin-bottom: 20px;
-}
-
-.modal-content h2 {
-  color: var(--text-color);
-  margin-bottom: 15px;
-}
-
-.modal-content p {
-  color: #666;
-  margin-bottom: 25px;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-}
-
-.modal-actions button {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: var(--transition);
-}
-
-.cancel-btn {
-  background-color: #f8f9fa;
-  color: #666;
-}
-
-.confirm-btn {
-  background-color: #FF0000;
-  color: white;
-}
-
-/* Loading State */
 .loading-state {
+  min-height: 65vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
+  color: var(--brown);
 }
 
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid var(--primary-color);
+  width: 46px;
+  height: 46px;
+  margin-bottom: 1rem;
+  border: 3px solid rgba(44, 24, 16, 0.1);
+  border-top-color: var(--green);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 20px;
+  animation: spin 0.85s linear infinite;
 }
 
-/* Animations */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(30, 18, 13, 0.58);
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  width: min(410px, 100%);
+  padding: 1.8rem;
+  border-radius: 22px;
+  background: #fffaf0;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.modal-icon {
+  margin-bottom: 0.8rem;
+  color: #c48b28;
+  font-size: 2.2rem;
+}
+
+.modal-content h2 {
+  margin: 0 0 0.65rem;
+  font-family: "Sora", sans-serif;
+}
+
+.modal-content p {
+  margin: 0 0 1.3rem;
+  color: rgba(44, 24, 16, 0.62);
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: 0.72rem;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  border: 1px solid rgba(44, 24, 16, 0.1);
+  background: #fff;
+  color: var(--brown);
+}
+
+.confirm-btn {
+  border: 0;
+  background: #9a382e;
+  color: #fff;
+}
+
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .modal-enter-active,
 .modal-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
 }
 
 .modal-enter-from,
@@ -454,18 +894,118 @@ onMounted(fetchUserProfile);
   opacity: 0;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .profile-container {
-    padding: 20px;
+@media (max-width: 900px) {
+  .dashboard-header {
+    align-items: flex-start;
   }
 
-  .action-cards {
+  .dashboard-grid {
     grid-template-columns: 1fr;
+  }
+
+  .quote-card {
+    min-height: 170px;
+  }
+
+  .account-card {
+    grid-template-columns: 1fr;
+  }
+
+  .account-actions {
+    flex-direction: row;
+    min-width: 0;
+  }
+
+  .account-actions button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 680px) {
+  .profile-page {
+    padding: 1.65rem 0.85rem 3.5rem;
+  }
+
+  .dashboard-header {
+    display: block;
+    margin-bottom: 1.35rem;
+  }
+
+  .welcome-copy p {
+    font-size: 0.9rem;
+  }
+
+  .user-pill {
+    min-width: 0;
+    width: 100%;
+    margin-top: 1.25rem;
+    box-sizing: border-box;
+  }
+
+  .dashboard-card,
+  .quote-card {
+    border-radius: 21px;
+  }
+
+  .mood-card-main,
+  .tracking-card {
+    padding: 1.15rem;
+  }
+
+  .current-mood {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .current-mood-image,
+  .current-mood-image img {
+    min-height: 190px;
+    max-height: 230px;
+  }
+
+  .handwritten-dashboard {
+    text-align: left;
+    font-size: 1.1rem;
+  }
+
+  .week-chart {
+    gap: 0.35rem;
+  }
+
+  .bar-track {
+    width: min(24px, 72%);
+  }
+
+  .account-details {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .account-actions {
+    flex-direction: column;
   }
 
   .modal-actions {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 420px) {
+  .card-heading {
+    align-items: center;
+  }
+
+  .mini-action {
+    padding: 0.5rem 0.66rem;
+    font-size: 0.7rem;
+  }
+
+  .tracking-summary {
+    gap: 0.5rem;
+  }
+
+  .tracking-summary div {
+    padding: 0.65rem;
   }
 }
 </style>
