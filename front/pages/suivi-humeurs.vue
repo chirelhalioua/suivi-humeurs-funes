@@ -918,51 +918,59 @@ onMounted(fetchMoodData);
 }
 
 .week-progress-card {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.7fr);
-  align-items: center;
-  gap: 1.4rem;
   margin-top: 1rem;
-  padding: 1rem 1.1rem;
+  padding: 1rem 1.1rem 1.05rem;
   border-radius: 18px;
   background: rgba(255, 250, 240, 0.72);
+}
+
+.progress-copy {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.progress-copy .tracking-kicker {
+  margin-bottom: 0.2rem;
 }
 
 .progress-copy h3 {
   margin: 0;
   font-family: "Sora", sans-serif;
-  font-size: 1rem;
+  font-size: 0.96rem;
 }
 
 .progress-copy p {
-  margin: 0.25rem 0 0;
+  margin: 0.2rem 0 0;
   color: rgba(44, 24, 16, 0.53);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
 }
 
 .progress-bars {
-  height: 62px;
+  height: 44px;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   align-items: end;
-  gap: 0.4rem;
+  gap: 0.45rem;
 }
 
 .progress-bars span {
-  height: 14%;
-  min-height: 8px;
+  height: 9px;
+  min-height: 9px;
   border-radius: 999px;
   background: rgba(120, 152, 106, 0.18);
-  transition: height 0.25s ease;
+  transition: height 0.25s ease, background 0.25s ease;
 }
 
 .progress-bars span.active {
-  height: 55%;
+  height: 24px;
   background: #8cac80;
 }
 
 .progress-bars span.full {
-  height: 100%;
+  height: 42px;
   background: #64845a;
 }
 
@@ -1083,8 +1091,8 @@ onMounted(fetchMoodData);
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .week-progress-card {
-    grid-template-columns: 1fr;
+  .progress-copy {
+    align-items: flex-start;
   }
 }
 
@@ -1139,6 +1147,14 @@ onMounted(fetchMoodData);
   .day-card {
     min-width: 125px;
     flex: 0 0 125px;
+  }
+
+  .progress-copy {
+    display: block;
+  }
+
+  .progress-bars {
+    margin-top: 0.75rem;
   }
 
   .share-section {
