@@ -3,6 +3,10 @@ import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
+  experimental: {
+    appManifest: false,
+  },
+
   modules: [
     "@pinia/nuxt",
     '@nuxt/content', // Assurez-vous que @nuxt/content est dans les modules
