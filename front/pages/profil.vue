@@ -13,14 +13,46 @@
           <p>Alors, quelle est ton humeur aujourd’hui ?</p>
         </div>
 
-        <div class="user-pill">
-          <div class="profile-avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
-          <div>
-            <strong>{{ user.name }}</strong>
-            <span>{{ user.email }}</span>
+      </header>
+
+      <article class="dashboard-card account-card account-card-top">
+        <div class="account-main">
+          <div class="account-heading">
+            <div class="account-avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
+            <div class="account-title-copy">
+              <span class="card-kicker">MON COMPTE</span>
+              <h2>{{ user.name }}</h2>
+              <p>{{ user.email }}</p>
+            </div>
+          </div>
+
+          <div class="account-details">
+            <div class="account-detail">
+              <span>Profil</span>
+              <strong>{{ user.name }}</strong>
+            </div>
+            <div class="account-detail">
+              <span>Adresse e-mail</span>
+              <strong>{{ user.email }}</strong>
+            </div>
           </div>
         </div>
-      </header>
+
+        <div class="account-actions">
+          <button class="password-btn" @click="goToPasswordReset">
+            <i class="fas fa-key"></i>
+            Modifier le mot de passe
+          </button>
+          <button class="logout-btn" @click="logout">
+            <i class="fas fa-sign-out-alt"></i>
+            Se déconnecter
+          </button>
+          <button class="delete-btn" @click="confirmDelete">
+            <i class="fas fa-trash-alt"></i>
+            Supprimer le profil
+          </button>
+        </div>
+      </article>
 
       <section class="dashboard-grid">
         <article class="dashboard-card mood-card-main">
@@ -108,43 +140,7 @@
           <span class="quote-signature">À la manière de Louis de Funès</span>
         </aside>
 
-        <article class="dashboard-card account-card">
-          <div class="account-main">
-            <div class="account-heading">
-              <div class="account-avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
-              <div>
-                <span class="card-kicker">MON COMPTE</span>
-                <h2>Mon compte</h2>
-              </div>
-            </div>
 
-            <div class="account-details">
-              <div class="account-detail">
-                <span>Nom et prénom</span>
-                <strong>{{ user.name }}</strong>
-              </div>
-              <div class="account-detail">
-                <span>Email</span>
-                <strong>{{ user.email }}</strong>
-              </div>
-            </div>
-          </div>
-
-          <div class="account-actions">
-            <button class="password-btn" @click="goToPasswordReset">
-              <i class="fas fa-key"></i>
-              Modifier le mot de passe
-            </button>
-            <button class="logout-btn" @click="logout">
-              <i class="fas fa-sign-out-alt"></i>
-              Se déconnecter
-            </button>
-            <button class="delete-btn" @click="confirmDelete">
-              <i class="fas fa-trash-alt"></i>
-              Supprimer le profil
-            </button>
-          </div>
-        </article>
       </section>
     </div>
 
@@ -369,11 +365,7 @@ onMounted(fetchUserProfile);
 }
 
 .dashboard-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.4rem;
 }
 
 .dashboard-kicker,
@@ -397,36 +389,6 @@ onMounted(fetchUserProfile);
   margin: 0.65rem 0 0;
   color: rgba(44, 24, 16, 0.62);
   font-size: 1rem;
-}
-
-.user-pill {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  min-width: 260px;
-  padding: 0.7rem 0.85rem;
-  border: 1px solid rgba(44, 24, 16, 0.08);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.65);
-  box-shadow: 0 10px 30px rgba(44, 24, 16, 0.05);
-}
-
-.profile-avatar {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  flex: 0 0 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--brown), #3f5f36);
-  color: #fff8e9;
-  font-family: "Sora", sans-serif;
-  font-weight: 800;
-}
-
-.user-pill strong,
-.user-pill span {
-  display: block;
 }
 
 .user-pill strong {
@@ -756,54 +718,77 @@ onMounted(fetchUserProfile);
 
 .account-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(210px, 0.72fr);
-  align-items: stretch;
-  gap: 1.25rem;
-  padding: 1.45rem;
+  grid-template-columns: minmax(0, 1.15fr) minmax(250px, 0.85fr);
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.35rem 1.45rem;
+}
+
+.account-card-top {
+  margin-bottom: 1.2rem;
+  border-color: rgba(120, 152, 106, 0.16);
+  background:
+    linear-gradient(135deg, rgba(255, 253, 248, 0.96), rgba(235, 244, 230, 0.9));
 }
 
 .account-main {
   min-width: 0;
-  padding: 0.15rem 0;
 }
 
 .account-heading {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.9rem;
 }
 
 .account-avatar {
   display: grid;
   place-items: center;
-  width: 46px;
-  height: 46px;
-  flex: 0 0 46px;
-  border-radius: 15px;
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  border-radius: 18px;
   background: linear-gradient(135deg, #5f7f55, #78986a);
   color: #fff;
   font-family: "Sora", sans-serif;
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: 800;
   box-shadow: 0 8px 20px rgba(120, 152, 106, 0.18);
 }
 
-.account-heading .card-kicker {
-  margin-bottom: 0.2rem;
+.account-title-copy {
+  min-width: 0;
+}
+
+.account-title-copy .card-kicker {
+  margin-bottom: 0.15rem;
+}
+
+.account-title-copy h2 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+}
+
+.account-title-copy p {
+  margin: 0.2rem 0 0;
+  color: rgba(44, 24, 16, 0.55);
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
 }
 
 .account-details {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: 0.7rem;
-  margin-top: 1.05rem;
+  gap: 0.65rem;
+  margin-top: 0.95rem;
 }
 
 .account-detail {
   min-width: 0;
-  padding: 0.72rem 0.82rem;
-  border: 1px solid rgba(120, 152, 106, 0.14);
-  border-radius: 14px;
+  padding: 0.68rem 0.78rem;
+  border: 1px solid rgba(120, 152, 106, 0.13);
+  border-radius: 13px;
   background: rgba(255, 255, 255, 0.48);
 }
 
@@ -813,25 +798,21 @@ onMounted(fetchUserProfile);
 }
 
 .account-details span {
-  margin-bottom: 0.18rem;
-  color: rgba(44, 24, 16, 0.5);
-  font-size: 0.66rem;
+  margin-bottom: 0.15rem;
+  color: rgba(44, 24, 16, 0.46);
+  font-size: 0.64rem;
 }
 
 .account-details strong {
-  overflow: hidden;
   color: var(--brown);
-  font-size: 0.8rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
 }
 
 .account-actions {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 0.5rem;
-  min-width: 0;
 }
 
 .password-btn,
@@ -842,7 +823,7 @@ onMounted(fetchUserProfile);
   align-items: center;
   justify-content: flex-start;
   gap: 0.55rem;
-  padding: 0.7rem 0.8rem;
+  padding: 0.72rem 0.82rem;
   border-radius: 12px;
   font: inherit;
   font-size: 0.72rem;
@@ -1001,16 +982,11 @@ onMounted(fetchUserProfile);
   }
 
   .account-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-width: 0;
-  }
-
-  .password-btn {
-    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .account-actions button {
+    justify-content: center;
     min-width: 0;
   }
 }
@@ -1027,13 +1003,6 @@ onMounted(fetchUserProfile);
 
   .welcome-copy p {
     font-size: 0.9rem;
-  }
-
-  .user-pill {
-    min-width: 0;
-    width: 100%;
-    margin-top: 1.25rem;
-    box-sizing: border-box;
   }
 
   .dashboard-card,
@@ -1076,8 +1045,11 @@ onMounted(fetchUserProfile);
   }
 
   .account-actions {
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  .account-actions button {
+    justify-content: flex-start;
   }
 
   .account-details strong {
