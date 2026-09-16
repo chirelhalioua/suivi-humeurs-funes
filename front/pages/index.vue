@@ -418,11 +418,11 @@ const goToRegister = async () => {
   position:relative;
   width:250px;
   height:455px;
-  border:8px solid #141111;
+  border:7px solid #241713;
   border-radius:38px;
-  background:#111;
+  background:#241713;
   padding:5px;
-  box-shadow:0 22px 44px rgba(44,24,16,.18);
+  box-shadow:0 18px 34px rgba(44,24,16,.16);
   transform:rotate(-1deg);
 }
 .preview-notch{
@@ -434,7 +434,7 @@ const goToRegister = async () => {
   width:82px;
   height:18px;
   border-radius:0 0 16px 16px;
-  background:#111;
+  background:#241713;
 }
 .preview-screen{
   height:100%;
