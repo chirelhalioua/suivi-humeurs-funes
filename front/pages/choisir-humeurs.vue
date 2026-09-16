@@ -463,27 +463,28 @@ onMounted(fetchHumeurs);
   align-items: center;
   gap: 0.35rem;
   padding: 0.58rem 0.5rem;
-  border: 1px solid rgba(44, 24, 16, 0.08);
+  border: 1px solid rgba(233, 185, 73, 0.28);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.62);
+  background: linear-gradient(145deg, #fff7dc, #ffedb3);
   color: var(--brown);
   font: inherit;
   font-size: 0.69rem;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .quick-mood:hover {
   transform: translateY(-2px);
-  border-color: rgba(120, 152, 106, 0.28);
+  border-color: rgba(233, 185, 73, 0.58);
+  box-shadow: 0 7px 18px rgba(233, 185, 73, 0.12);
 }
 
 .quick-mood.active {
-  border-color: rgba(120, 152, 106, 0.48);
-  background: #eaf3e6;
-  color: #47643f;
-  box-shadow: 0 7px 18px rgba(120, 152, 106, 0.12);
+  border-color: #e9b949;
+  background: linear-gradient(145deg, #ffe898, #ffd15d);
+  color: var(--brown);
+  box-shadow: 0 7px 18px rgba(233, 185, 73, 0.2);
 }
 
 .quick-emoji {
