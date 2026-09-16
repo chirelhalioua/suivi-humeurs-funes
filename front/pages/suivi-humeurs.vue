@@ -122,9 +122,9 @@
                 <div class="daily-copy">
                   <span v-if="morningMood.film" class="film-tag">{{ morningMood.film }}</span>
                   <h4>{{ morningMood.title }}</h4>
-                  <p>{{ morningMood.subtitle }}</p>
-                  <small v-if="morningMood.description && morningMood.description !== 'Aucune description fournie'">
-                    “{{ morningMood.description }}”
+                  <p class="film-quote">“{{ morningMood.subtitle }}”</p>
+                  <small v-if="morningMood.description && morningMood.description !== 'Aucune description fournie'" class="mood-description">
+                    {{ morningMood.description }}
                   </small>
                 </div>
               </div>
@@ -152,9 +152,9 @@
                 <div class="daily-copy">
                   <span v-if="eveningMood.film" class="film-tag">{{ eveningMood.film }}</span>
                   <h4>{{ eveningMood.title }}</h4>
-                  <p>{{ eveningMood.subtitle }}</p>
-                  <small v-if="eveningMood.description && eveningMood.description !== 'Aucune description fournie'">
-                    “{{ eveningMood.description }}”
+                  <p class="film-quote">“{{ eveningMood.subtitle }}”</p>
+                  <small v-if="eveningMood.description && eveningMood.description !== 'Aucune description fournie'" class="mood-description">
+                    {{ eveningMood.description }}
                   </small>
                 </div>
               </div>
@@ -1065,18 +1065,22 @@ onMounted(fetchMoodData);
 
 .daily-copy p {
   margin: 0;
-  color: rgba(44, 24, 16, 0.6);
-  font-size: 0.76rem;
-  line-height: 1.5;
+  color: rgba(44, 24, 16, 0.62);
+  line-height: 1.35;
 }
 
-.daily-copy small {
+.daily-copy .film-quote {
+  font-family: "Caveat", cursive;
+  font-size: 1.08rem;
+}
+
+.daily-copy .mood-description {
   display: block;
   margin-top: 0.65rem;
-  color: rgba(44, 24, 16, 0.5);
-  font-family: "Caveat", cursive;
-  font-size: 1rem;
-  line-height: 1.25;
+  color: rgba(44, 24, 16, 0.52);
+  font-family: "Sora", sans-serif;
+  font-size: 0.7rem;
+  line-height: 1.45;
 }
 
 .empty-mood {
@@ -1190,9 +1194,9 @@ onMounted(fetchMoodData);
   margin-top: 0.22rem;
   overflow: hidden;
   color: rgba(44, 24, 16, 0.48);
-  font-family: "Caveat", cursive;
-  font-size: 0.68rem;
-  line-height: 1.15;
+  font-family: "Sora", sans-serif;
+  font-size: 0.52rem;
+  line-height: 1.3;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
@@ -1813,18 +1817,19 @@ onMounted(fetchMoodData);
     font-size: 0.88rem;
   }
 
-  .daily-copy p {
+  .daily-copy .film-quote {
     display: -webkit-box;
     overflow: hidden;
-    font-size: 0.64rem;
-    line-height: 1.32;
+    font-size: 0.9rem;
+    line-height: 1.2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
 
-  .daily-copy small {
-    margin-top: 0.25rem;
-    font-size: 0.76rem;
+  .daily-copy .mood-description {
+    margin-top: 0.28rem;
+    font-size: 0.58rem;
+    line-height: 1.35;
   }
 
   .empty-mood {
@@ -1907,8 +1912,8 @@ onMounted(fetchMoodData);
 
   .mini-description {
     margin-top: 0.16rem;
-    font-size: 0.58rem;
-    line-height: 1.1;
+    font-size: 0.48rem;
+    line-height: 1.25;
     -webkit-line-clamp: 2;
   }
 
