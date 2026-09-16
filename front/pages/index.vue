@@ -701,94 +701,80 @@ const goToRegister = async () => {
 /* FINAL CTA */
 .final-cta-section{
   position:relative;
-  background:linear-gradient(145deg,#2d160f,#482317);
-  padding:clamp(4.2rem,7vw,6.2rem) clamp(1rem,4vw,3rem);
-  overflow:hidden;
+  background:#fff7e7;
+  padding:3.1rem 1rem 3.35rem;
+  border-top:1px solid rgba(44,24,16,.06);
+}
+.final-cta-section::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:50%;
+  width:72px;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+  transform:translateX(-50%);
+  opacity:.7;
 }
 .final-cta-card{
   position:relative;
-  max-width:1100px;
+  max-width:820px;
   margin:auto;
   padding:0;
   text-align:center;
-  color:#fff8e9;
-}
-.final-cta-section::before,
-.final-cta-section::after{
-  content:'';
-  position:absolute;
-  border-radius:50%;
-  border:1px solid rgba(255,243,212,.10);
-  pointer-events:none;
-}
-.final-cta-section::before{
-  width:300px;
-  height:300px;
-  right:-120px;
-  top:-150px;
-}
-.final-cta-section::after{
-  width:210px;
-  height:210px;
-  left:-90px;
-  bottom:-120px;
+  color:var(--brown);
 }
 .final-cta-note{
-  position:relative;
-  z-index:1;
   display:inline-block;
-  margin-bottom:.35rem;
+  margin-bottom:.25rem;
   font-family:'Caveat',cursive;
-  font-size:1.2rem;
-  color:#f4e4bc;
-  transform:rotate(-2deg);
+  font-size:1.15rem;
+  color:rgba(90,58,45,.72);
+  transform:rotate(-1.5deg);
 }
 .final-cta-card h2{
-  position:relative;
-  z-index:1;
-  margin:0 0 .6rem;
-  font-size:clamp(1.7rem,3vw,2.35rem);
-  line-height:1.1;
+  margin:0 0 .5rem;
+  font-size:clamp(1.65rem,3vw,2.2rem);
+  line-height:1.12;
+  font-weight:800;
 }
 .final-cta-card p{
-  position:relative;
-  z-index:1;
-  max-width:620px;
-  margin:0 auto 1.5rem;
-  color:rgba(255,248,233,.76);
-  font-size:.86rem;
-  line-height:1.6;
+  max-width:590px;
+  margin:0 auto 1.25rem;
+  color:rgba(44,24,16,.62);
+  font-size:.84rem;
+  line-height:1.55;
 }
 .final-cta-button{
-  position:relative;
-  z-index:1;
   display:inline-flex;
   align-items:center;
   gap:.65rem;
   border:0;
   border-radius:999px;
-  padding:.72rem 1rem .72rem 1.15rem;
-  background:#f4e4bc;
-  color:#2c1810;
+  padding:.7rem .85rem .7rem 1.1rem;
+  background:var(--brown);
+  color:#fff8e9;
   font:inherit;
-  font-size:.82rem;
+  font-size:.8rem;
   font-weight:800;
   cursor:pointer;
-  box-shadow:0 9px 20px rgba(0,0,0,.12);
-  transition:transform .25s,background .25s;
+  box-shadow:0 8px 18px rgba(44,24,16,.12);
+  transition:transform .25s,box-shadow .25s,background .25s;
 }
 .final-cta-button:hover{
-  transform:translateY(-3px);
-  background:#fff2cf;
+  transform:translateY(-2px);
+  background:#3b2016;
+  box-shadow:0 11px 22px rgba(44,24,16,.16);
 }
 .final-cta-button span:last-child{
   display:grid;
   place-items:center;
-  width:23px;
-  height:23px;
+  width:22px;
+  height:22px;
   border-radius:50%;
-  background:#2c1810;
-  color:#f4e4bc;
+  background:#f4e4bc;
+  color:var(--brown);
 }
 
 /* RESPONSIVE */
@@ -805,8 +791,11 @@ const goToRegister = async () => {
 }
 
 @media(max-width:860px){
-  .concept-section,.app-preview-section,.mood-section,.final-cta-section{
+  .concept-section,.app-preview-section,.mood-section{
     padding:3rem .85rem;
+  }
+  .final-cta-section{
+    padding:2.8rem .9rem 3rem;
   }
   .section-header{margin-bottom:1.8rem}
   .section-title{font-size:clamp(1.5rem,7vw,1.95rem)}
@@ -989,14 +978,18 @@ const goToRegister = async () => {
   }
 
   .final-cta-section{
-    padding:3.6rem 1rem;
+    padding:2.65rem .85rem 2.9rem;
   }
   .final-cta-card h2{
-    font-size:clamp(1.65rem,8vw,2.05rem);
+    font-size:clamp(1.55rem,8vw,1.95rem);
   }
   .final-cta-card p{
-    font-size:.82rem;
-    line-height:1.55;
+    max-width:440px;
+    font-size:.81rem;
+    line-height:1.5;
+  }
+  .final-cta-button{
+    font-size:.77rem;
   }
 }
 
