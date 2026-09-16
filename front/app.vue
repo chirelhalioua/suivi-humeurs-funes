@@ -21,7 +21,6 @@
             <NuxtLink to="/profil" class="nav-link" active-class="nav-link-active">Votre profil</NuxtLink>
             <NuxtLink to="/choisir-humeurs" class="nav-link" active-class="nav-link-active">Choix des Humeurs</NuxtLink>
             <NuxtLink to="/suivi-humeurs" class="nav-link" active-class="nav-link-active">Suivi des Humeurs</NuxtLink>
-            <NuxtLink to="/conseils-bien-etre" class="nav-link" active-class="nav-link-active">Bien-être</NuxtLink>
             <button @click="logout" class="nav-link">Déconnexion</button>
           </template>
           <NuxtLink to="/contact" class="nav-link" active-class="nav-link-active">Contact</NuxtLink>
@@ -44,7 +43,6 @@
           <NuxtLink to="/profil" class="mobile-link" @click="closeMenu">Votre profil</NuxtLink>
           <NuxtLink to="/choisir-humeurs" class="mobile-link" @click="closeMenu">Choix des Humeurs</NuxtLink>
           <NuxtLink to="/suivi-humeurs" class="mobile-link" @click="closeMenu">Suivi des Humeurs</NuxtLink>
-          <NuxtLink to="/conseils-bien-etre" class="mobile-link" @click="closeMenu">Bien-être</NuxtLink>
           <button @click="logout" class="mobile-link">Déconnexion</button>
         </template>
         <NuxtLink to="/contact" class="mobile-link" @click="closeMenu">Contact</NuxtLink>
