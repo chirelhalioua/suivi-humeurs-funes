@@ -81,7 +81,7 @@ Ce projet est sous licence MIT. Veuillez consulter le fichier [LICENSE](LICENSE)
 Pour toute question ou suggestion, veuillez contacter :
 
 - **Nom** : Chirel Halioua
-- **Email** : chirelhalioua@gmail.com
+- **Email** : contact@chirelhalioua.fr
 - **GitHub** : [chirelhalioua](https://github.com/chirelhalioua)
 
 ---
