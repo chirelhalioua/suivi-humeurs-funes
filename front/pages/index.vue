@@ -34,7 +34,7 @@
 
     <section class="app-preview-section">
       <div class="section-header preview-section-header">
-        <span class="section-kicker">UN APERÇU</span>
+        <span class="section-kicker">L’EXPÉRIENCE</span>
         <h2 class="section-title">Dans l’application</h2>
         <p class="section-subtitle">Ton humeur, ton suivi et une touche de Louis de Funès.</p>
       </div>
@@ -101,8 +101,8 @@
 
     <section class="mood-section">
       <div class="section-header">
-        <span class="section-kicker">UN APERÇU</span>
-        <h2 class="section-title">Aperçu des Humeurs</h2>
+        <span class="section-kicker">LES HUMEURS</span>
+        <h2 class="section-title">Quelques humeurs</h2>
       </div>
       <div class="mood-grid">
         <article v-for="(mood,index) in moods" :key="mood._id" class="mood-card">
@@ -135,10 +135,54 @@ const concepts = [
 ]
 
 const moods = ref([
-  {_id:'local-joyeux',title:'Joyeux',subtitle:'Aujourd’hui, tout me fait sourire !',film:'L’Homme orchestre · 1970',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Louis_de_Fun%C3%A8s_%E2%80%94_L%27Homme_orchestre_%281970%29.jpg',imageLoaded:false},
-  {_id:'local-enerve',title:'Énervé',subtitle:'Il ne faudrait pas trop me chercher aujourd’hui…',film:'L’Homme orchestre · 1970',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Louis_de_Fun%C3%A8s_2_%E2%80%94_L%27Homme_orchestre_%281970%29.jpg',imageLoaded:false},
-  {_id:'local-surpris',title:'Surpris',subtitle:'Alors ça, je ne l’avais vraiment pas vu venir !',film:'L’Homme orchestre · 1970',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Louis_de_Fun%C3%A8s_3_%E2%80%94_L%27Homme_orchestre_%281970%29.jpg',imageLoaded:false},
-  {_id:'local-fatigue',title:'Fatigué',subtitle:'Aujourd’hui, je tourne clairement au ralenti.',film:'L’Homme orchestre · 1970',image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Louis_de_Fun%C3%A8s_4_%E2%80%94_L%27Homme_orchestre_%281970%29.jpg',imageLoaded:false}
+  {
+    _id:'60b6c48f0c9c9f67a15a6b67',
+    title:'Heureux',
+    subtitle:'Mais c’est formidable !',
+    film:'Le Corniaud',
+    image:'https://media.gettyimages.com/id/1193495368/fr/photo/louis-de-funes.jpg',
+    imageLoaded:false
+  },
+  {
+    _id:'60b6c48f0c9c9f67a15a6b69',
+    title:'Rieur',
+    subtitle:'Ah, ah, ah ! Vous voulez rire ? Eh bien, rions',
+    film:'Hibernatus',
+    image:'https://media.gettyimages.com/id/1190193064/fr/photo/louis-de-funes.jpg',
+    imageLoaded:false
+  },
+  {
+    _id:'60b6c48f0c9c9f67a15a6b70',
+    title:'Étonné',
+    subtitle:'Mon Dieu ! Qu’est-ce que c’est que ça ?!',
+    film:'La Folie des grandeurs',
+    image:'https://media.gettyimages.com/id/1190193033/fr/photo/louis-de-funes.jpg',
+    imageLoaded:false
+  },
+  {
+    _id:'60b6c48f0c9c9f67a15a6b71',
+    title:'Énervé',
+    subtitle:'C’était pas mauvais, c’était très mauvais !',
+    film:'La Grande Vadrouille',
+    image:'https://media.gettyimages.com/id/1190192831/fr/photo/louis-de-funes.jpg',
+    imageLoaded:false
+  },
+  {
+    _id:'60b6c48f0c9c9f67a15a6b68',
+    title:'Fatigué',
+    subtitle:'Je ne sais pas ce que c’est, mais je me sens tout de même fatigué...',
+    film:'Fantomas contre Scotland Yard',
+    image:'https://media.gettyimages.com/id/1190193586/fr/photo/louis-de-funes.jpg',
+    imageLoaded:false
+  },
+  {
+    _id:'60b6c48f0c9c9f67a15a6b72',
+    title:'Triste',
+    subtitle:'Je suis triste, tout ça me fatigue, tout ça me dépasse...',
+    film:'Rabbi Jacob',
+    image:'https://media.gettyimages.com/id/1175705018/fr/photo/louis-de-funes.jpg',
+    imageLoaded:false
+  }
 ])
 
 const goToRegister = async () => {
@@ -180,7 +224,7 @@ const goToRegister = async () => {
 .section-subtitle{color:rgba(44,24,16,.66);line-height:1.6}.preview-section-header{margin-bottom:2.4rem}
 
 /* CONCEPT */
-.concept-grid,.mood-grid{max-width:1180px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.concept-grid{max-width:1180px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}.mood-grid{max-width:1080px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
 .concept-card{position:relative;min-height:215px;padding:1.35rem;border-radius:22px;background:rgba(255,255,255,.88);border:1px solid rgba(44,24,16,.08);box-shadow:0 10px 28px rgba(44,24,16,.05);transition:transform .25s,box-shadow .25s}
 .concept-card::before,.preview-benefit::before{content:'';position:absolute;inset:0;padding:2px;box-sizing:border-box;border-radius:inherit;background:conic-gradient(from var(--border-angle),transparent 0 62%,var(--green) 72%,#a8c99b 82%,transparent 92%);opacity:0;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
 .concept-card:hover{transform:translateY(-5px) scale(1.015);box-shadow:0 16px 38px rgba(44,24,16,.09)}
