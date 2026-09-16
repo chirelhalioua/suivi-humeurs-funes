@@ -1,705 +1,1182 @@
 <template>
-  <div class="mood-tracking-page">
-    <!-- Header avec navigation -->
-    <div class="tracking-header">
-      <h1>Suivi des Humeurs</h1>
+  <div class="tracking-page">
+    <section class="tracking-shell">
+      <header class="tracking-hero">
+        <div>
+          <span class="tracking-kicker">MON SUIVI</span>
+          <h1>Mes humeurs</h1>
+          <p>Observe ton évolution, jour après jour, sans perdre la touche de Louis de Funès.</p>
+        </div>
+
+        <div class="summary-cards">
+          <div class="summary-card">
+            <span>Cette semaine</span>
+            <strong>{{ currentWeekCount }}</strong>
+            <small>humeur{{ currentWeekCount > 1 ? "s" : "" }}</small>
+          </div>
+          <div class="summary-card green">
+            <span>Jours suivis</span>
+            <strong>{{ currentWeekDays }}</strong>
+            <small>sur 7 jours</small>
+          </div>
+        </div>
+      </header>
+
       <div class="view-toggle">
         <button
-          :class="['toggle-btn', { active: view === 'daily' }]"
+          type="button"
+          :class="{ active: view === 'daily' }"
           @click="changeView('daily')"
         >
           <i class="fas fa-calendar-day"></i>
           Journalier
         </button>
         <button
-          :class="['toggle-btn', { active: view === 'weekly' }]"
+          type="button"
+          :class="{ active: view === 'weekly' }"
           @click="changeView('weekly')"
         >
           <i class="fas fa-calendar-week"></i>
           Hebdomadaire
         </button>
       </div>
-    </div>
-    <!-- Loading State -->
-    <div v-if="isLoading" class="loading-state">
-      <div class="spinner"></div>
-      <p>Chargement de vos humeurs...</p>
-    </div>
 
-    <div v-else>
-      <!-- Vue Journalière -->
-      <div v-if="view === 'daily'" class="daily-view">
-        <div class="date-selector">
-          <button class="nav-btn" @click="previousDay">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <div class="current-date">
-            <h2>{{ formatDate(selectedDate) }}</h2>
-            <p>{{ days[selectedDate.getDay()] }}</p>
-          </div>
-          <button
-            class="nav-btn"
-            @click="nextDay"
-            :disabled="isToday(selectedDate)"
-          >
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </div>
-
-        <div class="moods-container">
-          <!-- Humeur du Matin -->
-          <div class="mood-card morning">
-            <div class="time-label">
-              <i class="fas fa-sun"></i>
-              Matin
-            </div>
-            <div v-if="morningData[selectedDate.getDay()]" class="mood-content">
-              <div class="mood-image-container">
-                <img
-                  :src="morningData[selectedDate.getDay()].image"
-                  :alt="morningData[selectedDate.getDay()].title"
-                  class="mood-image"
-                />
-              </div>
-              <div class="mood-details">
-                <h3>{{ morningData[selectedDate.getDay()].title }}</h3>
-                <p>{{ morningData[selectedDate.getDay()].subtitle }}</p>
-              </div>
-            </div>
-            <div v-else class="mood-empty">
-              <i class="fas fa-cloud"></i>
-              <p>Pas d'humeur enregistrée</p>
-            </div>
-          </div>
-
-          <!-- Humeur du Soir -->
-          <div class="mood-card evening">
-            <div class="time-label">
-              <i class="fas fa-moon"></i>
-              Soir
-            </div>
-            <div v-if="eveningData[selectedDate.getDay()]" class="mood-content">
-              <div class="mood-image-container">
-                <img
-                  :src="eveningData[selectedDate.getDay()].image"
-                  :alt="eveningData[selectedDate.getDay()].title"
-                  class="mood-image"
-                />
-              </div>
-              <div class="mood-details">
-                <h3>{{ eveningData[selectedDate.getDay()].title }}</h3>
-                <p>{{ eveningData[selectedDate.getDay()].subtitle }}</p>
-              </div>
-            </div>
-            <div v-else class="mood-empty">
-              <i class="fas fa-cloud"></i>
-              <p>Pas d'humeur enregistrée</p>
-            </div>
-          </div>
-        </div>
+      <div v-if="isLoading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Chargement de tes humeurs...</p>
       </div>
 
-      <!-- Vue Hebdomadaire -->
-      <div v-else class="weekly-view">
-        <div class="week-grid">
-          <div
-            v-for="(date, index) in weekDates"
-            :key="index"
-            class="day-card"
-            :class="{ 'current-day': isToday(date) }"
-          >
-            <div class="day-header">
-              <h3>{{ days[date.getDay()] }}</h3>
-              <p>{{ formatDateShort(date) }}</p>
+      <template v-else>
+        <section v-if="view === 'daily'" class="daily-view">
+          <div class="period-nav">
+            <button class="nav-btn" type="button" @click="previousDay" aria-label="Jour précédent">←</button>
+            <div class="period-copy">
+              <span>{{ days[selectedDate.getDay()] }}</span>
+              <h2>{{ formatDate(selectedDate) }}</h2>
+              <small v-if="isToday(selectedDate)">Aujourd’hui</small>
             </div>
+            <button
+              class="nav-btn"
+              type="button"
+              @click="nextDay"
+              :disabled="isToday(selectedDate)"
+              aria-label="Jour suivant"
+            >
+              →
+            </button>
+          </div>
 
-            <div class="day-moods">
-              <!-- Matin -->
-              <div class="mini-mood morning">
-                <span class="time-indicator">Matin</span>
-                <div
-                  v-if="morningData[date.getDay()]"
-                  class="mini-mood-content"
-                >
+          <div class="day-moods">
+            <article class="daily-card">
+              <div class="daily-card-header">
+                <div class="time-icon morning">☀️</div>
+                <div>
+                  <span>MATIN</span>
+                  <h3>Humeur du matin</h3>
+                </div>
+              </div>
+
+              <div v-if="morningMood" class="daily-mood-content">
+                <div class="daily-image">
+                  <img :src="morningMood.image" :alt="morningMood.title" />
+                </div>
+                <div class="daily-copy">
+                  <span v-if="morningMood.film" class="film-tag">{{ morningMood.film }}</span>
+                  <h4>{{ morningMood.title }}</h4>
+                  <p>{{ morningMood.subtitle }}</p>
+                  <small v-if="morningMood.description && morningMood.description !== 'Aucune description fournie'">
+                    “{{ morningMood.description }}”
+                  </small>
+                </div>
+              </div>
+
+              <div v-else class="empty-mood">
+                <span>☁️</span>
+                <h4>Pas d’humeur enregistrée</h4>
+                <p>Ce créneau est encore vide.</p>
+              </div>
+            </article>
+
+            <article class="daily-card">
+              <div class="daily-card-header">
+                <div class="time-icon evening">🌙</div>
+                <div>
+                  <span>SOIR</span>
+                  <h3>Humeur du soir</h3>
+                </div>
+              </div>
+
+              <div v-if="eveningMood" class="daily-mood-content">
+                <div class="daily-image">
+                  <img :src="eveningMood.image" :alt="eveningMood.title" />
+                </div>
+                <div class="daily-copy">
+                  <span v-if="eveningMood.film" class="film-tag">{{ eveningMood.film }}</span>
+                  <h4>{{ eveningMood.title }}</h4>
+                  <p>{{ eveningMood.subtitle }}</p>
+                  <small v-if="eveningMood.description && eveningMood.description !== 'Aucune description fournie'">
+                    “{{ eveningMood.description }}”
+                  </small>
+                </div>
+              </div>
+
+              <div v-else class="empty-mood">
+                <span>✨</span>
+                <h4>Pas d’humeur enregistrée</h4>
+                <p>Ce créneau est encore vide.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section v-else class="weekly-view">
+          <div class="period-nav week-nav">
+            <button class="nav-btn" type="button" @click="previousWeek" aria-label="Semaine précédente">←</button>
+            <div class="period-copy">
+              <span>SEMAINE</span>
+              <h2>{{ formatWeekRange }}</h2>
+              <small v-if="isCurrentWeek">Cette semaine</small>
+            </div>
+            <button
+              class="nav-btn"
+              type="button"
+              @click="nextWeek"
+              :disabled="isCurrentWeek"
+              aria-label="Semaine suivante"
+            >
+              →
+            </button>
+          </div>
+
+          <div class="week-overview">
+            <article
+              v-for="date in weekDates"
+              :key="dateKey(date)"
+              :class="['day-card', { today: isToday(date) }]"
+            >
+              <div class="day-card-header">
+                <span>{{ shortDays[date.getDay()] }}</span>
+                <strong>{{ date.getDate() }}</strong>
+              </div>
+
+              <div class="mini-period">
+                <span class="mini-label">☀️ Matin</span>
+                <div v-if="getMood(date, 'morning')" class="mini-mood">
                   <img
-                    :src="morningData[date.getDay()].image"
-                    :alt="morningData[date.getDay()].title"
+                    :src="getMood(date, 'morning').image"
+                    :alt="getMood(date, 'morning').title"
                   />
-                  <span>{{ morningData[date.getDay()].title }}</span>
+                  <strong>{{ getMood(date, 'morning').title }}</strong>
                 </div>
-                <div v-else class="mini-mood-empty">
-                  <i class="fas fa-minus-circle"></i>
-                </div>
+                <div v-else class="mini-empty">—</div>
               </div>
 
-              <!-- Soir -->
-              <div class="mini-mood evening">
-                <span class="time-indicator">Soir</span>
-                <div
-                  v-if="eveningData[date.getDay()]"
-                  class="mini-mood-content"
-                >
+              <div class="mini-period">
+                <span class="mini-label">🌙 Soir</span>
+                <div v-if="getMood(date, 'evening')" class="mini-mood">
                   <img
-                    :src="eveningData[date.getDay()].image"
-                    :alt="eveningData[date.getDay()].title"
+                    :src="getMood(date, 'evening').image"
+                    :alt="getMood(date, 'evening').title"
                   />
-                  <span>{{ eveningData[date.getDay()].title }}</span>
+                  <strong>{{ getMood(date, 'evening').title }}</strong>
                 </div>
-                <div v-else class="mini-mood-empty">
-                  <i class="fas fa-minus-circle"></i>
-                </div>
+                <div v-else class="mini-empty">—</div>
               </div>
+            </article>
+          </div>
+
+          <div class="week-progress-card">
+            <div class="progress-copy">
+              <span class="tracking-kicker">TA SEMAINE EN UN COUP D’ŒIL</span>
+              <h3>{{ weekTrackedSlots }} humeur{{ weekTrackedSlots > 1 ? "s" : "" }} enregistrée{{ weekTrackedSlots > 1 ? "s" : "" }}</h3>
+              <p>{{ weekTrackedDays }} jour{{ weekTrackedDays > 1 ? "s" : "" }} suivi{{ weekTrackedDays > 1 ? "s" : "" }} sur 7.</p>
+            </div>
+
+            <div class="progress-bars" aria-label="Progression de la semaine">
+              <span
+                v-for="date in weekDates"
+                :key="'bar-' + dateKey(date)"
+                :class="{ active: dayMoodCount(date) > 0, full: dayMoodCount(date) > 1 }"
+              ></span>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </section>
 
-    <div class="share-button-container">
-      <div class="share-btn" @click="toggleSocials">
-        Partager mon humeur
-        <div class="social-icons" v-if="socialsVisible">
-          <a :href="facebookShareLink" target="_blank">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a :href="twitterShareLink" target="_blank">
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a :href="linkedinShareLink" target="_blank">
-            <i class="fab fa-linkedin-in"></i>
-          </a>
-          <a :href="whatsappShareLink" target="_blank">
-            <i class="fab fa-whatsapp"></i>
-          </a>
-        </div>
-      </div>
-    </div>
+        <section class="share-section">
+          <div class="share-copy">
+            <span class="tracking-kicker">PARTAGER</span>
+            <h3>Une humeur à partager ?</h3>
+            <p>Envoie ton humeur du jour à tes proches en quelques secondes.</p>
+          </div>
+
+          <div class="share-actions">
+            <button class="share-main" type="button" @click="toggleSocials">
+              <span>Partager mon humeur</span>
+              <i class="fas fa-share-alt"></i>
+            </button>
+
+            <Transition name="fade">
+              <div v-if="socialsVisible" class="social-icons">
+                <a :href="facebookShareLink" target="_blank" rel="noopener" aria-label="Partager sur Facebook">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+                <a :href="twitterShareLink" target="_blank" rel="noopener" aria-label="Partager sur X">
+                  <i class="fab fa-twitter"></i>
+                </a>
+                <a :href="linkedinShareLink" target="_blank" rel="noopener" aria-label="Partager sur LinkedIn">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a :href="whatsappShareLink" target="_blank" rel="noopener" aria-label="Partager sur WhatsApp">
+                  <i class="fab fa-whatsapp"></i>
+                </a>
+              </div>
+            </Transition>
+          </div>
+        </section>
+      </template>
+    </section>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 import axios from "axios";
 
 const view = ref("daily");
 const selectedDate = ref(new Date());
 const isLoading = ref(true);
-const morningData = ref([]);
-const eveningData = ref([]);
 const socialsVisible = ref(false);
+const moodMap = ref(new Map());
 
 const days = [
-  "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
+  "Dimanche",
+  "Lundi",
+  "Mardi",
+  "Mercredi",
+  "Jeudi",
+  "Vendredi",
+  "Samedi",
 ];
 
-const formatDate = (date) => {
-  return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric" }).format(date);
+const shortDays = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+
+const dateKey = (date) => {
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 };
 
-const formatDateShort = (date) => {
-  return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "numeric" }).format(date);
-};
+const formatDate = (date) =>
+  new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+
+const formatDateShort = (date) =>
+  new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "short",
+  }).format(date);
 
 const isToday = (date) => {
   const today = new Date();
-  return date.toDateString() === today.toDateString();
+  return dateKey(today) === dateKey(date);
 };
 
+const getMood = (date, period) =>
+  moodMap.value.get(`${dateKey(date)}-${period}`) || null;
+
+const morningMood = computed(() => getMood(selectedDate.value, "morning"));
+const eveningMood = computed(() => getMood(selectedDate.value, "evening"));
+
 const previousDay = () => {
-  selectedDate.value = new Date(selectedDate.value.setDate(selectedDate.value.getDate() - 1));
+  const next = new Date(selectedDate.value);
+  next.setDate(next.getDate() - 1);
+  selectedDate.value = next;
 };
 
 const nextDay = () => {
-  if (!isToday(selectedDate.value)) {
-    selectedDate.value = new Date(selectedDate.value.setDate(selectedDate.value.getDate() + 1));
-  }
+  if (isToday(selectedDate.value)) return;
+  const next = new Date(selectedDate.value);
+  next.setDate(next.getDate() + 1);
+  selectedDate.value = next;
 };
 
 const changeView = (newView) => {
   view.value = newView;
+  socialsVisible.value = false;
 };
+
+const startOfWeek = (date) => {
+  const result = new Date(date);
+  const day = result.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  result.setDate(result.getDate() + diff);
+  result.setHours(0, 0, 0, 0);
+  return result;
+};
+
+const weekDates = computed(() => {
+  const start = startOfWeek(selectedDate.value);
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(start);
+    date.setDate(start.getDate() + index);
+    return date;
+  });
+});
+
+const currentWeekDates = computed(() => {
+  const start = startOfWeek(new Date());
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(start);
+    date.setDate(start.getDate() + index);
+    return date;
+  });
+});
+
+const isCurrentWeek = computed(
+  () => dateKey(weekDates.value[0]) === dateKey(currentWeekDates.value[0])
+);
+
+const formatWeekRange = computed(() => {
+  const start = weekDates.value[0];
+  const end = weekDates.value[6];
+  return `${formatDateShort(start)} — ${formatDateShort(end)}`;
+});
+
+const previousWeek = () => {
+  const next = new Date(selectedDate.value);
+  next.setDate(next.getDate() - 7);
+  selectedDate.value = next;
+};
+
+const nextWeek = () => {
+  if (isCurrentWeek.value) return;
+  const next = new Date(selectedDate.value);
+  next.setDate(next.getDate() + 7);
+
+  if (next > new Date()) {
+    selectedDate.value = new Date();
+  } else {
+    selectedDate.value = next;
+  }
+};
+
+const dayMoodCount = (date) =>
+  Number(Boolean(getMood(date, "morning"))) + Number(Boolean(getMood(date, "evening")));
+
+const weekTrackedSlots = computed(() =>
+  weekDates.value.reduce((sum, date) => sum + dayMoodCount(date), 0)
+);
+
+const weekTrackedDays = computed(
+  () => weekDates.value.filter((date) => dayMoodCount(date) > 0).length
+);
+
+const currentWeekCount = computed(() =>
+  currentWeekDates.value.reduce((sum, date) => sum + dayMoodCount(date), 0)
+);
+
+const currentWeekDays = computed(
+  () => currentWeekDates.value.filter((date) => dayMoodCount(date) > 0).length
+);
 
 const fetchMoodData = async () => {
   const userId = localStorage.getItem("userId");
+
   if (!userId) {
-    console.error("ID utilisateur non trouvé");
+    isLoading.value = false;
     return;
   }
+
   try {
     isLoading.value = true;
-    const moodsResponse = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userId}`);
-    morningData.value = Array(7).fill(null);
-    eveningData.value = Array(7).fill(null);
-    for (const entry of moodsResponse.data) {
-      const moodDetails = await axios.get(`https://suivi-humeurs-funes.onrender.com/api/humeurs/${entry.humeurId}`);
-      const dayIndex = new Date(entry.date).getDay();
-      if (entry.timeOfDay === "morning") {
-        morningData.value[dayIndex] = moodDetails.data;
-      } else {
-        eveningData.value[dayIndex] = moodDetails.data;
+    const moodsResponse = await axios.get(
+      `https://suivi-humeurs-funes.onrender.com/api/humeurs_utilisateurs/${userId}`
+    );
+
+    const entries = Array.isArray(moodsResponse.data) ? moodsResponse.data : [];
+    const uniqueEntries = new Map();
+
+    entries.forEach((entry) => {
+      const key = `${dateKey(entry.date)}-${entry.timeOfDay}`;
+      const current = uniqueEntries.get(key);
+
+      if (!current || String(entry._id) > String(current._id)) {
+        uniqueEntries.set(key, entry);
       }
-    }
+    });
+
+    const hydrated = await Promise.all(
+      Array.from(uniqueEntries.entries()).map(async ([key, entry]) => {
+        const moodResponse = await axios.get(
+          `https://suivi-humeurs-funes.onrender.com/api/humeurs/${entry.humeurId}`
+        );
+
+        return [
+          key,
+          {
+            ...moodResponse.data,
+            description: entry.description,
+            date: entry.date,
+            timeOfDay: entry.timeOfDay,
+          },
+        ];
+      })
+    );
+
+    moodMap.value = new Map(hydrated);
   } catch (error) {
-    console.error("Erreur lors de la récupération des données:", error);
+    if (error.response?.status === 404) {
+      moodMap.value = new Map();
+    } else {
+      console.error("Erreur lors de la récupération des humeurs :", error);
+    }
   } finally {
     isLoading.value = false;
   }
 };
 
-const weekDates = computed(() => {
-  const startOfWeek = new Date(selectedDate.value);
-  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-  return Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(startOfWeek);
-    date.setDate(startOfWeek.getDate() + i);
-    return date;
-  });
-});
-
 const toggleSocials = () => {
   socialsVisible.value = !socialsVisible.value;
 };
 
-  // Partage sur les réseaux sociaux
 const formattedShareText = computed(() => {
   const date = formatDate(selectedDate.value);
-  const moodMorning = morningData.value[selectedDate.value.getDay()];
-  const moodEvening = eveningData.value[selectedDate.value.getDay()];
+  const morning = morningMood.value;
+  const evening = eveningMood.value;
 
-  let shareText = `📅 ${date} - Mon humeur :\n`;
-  shareText += moodMorning ? `🌞 Matin : ${moodMorning.title}\n` : "🌞 Matin : Pas d'humeur enregistrée\n";
-  shareText += moodEvening ? `🌙 Soir : ${moodEvening.title}\n` : "🌙 Soir : Pas d'humeur enregistrée\n";
+  let text = `📅 ${date} - Mon humeur :\n`;
+  text += morning
+    ? `🌞 Matin : ${morning.title}\n`
+    : "🌞 Matin : Pas d'humeur enregistrée\n";
+  text += evening
+    ? `🌙 Soir : ${evening.title}\n`
+    : "🌙 Soir : Pas d'humeur enregistrée\n";
 
-  return shareText;
+  return text;
 });
 
 const siteUrl = "https://suivi-humeurs-funes.vercel.app/";
-const encodedShareText = computed(() => encodeURIComponent(formattedShareText.value));
-const fullText = computed(() => encodeURIComponent(`${formattedShareText.value} ${siteUrl}`));
+const encodedShareText = computed(() =>
+  encodeURIComponent(formattedShareText.value)
+);
+const fullText = computed(() =>
+  encodeURIComponent(`${formattedShareText.value} ${siteUrl}`)
+);
 
-// Facebook : Texte + lien
-const facebookShareLink = computed(() => {
-  return `https://www.facebook.com/sharer/sharer.php?u=${siteUrl}&quote=${encodedShareText.value}`;
-});
+const facebookShareLink = computed(
+  () =>
+    `https://www.facebook.com/sharer/sharer.php?u=${siteUrl}&quote=${encodedShareText.value}`
+);
 
-// Twitter : Texte + lien dans le tweet
-const twitterShareLink = computed(() => {
-  return `https://twitter.com/intent/tweet?text=${fullText.value}`;
-});
+const twitterShareLink = computed(
+  () => `https://twitter.com/intent/tweet?text=${fullText.value}`
+);
 
-// LinkedIn : Texte + lien
-const linkedinShareLink = computed(() => {
-  return `https://www.linkedin.com/shareArticle?mini=true&url=${siteUrl}&title=Partager mon humeur&summary=${encodedShareText.value}`;
-});
+const linkedinShareLink = computed(
+  () =>
+    `https://www.linkedin.com/shareArticle?mini=true&url=${siteUrl}&title=Partager mon humeur&summary=${encodedShareText.value}`
+);
 
-// WhatsApp : Texte + lien
-const whatsappShareLink = computed(() => {
-  return `https://wa.me/?text=${fullText.value}`;
-});
-
+const whatsappShareLink = computed(
+  () => `https://wa.me/?text=${fullText.value}`
+);
 
 onMounted(fetchMoodData);
 </script>
 
 <style scoped>
-.mood-tracking-page {
-  padding: 20px;
-}
-
-.tracking-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.view-toggle {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.toggle-btn {
-  padding: 10px 20px;
-  cursor: pointer;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.toggle-btn.active {
-  background-color: #46A34A;
-  color: white;
-}
-
-.daily-view, .weekly-view {
-  margin-top: 20px;
-}
-
-.share-button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.share-btn {
-  background-color: #46A34A;
-  color: white;
-  width: 200px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  position: relative;
-}
-
-.social-icons {
-  display: flex;
-  gap: 10px;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 10px;
-}
-
-.social-icons i {
-  font-size: 1.5rem;
-  color: #46A34A;
-  transition: 0.3s ease;
-}
-
-.share-btn:hover .social-icons i {
-  color: #388e3c;
-}
-</style>
-
-
-<style scoped>
-/* Variables */
-:root {
-  --primary-color: #4caf50;
-  --secondary-color: #2c1810;
-  --background-color: #f4e4bc;
-  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --transition: all 0.3s ease;
-}
-
-/* Page Layout */
-.mood-tracking-page {
+.tracking-page {
+  --brown: #2c1810;
+  --brown-soft: #6b4b3e;
+  --cream: #f4e4bc;
+  --gold: #e9b949;
+  --green: #78986a;
   min-height: 100vh;
-  background-color: var(--background-color);
-  padding: 40px 20px;
+  padding: clamp(2rem, 5vw, 4.5rem) 1rem 5rem;
+  background:
+    radial-gradient(circle at 10% 7%, rgba(233, 185, 73, 0.14), transparent 24%),
+    radial-gradient(circle at 90% 12%, rgba(120, 152, 106, 0.1), transparent 21%),
+    linear-gradient(180deg, #fffaf0 0%, #f7edcf 100%);
+  color: var(--brown);
 }
 
-/* Header Styles */
-.tracking-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.tracking-header h1 {
-  font-family: "Sora", sans-serif;
-  color: var(--secondary-color);
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-}
-
-/* View Toggle */
-.view-toggle {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-
-.toggle-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 50px;
-  background: white;
-  color: var(--secondary-color);
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.toggle-btn.active {
-  background: #46A34A;
-  color: white;
-}
-
-.toggle-btn i {
-  font-size: 1.1rem;
-}
-
-/* Loading State */
-.loading-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid var(--primary-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 20px;
-}
-
-/* Daily View */
-.daily-view {
-  max-width: 1000px;
+.tracking-shell {
+  width: min(1120px, 100%);
   margin: 0 auto;
 }
 
-.date-selector {
+.tracking-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 2rem;
+  margin-bottom: 1.45rem;
+}
+
+.tracking-kicker {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  color: #9b6d1f;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.tracking-hero h1 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(2rem, 5vw, 3.3rem);
+  line-height: 1.05;
+}
+
+.tracking-hero > div:first-child > p {
+  max-width: 590px;
+  margin: 0.65rem 0 0;
+  color: rgba(44, 24, 16, 0.6);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(115px, 1fr));
+  gap: 0.65rem;
+}
+
+.summary-card {
+  min-width: 120px;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(44, 24, 16, 0.08);
+  border-radius: 17px;
+  background: rgba(255, 253, 248, 0.82);
+  box-shadow: 0 8px 22px rgba(44, 24, 16, 0.05);
+}
+
+.summary-card.green {
+  background: #edf5e9;
+  border-color: rgba(120, 152, 106, 0.18);
+}
+
+.summary-card span,
+.summary-card strong,
+.summary-card small {
+  display: block;
+}
+
+.summary-card span {
+  color: rgba(44, 24, 16, 0.5);
+  font-size: 0.62rem;
+}
+
+.summary-card strong {
+  margin: 0.12rem 0;
+  font-family: "Sora", sans-serif;
+  font-size: 1.35rem;
+}
+
+.summary-card small {
+  color: rgba(44, 24, 16, 0.48);
+  font-size: 0.62rem;
+}
+
+.view-toggle {
+  width: fit-content;
+  display: flex;
+  gap: 0.25rem;
+  margin: 0 auto 1.15rem;
+  padding: 0.28rem;
+  border: 1px solid rgba(44, 24, 16, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 253, 248, 0.75);
+}
+
+.view-toggle button {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 30px;
+  gap: 0.45rem;
+  padding: 0.64rem 0.95rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(44, 24, 16, 0.62);
+  font: inherit;
+  font-size: 0.73rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-.current-date {
-  text-align: center;
+.view-toggle button.active {
+  background: var(--brown);
+  color: #fff8e9;
+  box-shadow: 0 5px 14px rgba(44, 24, 16, 0.13);
 }
 
-.current-date h2 {
-  font-size: 1.5rem;
-  color: var(--secondary-color);
-  margin-bottom: 4px;
+.daily-view,
+.weekly-view {
+  padding: clamp(1rem, 3vw, 1.45rem);
+  border: 1px solid rgba(44, 24, 16, 0.07);
+  border-radius: 28px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 253, 248, 0.94),
+    rgba(240, 246, 236, 0.78)
+  );
+  box-shadow: 0 16px 42px rgba(44, 24, 16, 0.06);
 }
 
-.current-date p {
-  color: #666;
+.period-nav {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: 500px;
+  margin: 0 auto 1.2rem;
 }
 
 .nav-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--secondary-color);
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(44, 24, 16, 0.08);
+  border-radius: 50%;
+  background: #fffaf0;
+  color: var(--brown);
+  font-size: 1rem;
   cursor: pointer;
-  padding: 8px;
-  transition: var(--transition);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #edf5e9;
 }
 
 .nav-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.34;
   cursor: not-allowed;
 }
 
-/* Mood Cards */
-.moods-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-}
-
-.mood-card {
-  background: linear-gradient(135deg, #f1f1f1, #e0e0e0); /* Fond dégradé */
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: var(--card-shadow);
-}
-
-.time-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  margin-bottom: 20px;
-  color: var(--secondary-color);
-}
-
-.mood-content {
+.period-copy {
   text-align: center;
 }
 
-.mood-image-container {
-  width: 200px;
-  height: 200px;
-  margin: 0 auto 20px;
-  border-radius: 50%;
-  overflow: hidden;
+.period-copy span {
+  display: block;
+  margin-bottom: 0.12rem;
+  color: #9b6d1f;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
 }
 
-.mood-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: var(--transition);
+.period-copy h2 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(1.05rem, 2.5vw, 1.35rem);
 }
 
-.mood-image:hover {
-  transform: scale(1.1);
-}
-
-.mood-details h3 {
-  font-size: 1.2rem;
-  color: var(--secondary-color);
-  margin-bottom: 8px;
-}
-
-.mood-details p {
-  color: #666;
-}
-
-.mood-empty {
-  text-align: center;
-  padding: 40px;
-  color: #666;
-}
-
-.mood-empty i {
-  font-size: 2rem;
-  margin-bottom: 12px;
-}
-
-/* Weekly View */
-.week-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.day-card {
-  background: linear-gradient(135deg, #f1f1f1, #e0e0e0); /* Fond dégradé */
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: var(--card-shadow);
-}
-
-.day-card.current-day {
-  border: 2px solid var(--primary-color);
-}
-
-.day-header {
-  text-align: center;
-  margin-bottom: 16px;
-}
-
-.day-header h3 {
-  font-size: 1.1rem;
-  color: var (--secondary-color);
-  margin-bottom: 4px;
-}
-
-.day-header p {
-  color: #666;
-  font-size: 0.9rem;
+.period-copy small {
+  display: block;
+  margin-top: 0.18rem;
+  color: var(--green);
+  font-size: 0.65rem;
+  font-weight: 700;
 }
 
 .day-moods {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
 }
 
-.mini-mood {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.daily-card {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid rgba(44, 24, 16, 0.075);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.7);
 }
 
-.time-indicator {
-  font-size: 0.9rem;
-  color: #666;
-  width: 50px;
-}
-
-.mini-mood-content {
+.daily-card-header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.7rem;
+  margin-bottom: 0.85rem;
 }
 
-.mini-mood-content img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+.time-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  border-radius: 14px;
+  font-size: 1.1rem;
+}
+
+.time-icon.morning {
+  background: #fff0c6;
+}
+
+.time-icon.evening {
+  background: #e9eee4;
+}
+
+.daily-card-header span {
+  display: block;
+  margin-bottom: 0.12rem;
+  color: rgba(44, 24, 16, 0.45);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.daily-card-header h3 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: 0.95rem;
+}
+
+.daily-mood-content {
+  display: grid;
+  grid-template-columns: minmax(120px, 42%) 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.daily-image {
+  height: 180px;
+  overflow: hidden;
+  border-radius: 17px;
+  background: #eee1c6;
+}
+
+.daily-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
   object-fit: cover;
 }
 
-.mini-mood-content span {
-  font-size: 0.9rem;
-  color: var(--secondary-color);
+.daily-copy {
+  min-width: 0;
 }
 
-.mini-mood-empty {
-  color: #ccc;
+.film-tag {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 0.4rem;
+  padding: 0.28rem 0.48rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #edf5e9;
+  color: #4f6d45;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Animations */
+.daily-copy h4 {
+  margin: 0 0 0.35rem;
+  font-family: "Sora", sans-serif;
+  font-size: 1.15rem;
+}
+
+.daily-copy p {
+  margin: 0;
+  color: rgba(44, 24, 16, 0.6);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.daily-copy small {
+  display: block;
+  margin-top: 0.65rem;
+  color: rgba(44, 24, 16, 0.5);
+  font-family: "Caveat", cursive;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.empty-mood {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(44, 24, 16, 0.46);
+  text-align: center;
+}
+
+.empty-mood > span {
+  font-size: 1.55rem;
+}
+
+.empty-mood h4 {
+  margin: 0.55rem 0 0.2rem;
+  color: var(--brown);
+  font-family: "Sora", sans-serif;
+  font-size: 0.85rem;
+}
+
+.empty-mood p {
+  margin: 0;
+  font-size: 0.7rem;
+}
+
+.week-nav {
+  margin-bottom: 1.35rem;
+}
+
+.week-overview {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.day-card {
+  min-width: 0;
+  padding: 0.75rem 0.62rem;
+  border: 1px solid rgba(44, 24, 16, 0.07);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.day-card.today {
+  border-color: rgba(120, 152, 106, 0.5);
+  background: #f1f7ee;
+  box-shadow: 0 6px 16px rgba(120, 152, 106, 0.1);
+}
+
+.day-card-header {
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.day-card-header span {
+  display: block;
+  color: rgba(44, 24, 16, 0.48);
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+.day-card-header strong {
+  display: block;
+  margin-top: 0.08rem;
+  font-family: "Sora", sans-serif;
+  font-size: 1rem;
+}
+
+.mini-period + .mini-period {
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(44, 24, 16, 0.06);
+}
+
+.mini-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: rgba(44, 24, 16, 0.46);
+  font-size: 0.55rem;
+}
+
+.mini-mood {
+  text-align: center;
+}
+
+.mini-mood img {
+  width: 42px;
+  height: 42px;
+  display: block;
+  margin: 0 auto 0.3rem;
+  border-radius: 13px;
+  object-fit: cover;
+}
+
+.mini-mood strong {
+  display: block;
+  overflow: hidden;
+  color: var(--brown);
+  font-size: 0.6rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mini-empty {
+  min-height: 42px;
+  display: grid;
+  place-items: center;
+  color: rgba(44, 24, 16, 0.25);
+  font-size: 0.8rem;
+}
+
+.week-progress-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.7fr);
+  align-items: center;
+  gap: 1.4rem;
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  background: rgba(255, 250, 240, 0.72);
+}
+
+.progress-copy h3 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: 1rem;
+}
+
+.progress-copy p {
+  margin: 0.25rem 0 0;
+  color: rgba(44, 24, 16, 0.53);
+  font-size: 0.7rem;
+}
+
+.progress-bars {
+  height: 62px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: end;
+  gap: 0.4rem;
+}
+
+.progress-bars span {
+  height: 14%;
+  min-height: 8px;
+  border-radius: 999px;
+  background: rgba(120, 152, 106, 0.18);
+  transition: height 0.25s ease;
+}
+
+.progress-bars span.active {
+  height: 55%;
+  background: #8cac80;
+}
+
+.progress-bars span.full {
+  height: 100%;
+  background: #64845a;
+}
+
+.share-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding: 1.05rem 1.15rem;
+  border: 1px solid rgba(44, 24, 16, 0.07);
+  border-radius: 20px;
+  background: rgba(255, 253, 248, 0.62);
+}
+
+.share-copy h3 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: 0.95rem;
+}
+
+.share-copy p {
+  margin: 0.25rem 0 0;
+  color: rgba(44, 24, 16, 0.52);
+  font-size: 0.7rem;
+}
+
+.share-actions {
+  position: relative;
+}
+
+.share-main {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 0.9rem;
+  border: 0;
+  border-radius: 13px;
+  background: var(--brown);
+  color: #fff8e9;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.social-icons {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.45rem;
+  border: 1px solid rgba(44, 24, 16, 0.08);
+  border-radius: 13px;
+  background: #fffaf0;
+  box-shadow: 0 10px 24px rgba(44, 24, 16, 0.1);
+}
+
+.social-icons a {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #edf5e9;
+  color: #4f6d45;
+  text-decoration: none;
+}
+
+.loading-state {
+  min-height: 390px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--brown);
+}
+
+.spinner {
+  width: 46px;
+  height: 46px;
+  margin-bottom: 1rem;
+  border: 3px solid rgba(44, 24, 16, 0.1);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.85s linear infinite;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-/* Media Queries */
-@media (max-width: 768px) {
-  .tracking-header h1 {
-    font-size: 2rem;
+@media (max-width: 900px) {
+  .tracking-hero {
+    grid-template-columns: 1fr;
+    align-items: start;
   }
 
-  .moods-container {
+  .summary-cards {
+    width: min(390px, 100%);
+  }
+
+  .week-overview {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .week-progress-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .tracking-page {
+    padding: 1.6rem 0.75rem 3.5rem;
+  }
+
+  .tracking-hero {
+    gap: 1rem;
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .view-toggle {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .view-toggle button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .daily-view,
+  .weekly-view {
+    padding: 0.8rem;
+    border-radius: 22px;
+  }
+
+  .day-moods {
     grid-template-columns: 1fr;
   }
 
-  .week-grid {
+  .daily-mood-content {
+    grid-template-columns: 125px 1fr;
+  }
+
+  .daily-image {
+    height: 155px;
+  }
+
+  .week-overview {
+    display: flex;
+    gap: 0.55rem;
+    overflow-x: auto;
+    padding-bottom: 0.45rem;
+  }
+
+  .day-card {
+    min-width: 125px;
+    flex: 0 0 125px;
+  }
+
+  .share-section {
     grid-template-columns: 1fr;
+  }
+
+  .share-main {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .social-icons {
+    left: 0;
+    right: auto;
   }
 }
 
-.share-button-container {
-  text-align: center;
-  margin-bottom: 20px;
-}
+@media (max-width: 430px) {
+  .summary-card {
+    min-width: 0;
+  }
 
-.share-button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
+  .period-nav {
+    grid-template-columns: 38px minmax(0, 1fr) 38px;
+    gap: 0.45rem;
+  }
 
-.share-btn {
-  background-color: #46A34A;
-  color: white;
-  width: 300px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  position: relative;
-  font-weight: 500;
-}
+  .nav-btn {
+    width: 38px;
+    height: 38px;
+  }
 
-.social-icons {
-  display: flex;
-  gap: 10px;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 10px;
-}
+  .daily-mood-content {
+    grid-template-columns: 1fr;
+  }
 
-.social-icons i {
-  font-size: 1.5rem;
-  color: #46A34A;
-  transition: 0.3s ease;
-}
-
-.share-btn:hover .social-icons i {
-  color: #388e3c;
+  .daily-image {
+    height: 210px;
+  }
 }
 </style>
