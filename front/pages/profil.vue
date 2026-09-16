@@ -109,15 +109,21 @@
         </aside>
 
         <article class="dashboard-card account-card">
-          <div class="account-copy">
-            <span class="card-kicker">MON COMPTE</span>
-            <h2>Mes informations</h2>
-            <div class="account-details">
+          <div class="account-main">
+            <div class="account-heading">
+              <div class="account-avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
               <div>
+                <span class="card-kicker">MON COMPTE</span>
+                <h2>Mon compte</h2>
+              </div>
+            </div>
+
+            <div class="account-details">
+              <div class="account-detail">
                 <span>Nom et prénom</span>
                 <strong>{{ user.name }}</strong>
               </div>
-              <div>
+              <div class="account-detail">
                 <span>Email</span>
                 <strong>{{ user.email }}</strong>
               </div>
@@ -125,6 +131,10 @@
           </div>
 
           <div class="account-actions">
+            <button class="password-btn" @click="goToPasswordReset">
+              <i class="fas fa-key"></i>
+              Modifier le mot de passe
+            </button>
             <button class="logout-btn" @click="logout">
               <i class="fas fa-sign-out-alt"></i>
               Se déconnecter
@@ -305,6 +315,10 @@ const logout = () => {
 
 const goToHumeursChoice = () => router.push("/choisir-humeurs");
 const goToMoodTracking = () => router.push("/suivi-humeurs");
+const goToPasswordReset = () => router.push({
+  path: "/reset-password",
+  query: { email: user.value?.email || "" },
+});
 const confirmDelete = () => (showConfirmDelete.value = true);
 const cancelDelete = () => (showConfirmDelete.value = false);
 
@@ -742,16 +756,55 @@ onMounted(fetchUserProfile);
 
 .account-card {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 0.72fr);
+  align-items: stretch;
+  gap: 1.25rem;
+  padding: 1.45rem;
+}
+
+.account-main {
+  min-width: 0;
+  padding: 0.15rem 0;
+}
+
+.account-heading {
+  display: flex;
   align-items: center;
-  gap: 1.5rem;
-  padding: 1.6rem;
+  gap: 0.8rem;
+}
+
+.account-avatar {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #5f7f55, #78986a);
+  color: #fff;
+  font-family: "Sora", sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  box-shadow: 0 8px 20px rgba(120, 152, 106, 0.18);
+}
+
+.account-heading .card-kicker {
+  margin-bottom: 0.2rem;
 }
 
 .account-details {
-  display: flex;
-  gap: 2rem;
-  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 0.7rem;
+  margin-top: 1.05rem;
+}
+
+.account-detail {
+  min-width: 0;
+  padding: 0.72rem 0.82rem;
+  border: 1px solid rgba(120, 152, 106, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.48);
 }
 
 .account-details span,
@@ -762,40 +815,52 @@ onMounted(fetchUserProfile);
 .account-details span {
   margin-bottom: 0.18rem;
   color: rgba(44, 24, 16, 0.5);
-  font-size: 0.68rem;
+  font-size: 0.66rem;
 }
 
 .account-details strong {
-  font-size: 0.82rem;
-  word-break: break-word;
+  overflow: hidden;
+  color: var(--brown);
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .account-actions {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
-  min-width: 175px;
-}
-
-.logout-btn,
-.delete-btn {
-  display: flex;
-  align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.72rem 0.85rem;
+  min-width: 0;
+}
+
+.password-btn,
+.logout-btn,
+.delete-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.55rem;
+  padding: 0.7rem 0.8rem;
   border-radius: 12px;
   font: inherit;
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.password-btn {
+  border: 1px solid rgba(120, 152, 106, 0.32);
+  background: #eaf3e6;
+  color: #48633f;
 }
 
 .logout-btn {
-  border: 1px solid rgba(120, 152, 106, 0.28);
-  background: #f0f6ed;
-  color: #4f6d45;
+  border: 1px solid rgba(44, 24, 16, 0.1);
+  background: #fffaf0;
+  color: var(--brown);
 }
 
 .delete-btn {
@@ -804,9 +869,15 @@ onMounted(fetchUserProfile);
   color: #9a382e;
 }
 
+.password-btn:hover,
 .logout-btn:hover,
 .delete-btn:hover {
   transform: translateY(-1px);
+}
+
+.password-btn:hover {
+  border-color: rgba(120, 152, 106, 0.5);
+  background: #e2efdd;
 }
 
 .loading-state {
@@ -930,12 +1001,17 @@ onMounted(fetchUserProfile);
   }
 
   .account-actions {
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     min-width: 0;
   }
 
+  .password-btn {
+    grid-column: 1 / -1;
+  }
+
   .account-actions button {
-    flex: 1;
+    min-width: 0;
   }
 }
 
@@ -995,12 +1071,18 @@ onMounted(fetchUserProfile);
   }
 
   .account-details {
-    flex-direction: column;
-    gap: 0.75rem;
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
   }
 
   .account-actions {
+    display: flex;
     flex-direction: column;
+  }
+
+  .account-details strong {
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .modal-actions {
