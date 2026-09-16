@@ -65,10 +65,9 @@
                 <div class="preview-mood-card">
                   <div class="preview-movie-image">
                     <img src="https://media.gettyimages.com/id/1193495368/fr/photo/lacteur-fran%C3%A7ais-louis-de-funes-invit%C3%A9-de-l%C3%A9mission-les-rendez-vous-du-dimanche-pr%C3%A9sent%C3%A9e-par.jpg?s=2048x2048&w=gi&k=20&c=UljXJU8EOKgAe2_bIQ9TXxO9lMOvvJ76fJRoNw4KdWo=" alt="Louis de Funès" />
-                    <div class="preview-image-label">
-                      <b>Heureux</b>
-                    </div>
                   </div>
+
+                  <div class="preview-mood-name">Heureux</div>
 
                   <div class="preview-emojis">
                     <span>🤩<small>Génial</small></span>
@@ -477,19 +476,13 @@ const goToRegister = async () => {
   object-position:center 32%;
   filter:saturate(1.02) contrast(1.01);
 }
-.preview-image-label{
-  position:absolute;
-  right:6px;
-  bottom:6px;
-  display:flex;
-  align-items:center;
-  padding:.2rem .36rem;
-  border-radius:999px;
-  background:rgba(44,24,16,.62);
-  color:#fff8e9;
-  backdrop-filter:blur(4px);
+.preview-mood-name{
+  margin:5px 0 4px;
+  color:#3b1b10;
+  font-size:.52rem;
+  font-weight:800;
+  text-align:center;
 }
-.preview-image-label b{font-size:.38rem;font-weight:700}
 .preview-emojis{
   display:grid;
   grid-template-columns:repeat(5,1fr);
