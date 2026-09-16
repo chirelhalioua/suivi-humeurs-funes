@@ -33,77 +33,61 @@
     </section>
 
     <section class="app-preview-section">
-      <div class="preview-poster">
-        <div class="poster-heading">
-          <span class="project-pill"><i></i> PROJET</span>
-          <h2><span>Les humeurs</span><strong>à la Funès</strong></h2>
-          <p>Une application ludique pour suivre tes humeurs et prendre soin de toi, avec humour !</p>
+      <div class="preview-stage">
+        <div class="preview-quote-card">
+          <span class="quote-mark">“</span>
+          <p>« Le bonheur, c’est comme une belle paire de lunettes, ça fait tout de suite voir la vie plus claire ! »</p>
+          <small>Louis de Funès</small>
         </div>
 
-        <p class="poster-note note-left">Des émotions<br>au quotidien…</p>
-        <p class="poster-note note-right">Et aujourd’hui,<br>quelle est ton<br>humeur ? <span>↙</span></p>
-
-        <div class="poster-left">
-          <div class="color-portrait">
-            <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/RabbiJacob-couleur.png" alt="Louis de Funès dans Rabbi Jacob" />
-          </div>
-          <div class="poster-quote">
-            <span class="quote-mark">“</span>
-            <p>Une humeur, une expression… avec une bonne dose d’humour.</p>
-            <small>Louis de Funès</small>
-          </div>
-        </div>
-
-        <div class="poster-phone-wrap">
-          <div class="poster-phone">
-            <div class="poster-notch"></div>
-            <div class="poster-screen">
-              <div class="poster-nav">
+        <div class="preview-phone-wrap">
+          <div class="preview-phone">
+            <div class="preview-notch"></div>
+            <div class="preview-screen">
+              <div class="preview-nav">
                 <b>Les Humeurs à la Funès</b>
                 <span>🌙 &nbsp; ☰</span>
               </div>
-              <div class="poster-body">
-                <h3>Bonjour ! 👋</h3>
-                <p class="poster-question">Alors, quelle est ton humeur aujourd’hui ?</p>
 
-                <div class="poster-mood-card">
-                  <div class="poster-movie-image">
-                    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Louis_de_Fun%C3%A8s_%E2%80%94_Le_Gendarme_et_les_Extra-terrestres.jpg" alt="Louis de Funès dans Le Gendarme et les Extra-terrestres" />
-                    <span class="image-spark spark-one"></span>
-                    <span class="image-spark spark-two"></span>
+              <div class="preview-body">
+                <h3>Bonjour ! 👋</h3>
+                <p class="preview-question">Alors, quelle est ton humeur aujourd’hui ?</p>
+
+                <div class="preview-mood-card">
+                  <div class="preview-movie-image">
+                    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Louis_de_Fun%C3%A8s_%E2%80%94_Tournage_Le_Gendarme_et_les_Extra-terrestres_%E2%80%94_Saint-Tropez%2C_1978.jpg" alt="Louis de Funès en couleur" />
                   </div>
-                  <p class="poster-caption">« Une humeur, une expression… »</p>
-                  <div class="poster-emojis">
+
+                  <p class="preview-caption">« Une humeur, une expression… »</p>
+
+                  <div class="preview-emojis">
                     <span>🤩<small>Génial</small></span>
                     <span>😌<small>Bien</small></span>
                     <span>😐<small>Moyen</small></span>
                     <span>😢<small>Pas top</small></span>
                     <span>😡<small>Nul</small></span>
                   </div>
-                  <div class="poster-save">Enregistrer mon humeur</div>
+
+                  <div class="preview-save">Enregistrer mon humeur</div>
                 </div>
 
-                <div class="poster-track">
+                <div class="preview-track">
                   <h4>📊 Mon suivi</h4>
-                  <div class="poster-tabs"><b>Semaine</b><span>Mois</span><span>Année</span></div>
-                  <div class="poster-bars"><i></i><i></i><i></i><i></i><i></i></div>
+                  <div class="preview-tabs"><b>Semaine</b><span>Mois</span><span>Année</span></div>
+                  <div class="preview-bars"><i></i><i></i><i></i><i></i><i></i></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="poster-benefits">
-          <div class="benefit-card"><span>📊</span><b>Suivi de tes humeurs</b></div>
-          <div class="benefit-card"><span>💛</span><b>Conseils bien-être</b></div>
-          <div class="benefit-card"><span>🙂</span><b>Une dose d’humour au quotidien</b></div>
-          <p class="poster-note benefit-note">… avec une touche<br>de bonne humeur ! ♡</p>
-        </div>
+        <div class="preview-side">
+          <p class="preview-handwritten">Et aujourd’hui,<br>quelle est ton humeur ? <span>↙</span></p>
 
-        <div class="poster-footer">
-          <button class="poster-cta" @click="goToRegister">Voir le projet <span>→</span></button>
-          <div class="tech-pills">
-            <span>Nuxt</span><span>MongoDB</span><span>Express</span><span>Tailwind CSS</span>
+          <div class="preview-benefits">
+            <div class="preview-benefit"><span>📊</span><b>Suivi de tes humeurs</b></div>
+            <div class="preview-benefit"><span>💛</span><b>Conseils bien-être</b></div>
+            <div class="preview-benefit"><span>🙂</span><b>Une dose d’humour</b></div>
           </div>
         </div>
       </div>
@@ -192,84 +176,56 @@ const goToRegister = async () => {
 /* CONCEPT */
 .concept-grid,.mood-grid{max-width:1180px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
 .concept-card{position:relative;min-height:245px;padding:1.5rem;border-radius:26px;background:rgba(255,255,255,.8);border:1px solid rgba(44,24,16,.09);box-shadow:0 12px 35px rgba(44,24,16,.06);transition:transform .25s,box-shadow .25s}
-.concept-card::before,.benefit-card::before{content:'';position:absolute;inset:0;padding:2px;box-sizing:border-box;border-radius:inherit;background:conic-gradient(from var(--border-angle),transparent 0 62%,var(--green) 72%,#a8c99b 82%,transparent 92%);opacity:0;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.concept-card::before,.preview-benefit::before{content:'';position:absolute;inset:0;padding:2px;box-sizing:border-box;border-radius:inherit;background:conic-gradient(from var(--border-angle),transparent 0 62%,var(--green) 72%,#a8c99b 82%,transparent 92%);opacity:0;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
 .concept-card:hover{transform:translateY(-5px) scale(1.015);box-shadow:0 16px 38px rgba(44,24,16,.09)}
-.concept-card:hover::before,.benefit-card:hover::before{opacity:1;animation:greenBorderTrace 1.25s linear infinite}
+.concept-card:hover::before,.preview-benefit:hover::before{opacity:1;animation:greenBorderTrace 1.25s linear infinite}
 .concept-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
 .concept-icon{display:grid;place-items:center;width:52px;height:52px;border-radius:17px;background:#fff3d4;font-size:1.55rem}
 .concept-number{font-size:2rem;font-weight:800;color:rgba(44,24,16,.1)}
 .concept-card h3{font-size:1.15rem;margin-bottom:.65rem}
 .concept-card p{color:rgba(44,24,16,.66);line-height:1.65;font-size:.94rem}
 
-/* APP PREVIEW — inspired by the reference poster */
-.app-preview-section{padding:clamp(4rem,7vw,6.5rem) 1rem;background:#fffaf0;overflow:hidden}
-.preview-poster{position:relative;max-width:1120px;min-height:760px;margin:auto;padding:2.3rem 2.4rem 2rem;border:1px solid rgba(44,24,16,.07);border-radius:38px;background:
-  radial-gradient(circle at 6% 38%,rgba(246,190,53,.15) 0 12%,transparent 12.5%),
-  radial-gradient(circle at 92% 7%,rgba(246,190,53,.14) 0 17%,transparent 17.5%),
-  radial-gradient(circle at 96% 92%,rgba(246,190,53,.12) 0 17%,transparent 17.5%),
-  #fffdf8;
-box-shadow:0 24px 60px rgba(67,42,18,.08);display:grid;grid-template-columns:1fr 1.18fr .95fr;grid-template-rows:auto 1fr auto;gap:1rem 1.6rem;align-items:center}
-.poster-heading{grid-column:1/-1;text-align:center;z-index:3}
-.project-pill{display:inline-flex;align-items:center;gap:.65rem;padding:.5rem 1rem;border-radius:999px;background:#fff;border:1px solid rgba(233,185,73,.35);box-shadow:0 8px 22px rgba(78,48,20,.07);font-size:.69rem;font-weight:800;letter-spacing:.22em}
-.project-pill i{width:13px;height:13px;border-radius:50%;background:#f6b72d}
-.poster-heading h2{margin:1.1rem 0 .8rem;font-size:clamp(2.6rem,6vw,5.4rem);line-height:.86;letter-spacing:-.045em}
-.poster-heading h2 span,.poster-heading h2 strong{display:block}
-.poster-heading h2 strong{color:#f1b42b;font-weight:800}
-.poster-heading p{max-width:620px;margin:auto;color:#4f4643;font-size:clamp(.96rem,1.7vw,1.18rem);line-height:1.55}
-.poster-note{position:absolute;z-index:4;font-family:'Caveat',cursive;font-weight:600;color:#241516;line-height:1.03}
-.note-left{left:3.4%;top:43%;font-size:1.5rem;transform:rotate(-8deg)}
-.note-right{right:4.6%;top:11%;font-size:1.45rem;transform:rotate(-7deg);text-align:center}
-.note-right span{display:block;font-family:'Sora',sans-serif;font-size:1.8rem;margin-top:.3rem}
-
-.poster-left{position:relative;align-self:end;min-height:360px;display:flex;align-items:flex-end;justify-content:center}
-.color-portrait{position:relative;width:220px;height:285px;border-radius:28px;overflow:hidden;border:7px solid #fff;box-shadow:0 18px 38px rgba(44,24,16,.16);transform:rotate(-4deg);background:#f5ead3}
-.color-portrait:before{content:'';position:absolute;inset:0;border:1px solid rgba(44,24,16,.08);border-radius:21px;z-index:2;pointer-events:none}
-.color-portrait img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 24%}
-.poster-quote{position:absolute;z-index:5;left:4%;bottom:-10px;width:220px;padding:1rem 1.1rem;border-radius:20px;background:linear-gradient(145deg,#2d160f,#482317);color:#fff7e8;box-shadow:0 16px 30px rgba(44,24,16,.22);transform:rotate(-3deg)}
-.quote-mark{position:absolute;right:13px;top:6px;font-size:2.5rem;opacity:.7}
-.poster-quote p{font-family:'Caveat',cursive;font-size:1.13rem;line-height:1.12;margin:.2rem 0 .55rem}
-.poster-quote small{opacity:.78;font-size:.68rem}
-
-.poster-phone-wrap{position:relative;z-index:3;display:flex;justify-content:center;align-self:end}
-.poster-phone{position:relative;width:330px;height:600px;border:9px solid #141111;border-radius:49px;background:#111;padding:7px;box-shadow:0 28px 58px rgba(44,24,16,.24);transform:rotate(-2.2deg)}
-.poster-notch{position:absolute;z-index:5;top:7px;left:50%;transform:translateX(-50%);width:112px;height:24px;border-radius:0 0 17px 17px;background:#111}
-.poster-screen{height:100%;border-radius:34px;overflow:hidden;background:#fffaf2}
-.poster-nav{height:62px;background:#3b1b10;color:#fff6de;display:flex;justify-content:space-between;align-items:flex-end;padding:0 17px 12px;font-size:.78rem}
-.poster-body{padding:19px 15px;color:#2d2020}
-.poster-body h3{font-size:1.03rem;margin:0}
-.poster-question{font-size:.7rem;margin:.18rem 0 .8rem}
-.poster-mood-card,.poster-track{background:#fff;border:1px solid #eee5d8;border-radius:20px;padding:11px;box-shadow:0 7px 18px rgba(44,24,16,.055)}
-.poster-movie-image{position:relative;height:155px;border-radius:16px;overflow:hidden;background:#f7e6a8}
-.poster-movie-image img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 28%;filter:saturate(1.05) contrast(1.02)}
-.poster-movie-image:after{content:'';position:absolute;inset:auto 0 0;height:35%;background:linear-gradient(transparent,rgba(53,27,14,.18))}
-.image-spark{position:absolute;width:2px;height:22px;background:#361c13;right:17px;top:14px;transform:rotate(20deg)}
-.spark-two{right:6px;top:29px;transform:rotate(65deg);height:17px}
-.poster-caption{text-align:center;font-family:'Caveat',cursive;font-size:.84rem;margin:.42rem 0}
-.poster-emojis{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
-.poster-emojis span{display:flex;flex-direction:column;align-items:center;padding:5px 1px;background:#fff9e9;border:1px solid rgba(233,185,73,.18);border-radius:10px;font-size:1rem}
-.poster-emojis small{font-size:.43rem;margin-top:2px}
-.poster-save{margin-top:9px;padding:8px;border-radius:999px;text-align:center;background:linear-gradient(90deg,#f4ad20,#ffd15d);font-size:.65rem;font-weight:800}
-.poster-track{margin-top:10px}
-.poster-track h4{margin:0 0 7px;font-size:.86rem}
-.poster-tabs{display:flex;background:#f4efe8;border-radius:999px;font-size:.5rem}
-.poster-tabs>*{flex:1;text-align:center;padding:6px}
-.poster-tabs b{background:var(--brown);color:#fff;border-radius:999px}
-.poster-bars{height:72px;display:flex;align-items:flex-end;justify-content:space-around;padding-top:8px}
-.poster-bars i{width:15px;border-radius:5px 5px 2px 2px;background:#f2bd45}
-.poster-bars i:nth-child(1){height:28%}.poster-bars i:nth-child(2){height:62%;background:#91b97f}.poster-bars i:nth-child(3){height:43%;background:#b99bd4}.poster-bars i:nth-child(4){height:78%;background:#75c8c2}.poster-bars i:nth-child(5){height:53%}
-
-.poster-benefits{align-self:center;display:flex;flex-direction:column;gap:1rem}
-.benefit-card{position:relative;display:flex;align-items:center;gap:.9rem;padding:1rem 1.05rem;border-radius:22px;background:#fff;border:1px solid rgba(44,24,16,.07);box-shadow:0 10px 26px rgba(44,24,16,.06);font-size:.83rem;transition:transform .25s,box-shadow .25s}
-.benefit-card:hover{transform:translateY(-3px) scale(1.015);box-shadow:0 14px 30px rgba(44,24,16,.09)}
-.benefit-card>span{display:grid;place-items:center;width:46px;height:46px;flex:none;border-radius:50%;background:#fff0bd;font-size:1.25rem}
-.benefit-note{position:static!important;font-size:1.4rem!important;text-align:center;transform:rotate(-5deg);margin:.8rem 0 0}
-
-.poster-footer{grid-column:1/-1;text-align:center;z-index:5}
-.poster-cta{border:0;border-radius:999px;background:linear-gradient(90deg,#2d160f,#492217);color:white;padding:.9rem 2rem;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 12px 28px rgba(44,24,16,.18)}
-.poster-cta span{margin-left:.7rem}
-.tech-pills{display:flex;justify-content:center;gap:.55rem;flex-wrap:wrap;margin-top:1rem}
-.tech-pills span{padding:.5rem .9rem;border-radius:999px;background:#fff;border:1px solid rgba(44,24,16,.08);font-size:.75rem;box-shadow:0 5px 14px rgba(44,24,16,.04)}
-.tech-pills span:nth-child(1),.tech-pills span:nth-child(2){color:#397e4c;background:#f5fbf4}
+/* APP PREVIEW */
+.app-preview-section{padding:clamp(4rem,7vw,6rem) 1rem;background:#fffaf0;overflow:hidden}
+.preview-stage{position:relative;max-width:1080px;min-height:610px;margin:auto;padding:2.4rem 2rem;border:1px solid rgba(44,24,16,.07);border-radius:36px;background:
+  radial-gradient(circle at 7% 24%,rgba(246,190,53,.13) 0 13%,transparent 13.5%),
+  radial-gradient(circle at 94% 12%,rgba(246,190,53,.12) 0 18%,transparent 18.5%),
+  #fffdf8;box-shadow:0 22px 54px rgba(67,42,18,.07);display:grid;grid-template-columns:.78fr 1.2fr .82fr;align-items:center;gap:1.4rem}
+.preview-quote-card{position:relative;align-self:end;margin-bottom:3rem;padding:1.15rem 1.2rem;border-radius:22px;background:linear-gradient(145deg,#2d160f,#482317);color:#fff7e8;box-shadow:0 16px 30px rgba(44,24,16,.2);transform:rotate(-3deg)}
+.preview-quote-card .quote-mark{position:absolute;right:14px;top:5px;font-size:2.8rem;opacity:.65}
+.preview-quote-card p{font-family:'Caveat',cursive;font-size:1.22rem;line-height:1.18;margin:.2rem 1.5rem .7rem 0}
+.preview-quote-card small{font-size:.7rem;opacity:.8}
+.preview-phone-wrap{display:flex;justify-content:center;align-items:center}
+.preview-phone{position:relative;width:330px;height:590px;border:9px solid #141111;border-radius:49px;background:#111;padding:7px;box-shadow:0 28px 56px rgba(44,24,16,.22);transform:rotate(-2deg)}
+.preview-notch{position:absolute;z-index:5;top:7px;left:50%;transform:translateX(-50%);width:110px;height:24px;border-radius:0 0 17px 17px;background:#111}
+.preview-screen{height:100%;border-radius:34px;overflow:hidden;background:#fffaf2}
+.preview-nav{height:61px;background:#3b1b10;color:#fff6de;display:flex;justify-content:space-between;align-items:flex-end;padding:0 17px 12px;font-size:.77rem}
+.preview-body{padding:18px 15px;color:#2d2020}
+.preview-body h3{font-size:1.02rem;margin:0}
+.preview-question{font-size:.7rem;margin:.18rem 0 .75rem}
+.preview-mood-card,.preview-track{background:#fff;border:1px solid #eee5d8;border-radius:20px;padding:11px;box-shadow:0 7px 18px rgba(44,24,16,.055)}
+.preview-movie-image{height:150px;border-radius:15px;overflow:hidden;background:#f3e6c5}
+.preview-movie-image img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 34%;filter:saturate(1.06) contrast(1.02)}
+.preview-caption{text-align:center;font-family:'Caveat',cursive;font-size:.84rem;margin:.42rem 0}
+.preview-emojis{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.preview-emojis span{display:flex;flex-direction:column;align-items:center;padding:5px 1px;background:#fff9e9;border:1px solid rgba(233,185,73,.18);border-radius:10px;font-size:1rem}
+.preview-emojis small{font-size:.43rem;margin-top:2px}
+.preview-save{margin-top:9px;padding:8px;border-radius:999px;text-align:center;background:linear-gradient(90deg,#f4ad20,#ffd15d);font-size:.65rem;font-weight:800}
+.preview-track{margin-top:10px}
+.preview-track h4{margin:0 0 7px;font-size:.86rem}
+.preview-tabs{display:flex;background:#f4efe8;border-radius:999px;font-size:.5rem}
+.preview-tabs>*{flex:1;text-align:center;padding:6px}
+.preview-tabs b{background:var(--brown);color:#fff;border-radius:999px}
+.preview-bars{height:68px;display:flex;align-items:flex-end;justify-content:space-around;padding-top:8px}
+.preview-bars i{width:15px;border-radius:5px 5px 2px 2px;background:#f2bd45}
+.preview-bars i:nth-child(1){height:28%}.preview-bars i:nth-child(2){height:62%;background:#91b97f}.preview-bars i:nth-child(3){height:43%;background:#b99bd4}.preview-bars i:nth-child(4){height:78%;background:#75c8c2}.preview-bars i:nth-child(5){height:53%}
+.preview-side{align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:1.5rem}
+.preview-handwritten{font-family:'Caveat',cursive;font-size:1.55rem;line-height:1.05;text-align:center;transform:rotate(-6deg);margin:0}
+.preview-handwritten span{display:block;font-family:'Sora',sans-serif;font-size:1.8rem;margin-top:.35rem}
+.preview-benefits{display:flex;flex-direction:column;gap:.85rem}
+.preview-benefit{position:relative;display:flex;align-items:center;gap:.8rem;background:#fff;border:1px solid rgba(44,24,16,.07);border-radius:19px;padding:.85rem;box-shadow:0 8px 20px rgba(44,24,16,.05);font-size:.77rem;transition:transform .25s,box-shadow .25s}
+.preview-benefit:hover{transform:translateY(-3px) scale(1.015);box-shadow:0 11px 24px rgba(44,24,16,.08)}
+.preview-benefit>span{display:grid;place-items:center;width:39px;height:39px;flex:none;background:#fff1bd;border-radius:50%;font-size:1.05rem}
 
 /* MOOD CARDS */
 .mood-card{background:#fffdf8;border:1px solid rgba(44,24,16,.1);border-radius:22px;overflow:hidden;box-shadow:0 10px 26px rgba(44,24,16,.07);transition:.25s}
@@ -288,15 +244,9 @@ box-shadow:0 24px 60px rgba(67,42,18,.08);display:grid;grid-template-columns:1fr
 @media(max-width:1024px){
   .hero-section{background-attachment:scroll}
   .concept-grid,.mood-grid{grid-template-columns:repeat(2,1fr)}
-  .preview-poster{grid-template-columns:.8fr 1.25fr;min-height:unset;padding:2rem;gap:1.2rem}
-  .poster-heading{grid-column:1/-1}
-  .poster-left{grid-column:1}
-  .poster-phone-wrap{grid-column:2;grid-row:2}
-  .poster-benefits{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr)}
-  .benefit-note{display:none}
-  .poster-footer{grid-column:1/-1}
-  .note-right{right:3%;top:13%;font-size:1.2rem}
-  .note-left{display:none}
+  .preview-stage{grid-template-columns:.72fr 1.15fr;min-height:unset;padding:2rem}
+  .preview-side{grid-column:1/-1;display:grid;grid-template-columns:.55fr 1.45fr;align-items:center}
+  .preview-benefits{display:grid;grid-template-columns:repeat(3,1fr)}
 }
 
 @media(max-width:650px){
@@ -323,46 +273,35 @@ box-shadow:0 24px 60px rgba(67,42,18,.08);display:grid;grid-template-columns:1fr
   .concept-card h3{font-size:.9rem;margin-bottom:.4rem}
   .concept-card p{font-size:.74rem;line-height:1.45}
 
-  .preview-poster{display:flex;flex-direction:column;min-height:unset;padding:1.35rem .8rem 1.4rem;border-radius:28px;gap:1.2rem}
-  .poster-heading h2{font-size:clamp(2.5rem,15vw,4rem);margin:.9rem 0 .7rem}
-  .poster-heading p{font-size:.82rem;max-width:310px}
-  .project-pill{font-size:.6rem;padding:.42rem .75rem}
-  .project-pill i{width:11px;height:11px}
-  .note-right{position:static;font-size:1.15rem;transform:rotate(-4deg);order:2;margin:.15rem 0 -.3rem}
-  .note-right span{font-size:1.4rem}
-  .poster-phone-wrap{order:3;width:100%}
-  .poster-phone{width:245px;height:460px;border-width:7px;border-radius:39px}
-  .poster-notch{width:82px;height:18px}
-  .poster-screen{border-radius:28px}
-  .poster-nav{height:50px;padding:0 11px 9px;font-size:.58rem}
-  .poster-body{padding:12px 10px}
-  .poster-body h3{font-size:.8rem}
-  .poster-question{font-size:.53rem;margin-bottom:.55rem}
-  .poster-movie-image{height:108px}
-  .poster-caption{font-size:.67rem;margin:.3rem 0}
-  .poster-emojis span{font-size:.82rem;padding:4px 1px}
-  .poster-emojis small{font-size:.34rem}
-  .poster-save{padding:6px;font-size:.48rem;margin-top:6px}
-  .poster-track{margin-top:7px;padding:8px}
-  .poster-track h4{font-size:.65rem;margin-bottom:5px}
-  .poster-tabs{font-size:.38rem}
-  .poster-tabs>*{padding:4px}
-  .poster-bars{height:45px}
-  .poster-bars i{width:10px}
-
-  .poster-left{order:4;min-height:240px;width:100%;align-self:auto}
-  .color-portrait{width:165px;height:210px;border-width:5px}
-  .poster-quote{width:170px;left:calc(50% - 118px);bottom:-6px;padding:.75rem .85rem}
-  .poster-quote p{font-size:.92rem}
-  .poster-benefits{order:5;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
-  .benefit-card{padding:.7rem;border-radius:16px;font-size:.67rem;text-align:left}
-  .benefit-card:last-of-type{grid-column:1/-1;justify-self:center;width:calc(50% - .3rem)}
-  .benefit-card>span{width:34px;height:34px;font-size:.95rem}
-  .poster-footer{order:6}
-  .poster-cta{padding:.75rem 1.45rem;font-size:.82rem}
-  .tech-pills{gap:.4rem;margin-top:.8rem}
-  .tech-pills span{font-size:.62rem;padding:.4rem .65rem}
-  .note-left{display:none}
+  .preview-stage{display:flex;flex-direction:column;min-height:unset;padding:1.5rem .85rem;border-radius:28px;gap:1rem}
+  .preview-side{display:flex;flex-direction:column;order:1;width:100%;gap:1rem}
+  .preview-handwritten{font-size:1.2rem;order:0}
+  .preview-handwritten span{font-size:1.35rem}
+  .preview-phone-wrap{order:2;width:100%}
+  .preview-phone{width:245px;height:455px;border-width:7px;border-radius:39px}
+  .preview-notch{width:82px;height:18px}
+  .preview-screen{border-radius:28px}
+  .preview-nav{height:49px;padding:0 11px 9px;font-size:.58rem}
+  .preview-body{padding:12px 10px}
+  .preview-body h3{font-size:.8rem}
+  .preview-question{font-size:.53rem;margin-bottom:.55rem}
+  .preview-movie-image{height:106px}
+  .preview-caption{font-size:.67rem;margin:.3rem 0}
+  .preview-emojis span{font-size:.82rem;padding:4px 1px}
+  .preview-emojis small{font-size:.34rem}
+  .preview-save{padding:6px;font-size:.48rem;margin-top:6px}
+  .preview-track{margin-top:7px;padding:8px}
+  .preview-track h4{font-size:.65rem;margin-bottom:5px}
+  .preview-tabs{font-size:.38rem}
+  .preview-tabs>*{padding:4px}
+  .preview-bars{height:44px}
+  .preview-bars i{width:10px}
+  .preview-quote-card{order:3;width:min(260px,88%);margin:0 auto;transform:rotate(-2deg);padding:.9rem 1rem}
+  .preview-quote-card p{font-size:1rem}
+  .preview-benefits{order:4;display:grid;grid-template-columns:1fr 1fr;width:100%;max-width:360px;margin:auto;gap:.6rem}
+  .preview-benefit{padding:.65rem;border-radius:15px;font-size:.68rem;text-align:left}
+  .preview-benefit:last-child{grid-column:1/-1;justify-self:center;width:calc(50% - .3rem)}
+  .preview-benefit>span{width:32px;height:32px;font-size:.9rem}
 
   .mood-grid{display:flex;overflow-x:auto;gap:.7rem;margin:0 -.85rem;padding:0 .85rem 1rem;scroll-snap-type:x mandatory;scrollbar-width:none}
   .mood-grid::-webkit-scrollbar{display:none}
@@ -378,12 +317,9 @@ box-shadow:0 24px 60px rgba(67,42,18,.08);display:grid;grid-template-columns:1fr
   .hero-title{font-size:2rem}
   .concept-card{min-height:170px;padding:.8rem}
   .concept-card p{font-size:.7rem}
-  .poster-phone{width:225px;height:430px}
-  .poster-left{min-height:220px}
-  .color-portrait{width:150px;height:195px}
-  .poster-quote{width:155px;left:calc(50% - 108px)}
-  .poster-benefits{grid-template-columns:1fr}
-  .benefit-card:last-of-type{grid-column:auto;width:100%;justify-self:stretch}
+  .preview-phone{width:225px;height:425px}
+  .preview-benefits{grid-template-columns:1fr}
+  .preview-benefit:last-child{grid-column:auto;width:100%;justify-self:stretch}
   .mood-card{flex-basis:60%;min-width:175px}
 }
 
