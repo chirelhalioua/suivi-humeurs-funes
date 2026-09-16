@@ -108,7 +108,7 @@
         <article v-for="(mood,index) in moods" :key="mood._id" class="mood-card">
           <div class="mood-image-wrapper">
             <div class="image-placeholder" v-if="!mood.imageLoaded"></div>
-            <img :src="mood.image" :alt="mood.title" class="mood-image" :class="{loaded:mood.imageLoaded}" @load="mood.imageLoaded=true"/>
+            <img :src="mood.image" :alt="mood.title" class="mood-image" :class="{loaded:mood.imageLoaded}" loading="eager" decoding="async" fetchpriority="high" @load="mood.imageLoaded=true"/>
             <span class="mood-index">0{{ index+1 }}</span>
           </div>
           <div class="mood-content">
@@ -126,6 +126,16 @@
 import { ref } from 'vue'
 
 const isNavigating = ref(false)
+
+useHead({
+  link: [
+    { rel: 'preconnect', href: 'https://media.gettyimages.com', crossorigin: '' },
+    { rel: 'dns-prefetch', href: 'https://media.gettyimages.com' },
+    { rel: 'preload', as: 'image', href: 'https://media.gettyimages.com/id/1193495368/fr/photo/louis-de-funes.jpg' },
+    { rel: 'preload', as: 'image', href: 'https://media.gettyimages.com/id/1190192831/fr/photo/louis-de-funes.jpg' },
+    { rel: 'preload', as: 'image', href: 'https://media.gettyimages.com/id/1175705018/fr/photo/louis-de-funes.jpg' }
+  ]
+})
 
 const concepts = [
   {title:'Exprimez-vous',description:'Exprimez facilement votre humeur à travers des images de Louis de Funès',icon:'🎭'},
@@ -547,7 +557,7 @@ const goToRegister = async () => {
   overflow:hidden;
   background:#eee7d7;
 }
-.image-placeholder{position:absolute;inset:0;background:#eee7d7}
+.image-placeholder{position:absolute;inset:0;background:linear-gradient(110deg,#eee7d7 8%,#f7f1e6 18%,#eee7d7 33%);background-size:200% 100%;animation:imageShimmer 1.15s linear infinite}
 .mood-image{
   width:100%;
   height:100%;
@@ -690,4 +700,5 @@ const goToRegister = async () => {
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @keyframes scrollWheel{0%{opacity:0;transform:translateY(0)}40%{opacity:1}100%{opacity:0;transform:translateY(10px)}}
 @keyframes greenBorderTrace{to{--border-angle:360deg}}
+@keyframes imageShimmer{to{background-position-x:-200%}}
 </style>
