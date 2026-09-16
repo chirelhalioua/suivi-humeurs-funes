@@ -20,14 +20,17 @@
         <h2 class="section-title">Le Concept</h2>
         <p class="section-subtitle">Exprimez vos humeurs avec Louis de Funès</p>
       </div>
-      <div class="concept-grid">
-        <article v-for="(concept,index) in concepts" :key="concept.title" class="concept-card">
-          <div class="concept-top">
-            <span class="concept-icon">{{ concept.icon }}</span>
+      <div class="concept-flow">
+        <article v-for="(concept,index) in concepts" :key="concept.title" class="concept-step">
+          <div class="concept-step-content">
             <span class="concept-number">0{{ index+1 }}</span>
+            <h3>{{ concept.title }}</h3>
+            <p>{{ concept.description }}</p>
           </div>
-          <h3>{{ concept.title }}</h3>
-          <p>{{ concept.description }}</p>
+
+          <div class="concept-marker">
+            <span>{{ concept.icon }}</span>
+          </div>
         </article>
       </div>
     </section>
@@ -230,74 +233,92 @@ const goToRegister = async () => {
 }
 
 /* CONCEPT */
-.concept-grid{
-  max-width:900px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:1rem;
-}
-.concept-card{
+.concept-flow{
   position:relative;
-  min-height:180px;
-  padding:1.15rem;
-  border-radius:20px;
-  background:#fff;
-  border:1px solid rgba(44,24,16,.08);
-  box-shadow:0 10px 26px rgba(44,24,16,.045);
-  transition:transform .25s,box-shadow .25s;
+  max-width:760px;
+  margin:auto;
+  padding:.35rem 0;
 }
-.concept-card::before,.preview-benefit::before{
+.concept-flow::before{
   content:'';
   position:absolute;
-  inset:0;
-  padding:2px;
-  box-sizing:border-box;
-  border-radius:inherit;
-  background:conic-gradient(from var(--border-angle),transparent 0 62%,var(--green) 72%,#a8c99b 82%,transparent 92%);
-  opacity:0;
-  pointer-events:none;
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-  mask-composite:exclude;
+  top:18px;
+  bottom:18px;
+  left:50%;
+  width:1px;
+  background:linear-gradient(180deg,transparent,rgba(44,24,16,.16) 8%,rgba(44,24,16,.16) 92%,transparent);
+  transform:translateX(-50%);
 }
-.concept-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 14px 30px rgba(44,24,16,.075);
-}
-.concept-card:hover::before,.preview-benefit:hover::before{
-  opacity:1;
-  animation:greenBorderTrace 1.25s linear infinite;
-}
-.concept-top{
-  display:flex;
+.concept-step{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr 72px 1fr;
   align-items:center;
-  justify-content:space-between;
-  margin-bottom:1rem;
+  min-height:126px;
 }
-.concept-icon{
+.concept-step:nth-child(odd) .concept-step-content{
+  grid-column:1;
+  text-align:right;
+  padding-right:1.2rem;
+}
+.concept-step:nth-child(even) .concept-step-content{
+  grid-column:3;
+  text-align:left;
+  padding-left:1.2rem;
+}
+.concept-marker{
+  grid-column:2;
+  grid-row:1;
+  position:relative;
+  z-index:2;
   display:grid;
   place-items:center;
-  width:42px;
-  height:42px;
-  border-radius:14px;
-  background:#fff3d4;
-  font-size:1.15rem;
+  width:48px;
+  height:48px;
+  margin:auto;
+  border-radius:50%;
+  background:#fffaf0;
+  border:1px solid rgba(44,24,16,.12);
+  box-shadow:0 5px 14px rgba(44,24,16,.06);
+  transition:transform .25s,border-color .25s,box-shadow .25s;
+}
+.concept-marker::after{
+  content:'';
+  position:absolute;
+  inset:5px;
+  border-radius:50%;
+  background:#fff1bd;
+  z-index:-1;
+}
+.concept-marker span{
+  font-size:1.08rem;
+}
+.concept-step:hover .concept-marker{
+  transform:scale(1.07);
+  border-color:rgba(120,152,106,.55);
+  box-shadow:0 7px 18px rgba(44,24,16,.09);
 }
 .concept-number{
-  font-size:1.45rem;
+  display:block;
+  margin-bottom:.2rem;
+  color:rgba(44,24,16,.34);
+  font-size:.62rem;
   font-weight:800;
-  color:rgba(44,24,16,.1);
+  letter-spacing:.16em;
 }
-.concept-card h3{
-  font-size:.98rem;
-  margin:0 0 .42rem;
+.concept-step h3{
+  margin:0 0 .28rem;
+  font-size:1rem;
 }
-.concept-card p{
-  color:rgba(44,24,16,.64);
-  line-height:1.5;
-  font-size:.78rem;
+.concept-step p{
+  max-width:275px;
   margin:0;
+  color:rgba(44,24,16,.62);
+  font-size:.77rem;
+  line-height:1.5;
+}
+.concept-step:nth-child(odd) p{
+  margin-left:auto;
 }
 
 /* APP PREVIEW */
@@ -617,7 +638,7 @@ const goToRegister = async () => {
 /* RESPONSIVE */
 @media(max-width:1024px){
   .hero-section{background-attachment:scroll}
-  .concept-grid{max-width:760px}
+  .concept-flow{max-width:700px}
   .preview-stage{
     max-width:760px;
     grid-template-columns:.72fr 1fr .88fr;
@@ -635,14 +656,39 @@ const goToRegister = async () => {
   .section-title{font-size:clamp(1.5rem,7vw,1.95rem)}
   .section-subtitle{font-size:.84rem}
 
-  .concept-grid{
-    grid-template-columns:1fr;
-    gap:.75rem;
+  .concept-flow{
     max-width:520px;
+    padding-left:14px;
   }
-  .concept-card{
-    min-height:145px;
-    padding:.9rem;
+  .concept-flow::before{
+    left:38px;
+    transform:none;
+  }
+  .concept-step{
+    display:grid;
+    grid-template-columns:56px 1fr;
+    min-height:112px;
+  }
+  .concept-step:nth-child(odd) .concept-step-content,
+  .concept-step:nth-child(even) .concept-step-content{
+    grid-column:2;
+    grid-row:1;
+    text-align:left;
+    padding:0 0 0 .8rem;
+  }
+  .concept-marker{
+    grid-column:1;
+    grid-row:1;
+    width:44px;
+    height:44px;
+    margin:0;
+  }
+  .concept-step:nth-child(odd) p{
+    margin-left:0;
+  }
+  .concept-step p{
+    max-width:360px;
+    font-size:.74rem;
   }
 
   .preview-stage{
@@ -713,7 +759,7 @@ const goToRegister = async () => {
 }
 
 @media(max-width:420px){
-  .concept-grid,.mood-list,.preview-stage{max-width:100%}
+  .concept-flow,.mood-list,.preview-stage{max-width:100%}
   .mood-row{
     grid-template-columns:1fr;
     gap:.55rem;
