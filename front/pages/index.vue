@@ -105,16 +105,18 @@
         <span class="section-kicker">LES HUMEURS</span>
         <h2 class="section-title">Quelques humeurs</h2>
       </div>
-      <div class="mood-grid">
-        <article v-for="(mood,index) in moods" :key="mood._id" class="mood-card">
+      <div class="mood-list">
+        <article v-for="(mood,index) in moods" :key="mood._id" class="mood-row">
+          <div class="mood-row-number">0{{ index+1 }}</div>
+
           <div class="mood-image-wrapper">
             <img :src="mood.image" :alt="mood.title" class="mood-image" loading="eager" decoding="async" fetchpriority="high" referrerpolicy="no-referrer"/>
-            <span class="mood-index">0{{ index+1 }}</span>
           </div>
+
           <div class="mood-content">
+            <span class="mood-film">{{ mood.film }}</span>
             <h3>{{ mood.title }}</h3>
             <p>{{ mood.subtitle }}</p>
-            <small>{{ mood.film }}</small>
           </div>
         </article>
       </div>
@@ -527,64 +529,89 @@ const goToRegister = async () => {
 }
 
 /* MOOD CARDS */
-.mood-grid{
-  max-width:850px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:.9rem;
+.mood-section{
+  background:linear-gradient(180deg,#fff 0%,#fffaf0 100%);
 }
-.mood-card{
+.mood-list{
+  max-width:780px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:.85rem;
+}
+.mood-row{
+  position:relative;
+  display:grid;
+  grid-template-columns:54px 220px 1fr;
+  align-items:center;
+  gap:1rem;
+  min-height:150px;
+  padding:.75rem 1rem .75rem .75rem;
   background:#fffdf8;
   border:1px solid rgba(44,24,16,.075);
   border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 9px 22px rgba(44,24,16,.045);
+  box-shadow:0 8px 22px rgba(44,24,16,.045);
   transition:transform .25s,box-shadow .25s;
 }
-.mood-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 13px 28px rgba(44,24,16,.08);
+.mood-row:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 28px rgba(44,24,16,.075);
+}
+.mood-row-number{
+  align-self:start;
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  margin-top:.15rem;
+  border-radius:50%;
+  background:#fff3d4;
+  color:var(--brown);
+  font-size:.62rem;
+  font-weight:800;
 }
 .mood-image-wrapper{
   position:relative;
-  aspect-ratio:4/3;
+  height:126px;
   overflow:hidden;
+  border-radius:15px;
   background:linear-gradient(145deg,#efe6d2,#f8f3e8);
-  padding:.6rem;
+  padding:.35rem;
 }
 .mood-image{
   width:100%;
   height:100%;
   object-fit:contain;
   object-position:center;
-  border-radius:13px;
+  border-radius:11px;
   background:#e9e2d4;
-  box-shadow:0 6px 16px rgba(44,24,16,.08);
-  opacity:1;
   display:block;
 }
-.mood-index{
-  position:absolute;
-  top:8px;
-  right:8px;
-  padding:.25rem .45rem;
+.mood-content{
+  min-width:0;
+  padding:.15rem .15rem .15rem .2rem;
+}
+.mood-film{
+  display:inline-flex;
+  align-items:center;
+  padding:.28rem .5rem;
+  margin-bottom:.55rem;
   border-radius:999px;
-  background:rgba(255,250,240,.92);
-  font-size:.6rem;
-  font-weight:800;
+  background:#fff3d4;
+  color:rgba(44,24,16,.72);
+  font-size:.58rem;
+  font-weight:700;
 }
-.mood-content{padding:.75rem}
-.mood-content h3{margin:0 0 .25rem;font-size:.9rem}
+.mood-content h3{
+  margin:0 0 .35rem;
+  font-size:1.05rem;
+}
 .mood-content p{
-  font-size:.7rem;
-  line-height:1.4;
-  color:rgba(44,24,16,.65);
-  margin:.2rem 0 .5rem;
-}
-.mood-content small{
-  font-size:.59rem;
-  color:rgba(44,24,16,.5);
+  margin:0;
+  color:rgba(44,24,16,.64);
+  font-family:'Caveat',cursive;
+  font-size:1rem;
+  line-height:1.25;
 }
 
 /* RESPONSIVE */
@@ -597,7 +624,7 @@ const goToRegister = async () => {
     padding:1.4rem;
     gap:1rem;
   }
-  .mood-grid{max-width:760px}
+  .mood-list{max-width:720px}
 }
 
 @media(max-width:760px){
@@ -660,31 +687,52 @@ const goToRegister = async () => {
     width:calc(50% - .28rem);
   }
 
-  .mood-grid{
-    grid-template-columns:1fr;
+  .mood-list{
     max-width:520px;
-    gap:.75rem;
+    gap:.7rem;
   }
-  .mood-card{
-    display:grid;
-    grid-template-columns:130px 1fr;
+  .mood-row{
+    grid-template-columns:42px 135px 1fr;
+    gap:.7rem;
+    min-height:132px;
+    padding:.65rem .75rem .65rem .6rem;
+    border-radius:17px;
+  }
+  .mood-row-number{
+    width:30px;
+    height:30px;
+    font-size:.56rem;
   }
   .mood-image-wrapper{
-    aspect-ratio:auto;
-    height:100%;
-    min-height:135px;
+    height:112px;
+    padding:.3rem;
   }
-  .mood-content{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-  }
+  .mood-content h3{font-size:.92rem}
+  .mood-content p{font-size:.9rem}
+  .mood-film{font-size:.52rem;margin-bottom:.4rem}
 }
 
 @media(max-width:420px){
-  .concept-grid,.mood-grid,.preview-stage{max-width:100%}
-  .mood-card{grid-template-columns:110px 1fr}
-  .mood-image-wrapper{min-height:128px}
+  .concept-grid,.mood-list,.preview-stage{max-width:100%}
+  .mood-row{
+    grid-template-columns:1fr;
+    gap:.55rem;
+    padding:.7rem;
+  }
+  .mood-row-number{
+    position:absolute;
+    z-index:2;
+    top:10px;
+    right:10px;
+    margin:0;
+    background:rgba(255,250,240,.92);
+  }
+  .mood-image-wrapper{
+    height:165px;
+    width:100%;
+  }
+  .mood-content{padding:.2rem .15rem .25rem}
+  .mood-film{margin-bottom:.35rem}
   .preview-phone{width:198px;height:370px}
   .preview-benefits{grid-template-columns:1fr}
   .preview-benefit:last-child{
