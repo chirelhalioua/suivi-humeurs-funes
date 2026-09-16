@@ -18,7 +18,21 @@
       <article class="dashboard-card account-card account-card-top">
         <div class="account-main">
           <div class="account-heading">
-            <div class="account-avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
+            <div class="account-photo-wrap">
+              <div class="account-avatar" :class="{ 'has-photo': user.profileImage }">
+                <img v-if="user.profileImage" :src="user.profileImage" alt="Photo de profil" />
+                <span v-else>{{ user.name.charAt(0).toUpperCase() }}</span>
+              </div>
+              <label class="photo-edit-btn" :class="{ loading: photoLoading }" aria-label="Modifier la photo de profil">
+                <i class="fas fa-camera"></i>
+                <input
+                  type="file"
+                  accept="image/*"
+                  :disabled="photoLoading"
+                  @change="handleProfileImage"
+                />
+              </label>
+            </div>
             <div class="account-title-copy">
               <span class="card-kicker">MON COMPTE</span>
               <h2>{{ user.name }}</h2>
@@ -36,10 +50,11 @@
               <strong>{{ user.email }}</strong>
             </div>
           </div>
+          <p v-if="accountNotice" :class="['account-notice', accountNoticeType]">{{ accountNotice }}</p>
         </div>
 
         <div class="account-actions">
-          <button class="password-btn" @click="goToPasswordReset">
+          <button class="password-btn" @click="openPasswordModal">
             <i class="fas fa-key"></i>
             Modifier le mot de passe
           </button>
@@ -145,6 +160,64 @@
     </div>
 
     <Transition name="modal">
+      <div v-if="showPasswordModal" class="modal-overlay" @click="closePasswordModal">
+        <div class="modal-content password-modal" @click.stop>
+          <div class="password-modal-icon">
+            <i class="fas fa-key"></i>
+          </div>
+          <h2>Modifier le mot de passe</h2>
+          <p class="password-modal-subtitle">Entre ton mot de passe actuel puis choisis-en un nouveau.</p>
+
+          <form class="password-form" @submit.prevent="changePassword">
+            <label for="current-password">Mot de passe actuel</label>
+            <input
+              id="current-password"
+              v-model="currentPassword"
+              type="password"
+              autocomplete="current-password"
+              required
+            />
+
+            <label for="new-account-password">Nouveau mot de passe</label>
+            <input
+              id="new-account-password"
+              v-model="newPassword"
+              type="password"
+              minlength="6"
+              autocomplete="new-password"
+              required
+            />
+
+            <label for="confirm-account-password">Confirmer le nouveau mot de passe</label>
+            <input
+              id="confirm-account-password"
+              v-model="confirmNewPassword"
+              type="password"
+              minlength="6"
+              autocomplete="new-password"
+              required
+            />
+
+            <p v-if="passwordMessage" :class="['password-message', passwordMessageType]">
+              {{ passwordMessage }}
+            </p>
+
+            <div class="password-modal-actions">
+              <button type="button" class="cancel-btn" @click="closePasswordModal">Annuler</button>
+              <button type="submit" class="save-password-btn" :disabled="passwordLoading">
+                {{ passwordLoading ? 'Modification...' : 'Modifier' }}
+              </button>
+            </div>
+
+            <button type="button" class="forgot-password-link" @click="goToPasswordReset">
+              Mot de passe actuel oublié ?
+            </button>
+          </form>
+        </div>
+      </div>
+    </Transition>
+
+    <Transition name="modal">
       <div v-if="showConfirmDelete" class="modal-overlay" @click="cancelDelete">
         <div class="modal-content" @click.stop>
           <div class="modal-icon">
@@ -175,6 +248,16 @@ const router = useRouter();
 const user = ref(null);
 const isLoading = ref(true);
 const showConfirmDelete = ref(false);
+const showPasswordModal = ref(false);
+const photoLoading = ref(false);
+const accountNotice = ref("");
+const accountNoticeType = ref("success");
+const currentPassword = ref("");
+const newPassword = ref("");
+const confirmNewPassword = ref("");
+const passwordLoading = ref(false);
+const passwordMessage = ref("");
+const passwordMessageType = ref("error");
 const moodEntries = ref([]);
 const recentMood = ref(null);
 
@@ -301,6 +384,151 @@ const fetchUserProfile = async () => {
     router.push("/login");
   } finally {
     isLoading.value = false;
+  }
+};
+
+const resizeProfileImage = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const image = new Image();
+
+      image.onload = () => {
+        const size = 320;
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = size;
+        canvas.height = size;
+
+        const sourceSize = Math.min(image.width, image.height);
+        const sourceX = (image.width - sourceSize) / 2;
+        const sourceY = (image.height - sourceSize) / 2;
+
+        ctx.drawImage(
+          image,
+          sourceX,
+          sourceY,
+          sourceSize,
+          sourceSize,
+          0,
+          0,
+          size,
+          size
+        );
+
+        resolve(canvas.toDataURL("image/jpeg", 0.78));
+      };
+
+      image.onerror = () => reject(new Error("Image invalide"));
+      image.src = reader.result;
+    };
+
+    reader.onerror = () => reject(new Error("Lecture impossible"));
+    reader.readAsDataURL(file);
+  });
+};
+
+const handleProfileImage = async (event) => {
+  const file = event.target.files?.[0];
+  event.target.value = "";
+
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    accountNotice.value = "Choisis un fichier image.";
+    accountNoticeType.value = "error";
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    accountNotice.value = "La photo doit faire moins de 5 Mo.";
+    accountNoticeType.value = "error";
+    return;
+  }
+
+  const userId = localStorage.getItem("userId");
+  if (!userId) return;
+
+  try {
+    photoLoading.value = true;
+    accountNotice.value = "";
+
+    const profileImage = await resizeProfileImage(file);
+    const response = await axios.put(
+      `https://suivi-humeurs-funes.onrender.com/api/auth/profil/${userId}/photo`,
+      { profileImage }
+    );
+
+    user.value = response.data.user;
+    accountNotice.value = "Photo de profil mise à jour.";
+    accountNoticeType.value = "success";
+  } catch (error) {
+    accountNotice.value = error.response?.data?.message || "Impossible de modifier la photo.";
+    accountNoticeType.value = "error";
+  } finally {
+    photoLoading.value = false;
+  }
+};
+
+const openPasswordModal = () => {
+  currentPassword.value = "";
+  newPassword.value = "";
+  confirmNewPassword.value = "";
+  passwordMessage.value = "";
+  passwordMessageType.value = "error";
+  showPasswordModal.value = true;
+};
+
+const closePasswordModal = () => {
+  if (passwordLoading.value) return;
+  showPasswordModal.value = false;
+};
+
+const changePassword = async () => {
+  passwordMessage.value = "";
+
+  if (newPassword.value.length < 6) {
+    passwordMessage.value = "Le nouveau mot de passe doit comporter au moins 6 caractères.";
+    passwordMessageType.value = "error";
+    return;
+  }
+
+  if (newPassword.value !== confirmNewPassword.value) {
+    passwordMessage.value = "Les deux nouveaux mots de passe ne correspondent pas.";
+    passwordMessageType.value = "error";
+    return;
+  }
+
+  const userId = localStorage.getItem("userId");
+  if (!userId) return;
+
+  try {
+    passwordLoading.value = true;
+
+    const response = await axios.put(
+      `https://suivi-humeurs-funes.onrender.com/api/auth/profil/${userId}/password`,
+      {
+        currentPassword: currentPassword.value,
+        newPassword: newPassword.value,
+      }
+    );
+
+    passwordMessage.value = response.data?.message || "Mot de passe modifié.";
+    passwordMessageType.value = "success";
+    currentPassword.value = "";
+    newPassword.value = "";
+    confirmNewPassword.value = "";
+
+    setTimeout(() => {
+      showPasswordModal.value = false;
+    }, 1200);
+  } catch (error) {
+    passwordMessage.value = error.response?.data?.message || "Impossible de modifier le mot de passe.";
+    passwordMessageType.value = "error";
+  } finally {
+    passwordLoading.value = false;
   }
 };
 
@@ -741,19 +969,71 @@ onMounted(fetchUserProfile);
   gap: 0.9rem;
 }
 
+.account-photo-wrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+
 .account-avatar {
   display: grid;
   place-items: center;
-  width: 54px;
-  height: 54px;
-  flex: 0 0 54px;
-  border-radius: 18px;
+  width: 62px;
+  height: 62px;
+  overflow: hidden;
+  border-radius: 19px;
   background: linear-gradient(135deg, #5f7f55, #78986a);
   color: #fff;
   font-family: "Sora", sans-serif;
   font-size: 1.15rem;
   font-weight: 800;
   box-shadow: 0 8px 20px rgba(120, 152, 106, 0.18);
+}
+
+.account-avatar img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.photo-edit-btn {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #fffaf0;
+  border-radius: 50%;
+  background: var(--brown);
+  color: #fff;
+  font-size: 0.68rem;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(44, 24, 16, 0.18);
+}
+
+.photo-edit-btn input {
+  display: none;
+}
+
+.photo-edit-btn.loading {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.account-notice {
+  margin: 0.65rem 0 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.account-notice.success {
+  color: #56774c;
+}
+
+.account-notice.error {
+  color: #9a382e;
 }
 
 .account-title-copy {
@@ -878,6 +1158,119 @@ onMounted(fetchUserProfile);
   border-top-color: var(--green);
   border-radius: 50%;
   animation: spin 0.85s linear infinite;
+}
+
+.password-modal {
+  text-align: left;
+}
+
+.password-modal-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 0.85rem;
+  border-radius: 15px;
+  background: #e8f1e3;
+  color: #4f6d45;
+  font-size: 1.05rem;
+}
+
+.password-modal h2,
+.password-modal-subtitle {
+  text-align: center;
+}
+
+.password-modal-subtitle {
+  margin-bottom: 1.2rem !important;
+}
+
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.password-form label {
+  margin-top: 0.35rem;
+  color: var(--brown);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.password-form input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 0.8rem;
+  border: 1px solid rgba(44, 24, 16, 0.14);
+  border-radius: 11px;
+  background: #fff;
+  color: var(--brown);
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+.password-form input:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(120, 152, 106, 0.15);
+}
+
+.password-message {
+  margin: 0.65rem 0 0 !important;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  text-align: center !important;
+  font-size: 0.72rem;
+}
+
+.password-message.success {
+  background: #eaf3e6;
+  color: #4f6d45;
+}
+
+.password-message.error {
+  background: #fff1ee;
+  color: #9a382e;
+}
+
+.password-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.password-modal-actions button {
+  padding: 0.72rem;
+  border-radius: 11px;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.save-password-btn {
+  border: 0;
+  background: #5f7f55;
+  color: #fff;
+}
+
+.save-password-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.forgot-password-link {
+  align-self: center;
+  margin-top: 0.35rem;
+  border: 0;
+  background: transparent;
+  color: rgba(44, 24, 16, 0.58);
+  font: inherit;
+  font-size: 0.7rem;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .modal-overlay {
