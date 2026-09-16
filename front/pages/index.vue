@@ -131,9 +131,9 @@ useHead({
   link: [
     { rel: 'preconnect', href: 'https://media.gettyimages.com', crossorigin: '' },
     { rel: 'dns-prefetch', href: 'https://media.gettyimages.com' },
-    { rel: 'preload', as: 'image', href: 'https://media.gettyimages.com/id/1193495368/fr/photo/louis-de-funes.jpg' },
-    { rel: 'preload', as: 'image', href: 'https://media.gettyimages.com/id/1190192831/fr/photo/louis-de-funes.jpg' },
-    { rel: 'preload', as: 'image', href: 'https://media.gettyimages.com/id/1175705018/fr/photo/louis-de-funes.jpg' }
+    { rel: 'preload', as: 'image', href: 'https://media.gettyimages.com/id/1193495368/fr/photo/lacteur-fran%C3%A7ais-louis-de-funes-invit%C3%A9-de-l%C3%A9mission-les-rendez-vous-du-dimanche-pr%C3%A9sent%C3%A9e-par.jpg?s=2048x2048&w=gi&k=20&c=UljXJU8EOKgAe2_bIQ9TXxO9lMOvvJ76fJRoNw4KdWo=' },
+    { rel: 'preload', as: 'image', href: 'https://media.gettyimages.com/id/1190192831/fr/photo/lacteur-fran%C3%A7ais-louis-de-funes-sur-le-tournage-du-film-la-grande-vadrouille.jpg?s=1024x1024&w=gi&k=20&c=eQKhJTznlLbW3XzdiCbtNDOihpJ8MYQq2nC1xB-tfaE=' },
+    { rel: 'preload', as: 'image', href: 'https://media.gettyimages.com/id/1175705018/fr/photo/louis-de-funes-on-the-set-of-les-aventures-de-rabbi-jacob-directed-by-gerard-oury-28th-march.jpg?s=1024x1024&w=gi&k=20&c=gk3H9CdG4r-zUeZUjel60HNKBM-UBPMcNTn-Yeg8kJA=' }
   ]
 })
 
