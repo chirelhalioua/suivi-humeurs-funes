@@ -15,7 +15,7 @@
     </section>
 
     <section class="concept-section">
-      <div class="section-header">
+      <div class="section-header concept-section-header">
         <span class="section-kicker">COMMENT ÇA MARCHE ?</span>
         <h2 class="section-title">Le Concept</h2>
         <p class="section-subtitle">Exprimez vos humeurs avec Louis de Funès</p>
@@ -100,7 +100,7 @@
     </section>
 
     <section class="mood-section">
-      <div class="section-header">
+      <div class="section-header mood-section-header">
         <span class="section-kicker">LES HUMEURS</span>
         <h2 class="section-title">Quelques humeurs</h2>
       </div>
@@ -194,18 +194,24 @@ const goToRegister = async () => {
 .concept-section,.mood-section{padding:clamp(3.2rem,5vw,4.4rem) 1rem}
 .concept-section{background:linear-gradient(180deg,#fffaf0 0%,#f8edcf 100%)}
 .mood-section{background:linear-gradient(180deg,#fffaf0 0%,#fff 100%)}
-.section-header{text-align:center;max-width:680px;margin:0 auto clamp(1.7rem,3.5vw,2.5rem)}
+.section-header{max-width:680px;margin:0 auto clamp(1.7rem,3.5vw,2.5rem)}
 .section-kicker{color:var(--brown-soft);background:rgba(255,255,255,.72);border:1px solid rgba(44,24,16,.08);margin-bottom:.7rem;font-size:.64rem;padding:.42rem .82rem}
 .section-title{font-size:clamp(1.6rem,3vw,2.35rem);line-height:1.1;margin:0 0 .8rem;font-weight:800}
-.section-subtitle{color:rgba(44,24,16,.66);line-height:1.55;font-size:.9rem}.preview-section-header{margin-bottom:1.8rem}
+.section-subtitle{color:rgba(44,24,16,.66);line-height:1.55;font-size:.9rem}
+.concept-section-header{text-align:left;max-width:980px}
+.preview-section-header{text-align:right;max-width:930px;margin-bottom:1.8rem}
+.mood-section-header{text-align:left;max-width:840px}
 
 /* CONCEPT */
-.concept-grid{max-width:1040px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}.mood-grid{max-width:840px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}
-.concept-card{position:relative;min-height:175px;padding:1rem;border-radius:18px;background:rgba(255,255,255,.88);border:1px solid rgba(44,24,16,.08);box-shadow:0 10px 28px rgba(44,24,16,.05);transition:transform .25s,box-shadow .25s}
+.concept-grid{max-width:900px;margin:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.15rem}
+.concept-card:nth-child(2),.concept-card:nth-child(4){transform:translateY(1.6rem)}
+.concept-card:nth-child(2):hover,.concept-card:nth-child(4):hover{transform:translateY(calc(1.6rem - 5px)) scale(1.015)}
+.mood-grid{max-width:840px;margin:auto;display:grid;grid-template-columns:1.08fr .92fr;grid-template-rows:repeat(2,minmax(0,1fr));gap:.9rem}
+.concept-card{position:relative;min-height:205px;padding:1.15rem;border-radius:18px;background:rgba(255,255,255,.88);border:1px solid rgba(44,24,16,.08);box-shadow:0 10px 28px rgba(44,24,16,.05);transition:transform .25s,box-shadow .25s}
 .concept-card::before,.preview-benefit::before{content:'';position:absolute;inset:0;padding:2px;box-sizing:border-box;border-radius:inherit;background:conic-gradient(from var(--border-angle),transparent 0 62%,var(--green) 72%,#a8c99b 82%,transparent 92%);opacity:0;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
 .concept-card:hover{transform:translateY(-5px) scale(1.015);box-shadow:0 16px 38px rgba(44,24,16,.09)}
 .concept-card:hover::before,.preview-benefit:hover::before{opacity:1;animation:greenBorderTrace 1.25s linear infinite}
-.concept-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.concept-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
 .concept-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#fff3d4;font-size:1.2rem}
 .concept-number{font-size:1.55rem;font-weight:800;color:rgba(44,24,16,.1)}
 .concept-card h3{font-size:.95rem;margin-bottom:.45rem}
@@ -213,15 +219,15 @@ const goToRegister = async () => {
 
 /* APP PREVIEW */
 .app-preview-section{padding:clamp(3.2rem,5vw,4.4rem) 1rem;background:#f7edcf;overflow:hidden}
-.preview-stage{position:relative;max-width:930px;min-height:470px;margin:auto;padding:1.5rem;border:1px solid rgba(44,24,16,.075);border-radius:30px;background:
-  radial-gradient(circle at 5% 18%,rgba(246,190,53,.11) 0 12%,transparent 12.5%),
-  radial-gradient(circle at 97% 84%,rgba(120,152,106,.08) 0 16%,transparent 16.5%),
-  #fffaf2;box-shadow:0 18px 46px rgba(67,42,18,.065);display:grid;grid-template-columns:.7fr 1fr .8fr;align-items:center;gap:1rem}
-.preview-quote-card{position:relative;align-self:center;justify-self:center;width:145px;margin:0;padding:.72rem .8rem;border-radius:16px;background:linear-gradient(145deg,#2d160f,#482317);color:#fff7e8;box-shadow:0 10px 22px rgba(44,24,16,.16);transform:rotate(-2deg)}
+.preview-stage{position:relative;max-width:860px;min-height:560px;margin:auto;padding:1.8rem 2rem;border:1px solid rgba(44,24,16,.075);border-radius:30px;background:
+  radial-gradient(circle at 4% 20%,rgba(246,190,53,.11) 0 12%,transparent 12.5%),
+  radial-gradient(circle at 96% 82%,rgba(120,152,106,.08) 0 16%,transparent 16.5%),
+  #fffaf2;box-shadow:0 18px 46px rgba(67,42,18,.065);display:grid;grid-template-columns:.95fr 1.05fr;grid-template-rows:auto 1fr;align-items:center;gap:1rem 2rem}
+.preview-quote-card{position:relative;grid-column:1;grid-row:1;justify-self:start;width:145px;margin:0 0 -.6rem .2rem;padding:.72rem .8rem;border-radius:16px;background:linear-gradient(145deg,#2d160f,#482317);color:#fff7e8;box-shadow:0 10px 22px rgba(44,24,16,.16);transform:rotate(-2deg)}
 .preview-quote-card .quote-mark{position:absolute;right:10px;top:2px;font-size:2rem;opacity:.58}
 .preview-quote-card p{font-family:'Caveat',cursive;font-size:.8rem;line-height:1.14;margin:.1rem 1rem .45rem 0}
 .preview-quote-card small{font-size:.58rem;opacity:.78}
-.preview-phone-wrap{display:flex;justify-content:center;align-items:center}
+.preview-phone-wrap{grid-column:1;grid-row:2;display:flex;justify-content:center;align-items:center}
 .preview-phone{position:relative;width:250px;height:455px;border:8px solid #141111;border-radius:38px;background:#111;padding:5px;box-shadow:0 24px 48px rgba(44,24,16,.2);transform:rotate(-1.5deg)}
 .preview-notch{position:absolute;z-index:5;top:5px;left:50%;transform:translateX(-50%);width:82px;height:18px;border-radius:0 0 16px 16px;background:#111}
 .preview-screen{height:100%;border-radius:27px;overflow:hidden;background:#fffaf2}
@@ -245,7 +251,7 @@ const goToRegister = async () => {
 .preview-bars{height:42px;display:flex;align-items:flex-end;justify-content:space-around;padding-top:7px}
 .preview-bars i{width:10px;border-radius:5px 5px 2px 2px;background:#f2bd45}
 .preview-bars i:nth-child(1){height:28%}.preview-bars i:nth-child(2){height:62%;background:#91b97f}.preview-bars i:nth-child(3){height:43%;background:#b99bd4}.preview-bars i:nth-child(4){height:78%;background:#75c8c2}.preview-bars i:nth-child(5){height:53%}
-.preview-side{align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:1rem}
+.preview-side{grid-column:2;grid-row:1/3;align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:1rem}
 .preview-handwritten{font-family:'Caveat',cursive;font-size:1.15rem;line-height:1.05;text-align:center;transform:rotate(-4deg);margin:0 0 .35rem}
 .preview-handwritten span{display:block;font-family:'Sora',sans-serif;font-size:1.35rem;margin-top:.35rem}
 .preview-benefits{display:flex;flex-direction:column;gap:.85rem}
@@ -255,6 +261,11 @@ const goToRegister = async () => {
 
 /* MOOD CARDS */
 .mood-card{background:#fffdf8;border:1px solid rgba(44,24,16,.08);border-radius:18px;overflow:hidden;box-shadow:0 9px 24px rgba(44,24,16,.055);transition:.25s}
+.mood-card:first-child{grid-row:1/3}
+.mood-card:first-child .mood-image-wrapper{aspect-ratio:auto;height:72%}
+.mood-card:not(:first-child){display:grid;grid-template-columns:.8fr 1.2fr;min-height:170px}
+.mood-card:not(:first-child) .mood-image-wrapper{aspect-ratio:auto;height:100%}
+.mood-card:not(:first-child) .mood-content{display:flex;flex-direction:column;justify-content:center}
 .mood-card:hover{transform:translateY(-5px)}
 .mood-image-wrapper{position:relative;aspect-ratio:1/1;overflow:hidden;background:#eee7d7}
 .image-placeholder{position:absolute;inset:0;background:#eee7d7}
@@ -269,10 +280,13 @@ const goToRegister = async () => {
 /* RESPONSIVE */
 @media(max-width:1024px){
   .hero-section{background-attachment:scroll}
-  .concept-grid,.mood-grid{grid-template-columns:repeat(2,1fr)}
-  .preview-stage{grid-template-columns:.7fr 1.1fr;min-height:unset;padding:1.8rem}
-  .preview-side{grid-column:1/-1;display:grid;grid-template-columns:.55fr 1.45fr;align-items:center}
-  .preview-benefits{display:grid;grid-template-columns:repeat(3,1fr)}
+  .concept-grid{max-width:760px}
+  .concept-card:nth-child(2),.concept-card:nth-child(4){transform:none}
+  .concept-card:nth-child(2):hover,.concept-card:nth-child(4):hover{transform:translateY(-5px) scale(1.015)}
+  .preview-stage{max-width:760px;min-height:unset;padding:1.6rem;grid-template-columns:.9fr 1.1fr}
+  .preview-side{grid-column:2;grid-row:1/3}
+  .preview-benefits{display:flex}
+  .mood-grid{max-width:760px}
 }
 
 @media(max-width:650px){
@@ -291,8 +305,8 @@ const goToRegister = async () => {
   .section-kicker{font-size:.58rem;letter-spacing:.12em;padding:.4rem .7rem}
   .section-subtitle{font-size:.88rem}
 
-  .concept-grid{grid-template-columns:1fr 1fr;gap:.65rem}
-  .concept-card{min-height:155px;padding:.8rem;border-radius:16px}
+  .concept-grid{grid-template-columns:1fr;gap:.75rem}
+  .concept-card{min-height:145px;padding:.85rem;border-radius:16px}
   .concept-top{margin-bottom:.85rem}
   .concept-icon{width:40px;height:40px;border-radius:13px;font-size:1.15rem}
   .concept-number{font-size:1.35rem}
@@ -300,8 +314,9 @@ const goToRegister = async () => {
   .concept-card p{font-size:.74rem;line-height:1.45}
 
   .preview-stage{display:flex;flex-direction:column;min-height:unset;padding:1.35rem .85rem;border-radius:24px;gap:1rem}
-  .preview-phone-wrap{order:1;width:100%}
-  .preview-side{display:flex;flex-direction:column;order:2;width:100%;gap:.75rem}
+  .preview-quote-card{order:1}
+  .preview-phone-wrap{order:2;width:100%}
+  .preview-side{display:flex;flex-direction:column;order:3;width:100%;gap:.75rem}
   .preview-handwritten{font-size:1.12rem;order:0;margin:.15rem 0}
   .preview-handwritten span{font-size:1.3rem}
 
@@ -330,9 +345,10 @@ const goToRegister = async () => {
   .preview-benefit:last-child{grid-column:1/-1;justify-self:center;width:calc(50% - .3rem)}
   .preview-benefit>span{width:32px;height:32px;font-size:.9rem}
 
-  .mood-grid{display:flex;overflow-x:auto;gap:.7rem;margin:0 -.85rem;padding:0 .85rem 1rem;scroll-snap-type:x mandatory;scrollbar-width:none}
-  .mood-grid::-webkit-scrollbar{display:none}
-  .mood-card{flex:0 0 56%;max-width:190px;min-width:165px;border-radius:16px;scroll-snap-align:start}
+  .mood-grid{display:grid;grid-template-columns:1fr;gap:.75rem;margin:0;padding:0;overflow:visible}
+  .mood-card,.mood-card:first-child,.mood-card:not(:first-child){display:grid;grid-template-columns:.8fr 1.2fr;min-height:145px;max-width:none;border-radius:16px}
+  .mood-card:first-child{grid-row:auto}
+  .mood-card:first-child .mood-image-wrapper,.mood-card:not(:first-child) .mood-image-wrapper{aspect-ratio:auto;height:100%}
   .mood-content{padding:.8rem}
   .mood-content h3{font-size:.9rem}
   .mood-content p{font-size:.72rem}
@@ -342,12 +358,12 @@ const goToRegister = async () => {
 @media(max-width:390px){
   .hero-section{min-height:72vh}
   .hero-title{font-size:2rem}
-  .concept-card{min-height:170px;padding:.8rem}
+  .concept-card{min-height:140px;padding:.8rem}
   .concept-card p{font-size:.7rem}
   .preview-phone{width:198px;height:370px}
   .preview-benefits{grid-template-columns:1fr}
   .preview-benefit:last-child{grid-column:auto;width:100%;justify-self:stretch}
-  .mood-card{flex-basis:60%;min-width:175px}
+  .mood-card{min-width:0}
 }
 
 @property --border-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
