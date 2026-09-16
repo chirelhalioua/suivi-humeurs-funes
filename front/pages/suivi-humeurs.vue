@@ -539,13 +539,13 @@ const moodWellbeingSets = {
     ],
   },
   tired: {
-    icon: "🌙",
+    icon: "💤",
     title: "Économise ton énergie",
     message: "Ton énergie semble plus basse aujourd’hui. Fais simple et garde tes forces pour ce qui compte vraiment.",
     actions: [
       { icon: "💧", label: "Boire" },
       { icon: "🛋️", label: "Se poser" },
-      { icon: "🌙", label: "Lever le pied" },
+      { icon: "🫧", label: "Lever le pied" },
     ],
   },
   stressed: {
