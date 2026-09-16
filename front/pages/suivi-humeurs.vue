@@ -57,7 +57,8 @@
           @click="changeView('daily')"
         >
           <i class="fas fa-calendar-day"></i>
-          Journalier
+          <span class="label-long">Journalier</span>
+          <span class="label-short">Jour</span>
         </button>
         <button
           type="button"
@@ -65,7 +66,8 @@
           @click="changeView('weekly')"
         >
           <i class="fas fa-calendar-week"></i>
-          Hebdomadaire
+          <span class="label-long">Hebdomadaire</span>
+          <span class="label-short">Semaine</span>
         </button>
         <button
           type="button"
@@ -73,7 +75,8 @@
           @click="changeView('annual')"
         >
           <i class="fas fa-calendar-alt"></i>
-          Annuel
+          <span class="label-long">Annuel</span>
+          <span class="label-short">Année</span>
         </button>
       </div>
 
@@ -868,6 +871,10 @@ onMounted(fetchMoodData);
   box-shadow: 0 6px 16px rgba(95, 127, 85, 0.2);
 }
 
+.label-short {
+  display: none;
+}
+
 .daily-view,
 .weekly-view,
 .annual-view {
@@ -1647,24 +1654,25 @@ onMounted(fetchMoodData);
     position: sticky;
     top: 0.35rem;
     z-index: 10;
-    width: calc(100% - 1.2rem);
+    width: fit-content;
+    max-width: calc(100% - 1.2rem);
     margin: 0 auto 0.65rem;
-    padding: 0.2rem;
-    gap: 0.12rem;
+    padding: 0.18rem;
+    gap: 0.1rem;
     border: 0;
-    border-radius: 14px;
-    background: rgba(255, 251, 242, 0.94);
+    border-radius: 999px;
+    background: rgba(255, 251, 242, 0.95);
     box-shadow: 0 6px 18px rgba(44, 24, 16, 0.06);
     backdrop-filter: blur(10px);
   }
 
   .view-toggle button {
-    flex: 1;
+    flex: 0 0 auto;
     justify-content: center;
-    gap: 0.25rem;
-    padding: 0.5rem 0.22rem;
-    border-radius: 11px;
-    font-size: 0.59rem;
+    gap: 0.22rem;
+    padding: 0.48rem 0.62rem;
+    border-radius: 999px;
+    font-size: 0.6rem;
   }
 
   .view-toggle button i {
@@ -1674,6 +1682,14 @@ onMounted(fetchMoodData);
   .view-toggle button.active {
     background: #78986a;
     box-shadow: none;
+  }
+
+  .label-long {
+    display: none;
+  }
+
+  .label-short {
+    display: inline;
   }
 
   .daily-view,
@@ -1791,70 +1807,85 @@ onMounted(fetchMoodData);
     min-height: 70px;
   }
 
-  /* Hebdo : mini calendrier horizontal, sans grosses cartes desktop */
+  /* Hebdo : cartes compactes comme sur la maquette */
   .week-overview {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 0.2rem;
+    display: flex;
+    gap: 0.48rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding: 0.05rem 0 0.35rem;
+    scrollbar-width: none;
+  }
+
+  .week-overview::-webkit-scrollbar {
+    display: none;
   }
 
   .day-card {
-    min-width: 0;
-    padding: 0.38rem 0.04rem 0.42rem;
-    border: 0;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.58);
+    min-width: 108px;
+    flex: 0 0 108px;
+    padding: 0.58rem 0.5rem;
+    border: 1px solid rgba(44, 24, 16, 0.06);
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.68);
     box-shadow: none;
     text-align: center;
+    scroll-snap-align: start;
   }
 
   .day-card.today {
-    background: #e7f0e2;
+    border-color: rgba(120, 152, 106, 0.35);
+    background: #eaf2e6;
     box-shadow: none;
   }
 
   .day-card-header {
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.48rem;
   }
 
   .day-card-header span {
-    font-size: 0.42rem;
+    font-size: 0.5rem;
   }
 
   .day-card-header strong {
-    font-size: 0.72rem;
+    font-size: 0.82rem;
   }
 
   .mini-period {
-    min-height: 15px;
-    display: grid;
-    place-items: center;
+    min-height: auto;
+    display: block;
   }
 
   .mini-period + .mini-period {
-    margin-top: 0.14rem;
-    padding-top: 0;
-    border-top: 0;
+    margin-top: 0.45rem;
+    padding-top: 0.45rem;
+    border-top: 1px solid rgba(44, 24, 16, 0.05);
   }
 
-  .mini-label,
-  .mini-mood img,
-  .mini-mood strong,
-  .mini-empty {
-    display: none;
-  }
-
-  .mini-period::before {
-    content: "";
-    width: 7px;
-    height: 7px;
+  .mini-label {
     display: block;
-    border-radius: 50%;
-    background: #d5d5d0;
+    margin-bottom: 0.26rem;
+    font-size: 0.48rem;
   }
 
-  .mini-period:has(.mini-mood)::before {
-    background: #78986a;
+  .mini-mood img {
+    width: 32px;
+    height: 32px;
+    display: block;
+    margin: 0 auto 0.2rem;
+    border-radius: 9px;
+  }
+
+  .mini-mood strong {
+    display: block;
+    font-size: 0.5rem;
+  }
+
+  .mini-empty {
+    min-height: 32px;
+    display: grid;
+    place-items: center;
+    font-size: 0.65rem;
   }
 
   .week-progress-card {
@@ -2056,11 +2087,12 @@ onMounted(fetchMoodData);
   }
 
   .view-toggle {
-    width: calc(100% - 1rem);
+    width: fit-content;
+    max-width: calc(100% - 0.8rem);
   }
 
   .view-toggle button {
-    padding-inline: 0.12rem;
+    padding-inline: 0.52rem;
     font-size: 0.55rem;
   }
 
