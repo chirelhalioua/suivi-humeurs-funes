@@ -206,6 +206,12 @@
                     :alt="getMood(date, 'morning').title"
                   />
                   <strong>{{ getMood(date, 'morning').title }}</strong>
+                  <small
+                    v-if="getMood(date, 'morning').description && getMood(date, 'morning').description !== 'Aucune description fournie'"
+                    class="mini-description"
+                  >
+                    “{{ getMood(date, 'morning').description }}”
+                  </small>
                 </div>
                 <div v-else class="mini-empty">—</div>
               </div>
@@ -218,6 +224,12 @@
                     :alt="getMood(date, 'evening').title"
                   />
                   <strong>{{ getMood(date, 'evening').title }}</strong>
+                  <small
+                    v-if="getMood(date, 'evening').description && getMood(date, 'evening').description !== 'Aucune description fournie'"
+                    class="mini-description"
+                  >
+                    “{{ getMood(date, 'evening').description }}”
+                  </small>
                 </div>
                 <div v-else class="mini-empty">—</div>
               </div>
@@ -1173,6 +1185,18 @@ onMounted(fetchMoodData);
   white-space: nowrap;
 }
 
+.mini-description {
+  display: -webkit-box;
+  margin-top: 0.22rem;
+  overflow: hidden;
+  color: rgba(44, 24, 16, 0.48);
+  font-family: "Caveat", cursive;
+  font-size: 0.68rem;
+  line-height: 1.15;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 .mini-empty {
   min-height: 42px;
   display: grid;
@@ -1879,6 +1903,13 @@ onMounted(fetchMoodData);
   .mini-mood strong {
     display: block;
     font-size: 0.5rem;
+  }
+
+  .mini-description {
+    margin-top: 0.16rem;
+    font-size: 0.58rem;
+    line-height: 1.1;
+    -webkit-line-clamp: 2;
   }
 
   .mini-empty {
