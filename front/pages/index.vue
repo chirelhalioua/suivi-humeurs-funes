@@ -335,28 +335,52 @@ const goToRegister = async () => {
 
 /* APP PREVIEW */
 .preview-stage{
+  position:relative;
   max-width:900px;
   margin:auto;
-  padding:1.7rem;
-  border:1px solid rgba(44,24,16,.075);
-  border-radius:28px;
-  background:#fffaf2;
-  box-shadow:0 16px 38px rgba(67,42,18,.055);
+  padding:2.3rem 1.35rem;
   display:grid;
   grid-template-columns:.72fr 1fr .88fr;
   align-items:center;
-  gap:1.35rem;
+  gap:1.5rem;
+  isolation:isolate;
+}
+.preview-stage::before,
+.preview-stage::after{
+  content:'';
+  position:absolute;
+  z-index:-1;
+  pointer-events:none;
+  border-radius:50%;
+  filter:blur(.2px);
+}
+.preview-stage::before{
+  width:420px;
+  height:290px;
+  left:16%;
+  top:16%;
+  background:rgba(255,250,240,.78);
+  transform:rotate(-8deg);
+}
+.preview-stage::after{
+  width:280px;
+  height:210px;
+  right:5%;
+  bottom:8%;
+  background:rgba(233,185,73,.10);
+  transform:rotate(12deg);
 }
 .preview-quote-card{
   position:relative;
   width:150px;
-  justify-self:center;
+  justify-self:end;
+  align-self:center;
   padding:.72rem .8rem;
   border-radius:16px;
   background:linear-gradient(145deg,#2d160f,#482317);
   color:#fff7e8;
   box-shadow:0 10px 22px rgba(44,24,16,.14);
-  transform:rotate(-2deg);
+  transform:rotate(-3deg) translateY(-18px);
 }
 .preview-quote-card .quote-mark{
   position:absolute;
@@ -509,10 +533,12 @@ const goToRegister = async () => {
 .preview-bars i:nth-child(4){height:78%;background:#75c8c2}
 .preview-bars i:nth-child(5){height:53%}
 .preview-side{
+  position:relative;
   display:flex;
   flex-direction:column;
   justify-content:center;
   gap:.9rem;
+  padding-left:.15rem;
 }
 .preview-handwritten{
   font-family:'Caveat',cursive;
@@ -538,11 +564,12 @@ const goToRegister = async () => {
   display:flex;
   align-items:center;
   gap:.6rem;
-  background:#fff;
+  background:rgba(255,255,255,.88);
   border:1px solid rgba(44,24,16,.07);
   border-radius:15px;
   padding:.58rem;
   box-shadow:0 7px 18px rgba(44,24,16,.04);
+  backdrop-filter:blur(5px);
   font-size:.66rem;
   transition:transform .25s,box-shadow .25s;
 }
@@ -749,7 +776,7 @@ const goToRegister = async () => {
   .preview-stage{
     max-width:760px;
     grid-template-columns:.72fr 1fr .88fr;
-    padding:1.4rem;
+    padding:2rem 1rem;
     gap:1rem;
   }
   .mood-list{max-width:720px}
@@ -802,12 +829,27 @@ const goToRegister = async () => {
     display:flex;
     flex-direction:column;
     max-width:520px;
-    padding:1.2rem .85rem;
+    padding:1.4rem .5rem;
     gap:1rem;
+  }
+  .preview-stage::before{
+    width:300px;
+    height:250px;
+    left:50%;
+    top:23%;
+    transform:translateX(-50%) rotate(-8deg);
+  }
+  .preview-stage::after{
+    width:190px;
+    height:150px;
+    right:0;
+    bottom:4%;
   }
   .preview-quote-card{
     width:150px;
     margin:0 auto;
+    justify-self:center;
+    transform:rotate(-2deg);
   }
   .preview-phone{width:210px;height:390px;border-width:6px;border-radius:34px}
   .preview-notch{width:72px;height:16px}
