@@ -193,11 +193,17 @@
             </div>
 
             <div class="progress-bars" aria-label="Progression de la semaine">
-              <span
+              <div
                 v-for="date in weekDates"
                 :key="'bar-' + dateKey(date)"
-                :class="{ active: dayMoodCount(date) > 0, full: dayMoodCount(date) > 1 }"
-              ></span>
+                class="progress-day"
+              >
+                <span
+                  class="progress-line"
+                  :class="{ active: dayMoodCount(date) > 0, full: dayMoodCount(date) > 1 }"
+                ></span>
+                <small>{{ shortDays[date.getDay()] }}</small>
+              </div>
             </div>
           </div>
         </section>
@@ -949,29 +955,47 @@ onMounted(fetchMoodData);
 }
 
 .progress-bars {
-  height: 44px;
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   align-items: end;
   gap: 0.45rem;
 }
 
-.progress-bars span {
+.progress-day {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: 42px auto;
+  align-items: end;
+  gap: 0.28rem;
+  text-align: center;
+}
+
+.progress-line {
+  width: 100%;
   height: 9px;
   min-height: 9px;
+  align-self: end;
   border-radius: 999px;
-  background: rgba(120, 152, 106, 0.18);
+  background: #d9d9d4;
   transition: height 0.25s ease, background 0.25s ease;
 }
 
-.progress-bars span.active {
+.progress-line.active {
   height: 24px;
   background: #8cac80;
 }
 
-.progress-bars span.full {
+.progress-line.full {
   height: 42px;
   background: #64845a;
+}
+
+.progress-day small {
+  display: block;
+  color: rgba(44, 24, 16, 0.48);
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .share-section {
