@@ -108,8 +108,7 @@
       <div class="mood-grid">
         <article v-for="(mood,index) in moods" :key="mood._id" class="mood-card">
           <div class="mood-image-wrapper">
-            <div class="image-placeholder" v-if="!mood.imageLoaded"></div>
-            <img :src="mood.image" :alt="mood.title" class="mood-image" :class="{loaded:mood.imageLoaded}" loading="eager" decoding="async" fetchpriority="high" @load="mood.imageLoaded=true"/>
+            <img :src="mood.image" :alt="mood.title" class="mood-image" loading="eager" decoding="async" fetchpriority="high" referrerpolicy="no-referrer"/>
             <span class="mood-index">0{{ index+1 }}</span>
           </div>
           <div class="mood-content">
@@ -141,24 +140,21 @@ const moods = ref([
     title:'Heureux',
     subtitle:'Mais c’est formidable !',
     film:'Le Corniaud',
-    image:'https://media.gettyimages.com/id/1193495368/fr/photo/lacteur-fran%C3%A7ais-louis-de-funes-invit%C3%A9-de-l%C3%A9mission-les-rendez-vous-du-dimanche-pr%C3%A9sent%C3%A9e-par.jpg?s=2048x2048&w=gi&k=20&c=UljXJU8EOKgAe2_bIQ9TXxO9lMOvvJ76fJRoNw4KdWo=',
-    imageLoaded:false
+    image:'https://media.gettyimages.com/id/1193495368/fr/photo/lacteur-fran%C3%A7ais-louis-de-funes-invit%C3%A9-de-l%C3%A9mission-les-rendez-vous-du-dimanche-pr%C3%A9sent%C3%A9e-par.jpg?s=2048x2048&w=gi&k=20&c=UljXJU8EOKgAe2_bIQ9TXxO9lMOvvJ76fJRoNw4KdWo='
   },
   {
     _id:'60b6c48f0c9c9f67a15a6b71',
     title:'Énervé',
     subtitle:'C’était pas mauvais, c’était très mauvais !',
     film:'La Grande Vadrouille',
-    image:'https://media.gettyimages.com/id/1190192831/fr/photo/lacteur-fran%C3%A7ais-louis-de-funes-sur-le-tournage-du-film-la-grande-vadrouille.jpg?s=1024x1024&w=gi&k=20&c=eQKhJTznlLbW3XzdiCbtNDOihpJ8MYQq2nC1xB-tfaE=',
-    imageLoaded:false
+    image:'https://media.gettyimages.com/id/1190192831/fr/photo/lacteur-fran%C3%A7ais-louis-de-funes-sur-le-tournage-du-film-la-grande-vadrouille.jpg?s=1024x1024&w=gi&k=20&c=eQKhJTznlLbW3XzdiCbtNDOihpJ8MYQq2nC1xB-tfaE='
   },
   {
     _id:'60b6c48f0c9c9f67a15a6b72',
     title:'Triste',
     subtitle:'Je suis triste, tout ça me fatigue, tout ça me dépasse...',
     film:'Rabbi Jacob',
-    image:'https://media.gettyimages.com/id/1175705018/fr/photo/louis-de-funes-on-the-set-of-les-aventures-de-rabbi-jacob-directed-by-gerard-oury-28th-march.jpg?s=1024x1024&w=gi&k=20&c=gk3H9CdG4r-zUeZUjel60HNKBM-UBPMcNTn-Yeg8kJA=',
-    imageLoaded:false
+    image:'https://media.gettyimages.com/id/1175705018/fr/photo/louis-de-funes-on-the-set-of-les-aventures-de-rabbi-jacob-directed-by-gerard-oury-28th-march.jpg?s=1024x1024&w=gi&k=20&c=gk3H9CdG4r-zUeZUjel60HNKBM-UBPMcNTn-Yeg8kJA='
   }
 ])
 
@@ -557,7 +553,6 @@ const goToRegister = async () => {
   background:linear-gradient(145deg,#efe6d2,#f8f3e8);
   padding:.6rem;
 }
-.image-placeholder{position:absolute;inset:.6rem;border-radius:13px;background:linear-gradient(110deg,#eee7d7 8%,#f7f1e6 18%,#eee7d7 33%);background-size:200% 100%;animation:imageShimmer 1.15s linear infinite}
 .mood-image{
   width:100%;
   height:100%;
@@ -566,10 +561,9 @@ const goToRegister = async () => {
   border-radius:13px;
   background:#e9e2d4;
   box-shadow:0 6px 16px rgba(44,24,16,.08);
-  opacity:0;
-  transition:.35s;
+  opacity:1;
+  display:block;
 }
-.mood-image.loaded{opacity:1}
 .mood-index{
   position:absolute;
   top:8px;
