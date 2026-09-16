@@ -247,7 +247,7 @@ const goToRegister = async () => {
 /* CONCEPT */
 .concept-flow{
   position:relative;
-  max-width:920px;
+  max-width:1080px;
   margin:auto;
   padding:.35rem 0;
 }
@@ -599,7 +599,7 @@ const goToRegister = async () => {
   background:linear-gradient(180deg,#fff 0%,#fffaf0 100%);
 }
 .mood-list{
-  max-width:920px;
+  max-width:1080px;
   margin:auto;
   display:flex;
   flex-direction:column;
@@ -700,42 +700,38 @@ const goToRegister = async () => {
 
 /* FINAL CTA */
 .final-cta-section{
-  background:#fffaf0;
-  padding-top:3.2rem;
-  padding-bottom:4.2rem;
+  position:relative;
+  background:linear-gradient(145deg,#2d160f,#482317);
+  padding:clamp(4.2rem,7vw,6.2rem) clamp(1rem,4vw,3rem);
+  overflow:hidden;
 }
 .final-cta-card{
   position:relative;
-  max-width:920px;
+  max-width:1100px;
   margin:auto;
-  padding:2.5rem 1.8rem;
+  padding:0;
   text-align:center;
-  border-radius:28px;
-  border:2px solid transparent;
-  background:linear-gradient(145deg,#2d160f,#482317);
   color:#fff8e9;
-  box-shadow:0 18px 38px rgba(44,24,16,.14);
-  overflow:hidden;
-  transition:transform .25s,box-shadow .25s,border-color .25s;
 }
-.final-cta-card::before,
-.final-cta-card::after{
+.final-cta-section::before,
+.final-cta-section::after{
   content:'';
   position:absolute;
   border-radius:50%;
-  border:1px solid rgba(255,243,212,.12);
+  border:1px solid rgba(255,243,212,.10);
+  pointer-events:none;
 }
-.final-cta-card::before{
-  width:180px;
-  height:180px;
-  right:-70px;
-  top:-85px;
+.final-cta-section::before{
+  width:300px;
+  height:300px;
+  right:-120px;
+  top:-150px;
 }
-.final-cta-card::after{
-  width:120px;
-  height:120px;
-  left:-45px;
-  bottom:-70px;
+.final-cta-section::after{
+  width:210px;
+  height:210px;
+  left:-90px;
+  bottom:-120px;
 }
 .final-cta-note{
   position:relative;
@@ -757,8 +753,8 @@ const goToRegister = async () => {
 .final-cta-card p{
   position:relative;
   z-index:1;
-  max-width:520px;
-  margin:0 auto 1.4rem;
+  max-width:620px;
+  margin:0 auto 1.5rem;
   color:rgba(255,248,233,.76);
   font-size:.86rem;
   line-height:1.6;
@@ -781,11 +777,6 @@ const goToRegister = async () => {
   box-shadow:0 9px 20px rgba(0,0,0,.12);
   transition:transform .25s,background .25s;
 }
-.final-cta-card:hover{
-  transform:translateY(-3px);
-  border-color:rgba(120,152,106,.75);
-  box-shadow:0 22px 44px rgba(44,24,16,.18);
-}
 .final-cta-button:hover{
   transform:translateY(-3px);
   background:#fff2cf;
@@ -803,17 +794,17 @@ const goToRegister = async () => {
 /* RESPONSIVE */
 @media(max-width:1024px){
   .hero-section{background-attachment:scroll}
-  .concept-flow{max-width:860px}
+  .concept-flow{max-width:calc(100% - 1rem)}
   .preview-stage{
     max-width:760px;
     grid-template-columns:.72fr 1fr .88fr;
     padding:1.4rem;
     gap:1rem;
   }
-  .mood-list{max-width:860px}
+  .mood-list{max-width:calc(100% - 1rem)}
 }
 
-@media(max-width:760px){
+@media(max-width:860px){
   .concept-section,.app-preview-section,.mood-section,.final-cta-section{
     padding:3rem .85rem;
   }
@@ -860,8 +851,8 @@ const goToRegister = async () => {
   .preview-stage{
     display:flex;
     flex-direction:column;
-    max-width:520px;
-    padding:1.2rem .85rem;
+    max-width:620px;
+    padding:1.25rem 1rem;
     gap:1rem;
   }
   .preview-quote-card{
@@ -900,11 +891,11 @@ const goToRegister = async () => {
   }
 
   .mood-list{
-    max-width:520px;
-    gap:.7rem;
+    max-width:680px;
+    gap:.75rem;
   }
   .mood-row{
-    grid-template-columns:42px 135px 1fr;
+    grid-template-columns:42px 170px 1fr;
     gap:.7rem;
     min-height:132px;
     padding:.65rem .75rem .65rem .6rem;
@@ -924,11 +915,92 @@ const goToRegister = async () => {
   .mood-film{font-size:.52rem;margin-bottom:.4rem}
 }
 
-@media(max-width:420px){
-  .final-cta-card{
-    padding:2rem 1rem;
+@media(max-width:600px){
+  .concept-section,.app-preview-section,.mood-section{
+    padding:2.7rem .75rem;
+  }
+
+  .concept-flow{
+    padding-left:4px;
+  }
+  .concept-flow::before{
+    left:25px;
+  }
+  .concept-step{
+    grid-template-columns:46px 1fr;
+    min-height:108px;
+  }
+  .concept-marker{
+    width:40px;
+    height:40px;
+  }
+  .concept-step:nth-child(odd) .concept-step-content,
+  .concept-step:nth-child(even) .concept-step-content{
+    margin-left:.45rem;
+    padding:.8rem .85rem;
+  }
+
+  .mood-list{
+    max-width:100%;
+  }
+  .mood-row{
+    grid-template-columns:1fr;
+    gap:.6rem;
+    padding:.75rem;
+  }
+  .mood-row-number{
+    position:absolute;
+    z-index:2;
+    top:12px;
+    right:12px;
+    margin:0;
+    background:rgba(255,250,240,.94);
+  }
+  .mood-image-wrapper{
+    width:100%;
+    height:190px;
+  }
+  .mood-content{
+    padding:.25rem .2rem .35rem;
+  }
+  .mood-content h3{
+    font-size:1rem;
+  }
+  .mood-content p{
+    font-size:.96rem;
+  }
+
+  .preview-stage{
+    width:100%;
+    max-width:100%;
+    padding:1rem .6rem;
     border-radius:22px;
   }
+  .preview-side{
+    max-width:100%;
+  }
+  .preview-benefits{
+    grid-template-columns:1fr;
+  }
+  .preview-benefit:last-child{
+    grid-column:auto;
+    width:100%;
+    justify-self:stretch;
+  }
+
+  .final-cta-section{
+    padding:3.6rem 1rem;
+  }
+  .final-cta-card h2{
+    font-size:clamp(1.65rem,8vw,2.05rem);
+  }
+  .final-cta-card p{
+    font-size:.82rem;
+    line-height:1.55;
+  }
+}
+
+@media(max-width:420px){
   .final-cta-note{font-size:1.05rem}
   .final-cta-card p{font-size:.8rem}
   .final-cta-button{font-size:.76rem}
