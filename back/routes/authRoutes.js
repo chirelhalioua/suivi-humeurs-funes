@@ -37,6 +37,35 @@ router.get('/profil', getUserProfile);
 router.put("/profil/:userId/photo", updateProfileImage);
 router.put("/profil/:userId/password", changePassword);
 
+// Supprimer uniquement la photo de profil
+router.delete("/profil/:userId/photo", async (req, res) => {
+  const { userId } = req.params;
+
+  if (!/^[0-9a-fA-F]{24}$/.test(userId)) {
+    return res.status(400).json({ message: "Utilisateur invalide." });
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { profileImage: '' },
+      { new: true }
+    ).select('-password -resetPasswordToken -resetPasswordExpires');
+
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé." });
+    }
+
+    return res.status(200).json({
+      message: "Photo de profil supprimée.",
+      user,
+    });
+  } catch (error) {
+    console.error("Erreur lors de la suppression de la photo :", error);
+    return res.status(500).json({ message: "Erreur du serveur." });
+  }
+});
+
 // Supprimer un profil utilisateur
 router.delete("/profil/:userId", deleteUserProfile);
 
