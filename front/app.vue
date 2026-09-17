@@ -133,6 +133,16 @@ body { font-family: "Inter", sans-serif; line-height: 1.6; background-color: #f4
 .footer-link:hover { color:white; }
 .footer-bottom { padding-top:2rem; border-top:1px solid rgba(244,228,188,.2); text-align:center; }
 .copyright { font-size:.875rem; }
+@media (min-width:769px) {
+  .navbar-container {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+    justify-content:initial;
+  }
+  .navbar-brand { justify-self:start; }
+  .navbar-links { justify-self:center; }
+  .theme-toggle { justify-self:end; margin-left:0; }
+}
 @media (max-width:768px) {
   .navbar-links { display:none; }
   .navbar-container { padding-right: 4.5rem; }
