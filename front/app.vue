@@ -20,6 +20,7 @@
             <NuxtLink to="/choisir-humeurs" class="nav-link" active-class="nav-link-active">Choisir</NuxtLink>
             <NuxtLink to="/suivi-humeurs" class="nav-link" active-class="nav-link-active">Mon suivi</NuxtLink>
             <NuxtLink to="/profil" class="nav-link" active-class="nav-link-active">Profil</NuxtLink>
+            <NuxtLink to="/contact" class="nav-link" active-class="nav-link-active">Contact</NuxtLink>
             <button @click="logout" class="nav-link">Déconnexion</button>
           </template>
         </div>
@@ -42,6 +43,7 @@
           <NuxtLink to="/choisir-humeurs" class="mobile-link" @click="closeMenu">Choisir mon humeur</NuxtLink>
           <NuxtLink to="/suivi-humeurs" class="mobile-link" @click="closeMenu">Mon suivi</NuxtLink>
           <NuxtLink to="/profil" class="mobile-link" @click="closeMenu">Profil</NuxtLink>
+          <NuxtLink to="/contact" class="mobile-link" @click="closeMenu">Contact</NuxtLink>
           <button @click="logout" class="mobile-link">Déconnexion</button>
         </template>
       </div>
