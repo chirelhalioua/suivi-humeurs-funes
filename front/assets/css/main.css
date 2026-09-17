@@ -392,3 +392,35 @@ h6 {
 .register-page input[type="checkbox"] {
   accent-color: var(--funes-green-dark);
 }
+
+/* Mobile : davantage d'air sur les côtés et pas de barre verte horizontale */
+@media (max-width: 680px) {
+  .choose-mood-page,
+  .tracking-page,
+  .profile-page {
+    padding-left: 0.9rem !important;
+    padding-right: 0.9rem !important;
+  }
+
+  .choose-mood-page .mood-experience,
+  .tracking-page .daily-view,
+  .tracking-page .weekly-view,
+  .tracking-page .annual-view,
+  .profile-page .dashboard-card {
+    border-top: 1px solid rgba(95, 127, 85, 0.2) !important;
+  }
+
+  .tracking-page .tracking-shell {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .tracking-page .daily-card,
+  .tracking-page .daily-wellbeing,
+  .tracking-page .week-progress-card,
+  .tracking-page .annual-chart-card,
+  .tracking-page .annual-month-detail {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
