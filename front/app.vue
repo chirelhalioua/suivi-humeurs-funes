@@ -90,7 +90,7 @@ onUnmounted(() => { window.removeEventListener("scroll", handleScroll); });
 const logout = async () => { localStorage.removeItem("userId"); isAuthenticated.value = false; menuOpen.value = false; await router.push("/login"); };
 const toggleMenu = () => { menuOpen.value = !menuOpen.value; document.body.style.overflow = menuOpen.value ? "hidden" : ""; };
 const closeMenu = () => { menuOpen.value = false; document.body.style.overflow = ""; };
-router.afterEach(() => { closeMenu(); });
+router.afterEach(() => { checkAuthentication(); closeMenu(); });
 </script>
 
 <style>
