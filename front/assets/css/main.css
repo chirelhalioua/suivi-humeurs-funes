@@ -348,3 +348,47 @@ h6 {
   background: #dcebd7 !important;
   transform: scale(1.04);
 }
+
+/* Harmonise les formulaires d'authentification avec le vert sauge foncé du site */
+.login-page .form-input:focus,
+.register-page .form-input:focus,
+.reset-password-page .form-input:focus,
+.new-password-page input:focus {
+  border-color: var(--funes-green-dark) !important;
+  box-shadow: 0 0 0 3px rgba(95, 127, 85, 0.16) !important;
+  outline: none !important;
+}
+
+.login-page .submit-btn,
+.register-page .submit-btn,
+.reset-password-page .submit-btn,
+.new-password-page button[type="submit"] {
+  background: var(--funes-green-dark) !important;
+  color: #fffaf0 !important;
+  box-shadow: 0 8px 18px rgba(95, 127, 85, 0.18) !important;
+}
+
+.login-page .submit-btn:hover,
+.register-page .submit-btn:hover,
+.reset-password-page .submit-btn:hover,
+.new-password-page button[type="submit"]:hover {
+  background: #4f6f46 !important;
+  box-shadow: 0 10px 22px rgba(95, 127, 85, 0.24) !important;
+}
+
+.login-page .submit-btn:disabled,
+.register-page .submit-btn.loading,
+.reset-password-page .submit-btn:disabled,
+.new-password-page button[type="submit"]:disabled {
+  background: #78986a !important;
+}
+
+.login-page .forgot-password a,
+.register-page .highlight-link,
+.new-password-page .login-link {
+  color: var(--funes-green-dark) !important;
+}
+
+.register-page input[type="checkbox"] {
+  accent-color: var(--funes-green-dark);
+}
