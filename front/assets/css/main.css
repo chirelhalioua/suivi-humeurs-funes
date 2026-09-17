@@ -79,3 +79,15 @@ h6 {
 .profile-page .quote-card p {
   font-family: "Caveat", cursive !important;
 }
+
+/* Centre tous les contenus des cartes de résumé du suivi */
+.tracking-page .summary-card {
+  text-align: center !important;
+}
+
+.tracking-page .summary-card small {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: auto !important;
+  text-align: center !important;
+}
