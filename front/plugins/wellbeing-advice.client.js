@@ -8,7 +8,7 @@ export default defineNuxtPlugin(() => {
 
   const adviceByMood = {
     rieur: {
-      icon: "😄",
+      icon: "😂",
       title: "Profite de cette bonne humeur",
       message:
         "Ton humeur est légère aujourd’hui. Garde ce moment de rire et fais durer ce qui t’a mis de bonne humeur.",
@@ -19,7 +19,7 @@ export default defineNuxtPlugin(() => {
       ],
     },
     etonne: {
-      icon: "✨",
+      icon: "😲",
       title: "Accueille la surprise",
       message:
         "Quelque chose semble t’avoir surpris aujourd’hui. Prends un instant pour observer ce que ça t’a fait ressentir, sans te presser.",
