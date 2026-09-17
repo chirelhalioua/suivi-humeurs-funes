@@ -424,3 +424,76 @@ h6 {
     margin-right: 0 !important;
   }
 }
+
+/* Labels de section : moins "bouton" et cohérents sur tout le site */
+.home-page .section-kicker,
+.choose-mood-page .mood-kicker,
+.choose-mood-page .note-kicker,
+.tracking-page .tracking-kicker,
+.profile-page .dashboard-kicker,
+.profile-page .card-kicker {
+  color: var(--funes-green-dark) !important;
+  background: rgba(234, 242, 230, 0.72) !important;
+  border: 1px solid rgba(95, 127, 85, 0.18) !important;
+  border-radius: 8px !important;
+  padding: 0.32rem 0.58rem !important;
+  box-shadow: none !important;
+}
+
+/* Contact : remplace l'ancien vert vif par le vert sauge du site */
+.contact-page .card-icon,
+.contact-page .scroll-to-faq {
+  background: var(--funes-green-dark) !important;
+}
+
+.contact-page .contact-link,
+.contact-page .faq-question i {
+  color: var(--funes-green-dark) !important;
+}
+
+.contact-page .contact-link:hover {
+  color: #4f6f46 !important;
+}
+
+.contact-page .scroll-to-faq:hover {
+  background: #4f6f46 !important;
+}
+
+.contact-page .contact-card,
+.contact-page .faq-item {
+  border: 1px solid rgba(95, 127, 85, 0.14);
+}
+
+/* Champs de formulaire : texte toujours lisible pendant la saisie */
+.login-page .form-input,
+.register-page .form-input,
+.reset-password-page .form-input,
+.new-password-page input[type="text"],
+.new-password-page input[type="password"],
+.profile-page .password-form input,
+.choose-mood-page .mood-note textarea {
+  color: #2c1810 !important;
+  -webkit-text-fill-color: #2c1810 !important;
+  caret-color: var(--funes-green-dark) !important;
+  background-color: #fffdf8 !important;
+}
+
+.login-page .form-input::placeholder,
+.register-page .form-input::placeholder,
+.reset-password-page .form-input::placeholder,
+.new-password-page input::placeholder,
+.profile-page .password-form input::placeholder,
+.choose-mood-page .mood-note textarea::placeholder {
+  color: rgba(44, 24, 16, 0.42) !important;
+  -webkit-text-fill-color: rgba(44, 24, 16, 0.42) !important;
+}
+
+.login-page .form-input:-webkit-autofill,
+.register-page .form-input:-webkit-autofill,
+.reset-password-page .form-input:-webkit-autofill,
+.new-password-page input:-webkit-autofill,
+.profile-page .password-form input:-webkit-autofill {
+  -webkit-text-fill-color: #2c1810 !important;
+  box-shadow: 0 0 0 1000px #fffdf8 inset !important;
+  caret-color: var(--funes-green-dark) !important;
+}
