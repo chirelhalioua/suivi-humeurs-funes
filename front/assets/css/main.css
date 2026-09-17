@@ -9,6 +9,10 @@
   --secondary: #2c1810;
   --secondary-hover: #3d251b;
   --background: #f4e4bc;
+  --funes-green: #78986a;
+  --funes-green-dark: #5f7f55;
+  --funes-green-soft: #eaf2e6;
+  --funes-gold: #e9b949;
 }
 
 /* Transitions de page */
@@ -90,4 +94,60 @@ h6 {
   max-width: 100% !important;
   margin-inline: auto !important;
   text-align: center !important;
+}
+
+/* Plus de relief, avec le même vert sauge que la page d'accueil */
+.choose-mood-page {
+  background:
+    radial-gradient(circle at 90% 8%, rgba(120, 152, 106, 0.18), transparent 24%),
+    radial-gradient(circle at 8% 5%, rgba(233, 185, 73, 0.18), transparent 25%),
+    linear-gradient(180deg, #fffaf0 0%, #f5edcf 100%) !important;
+}
+
+.choose-mood-page .mood-experience {
+  border-color: rgba(120, 152, 106, 0.22) !important;
+  background: linear-gradient(145deg, rgba(255, 253, 248, 0.97), rgba(234, 243, 229, 0.9)) !important;
+  box-shadow: 0 16px 38px rgba(95, 127, 85, 0.09) !important;
+}
+
+.choose-mood-page .mood-note {
+  border-color: rgba(120, 152, 106, 0.18) !important;
+  background: linear-gradient(145deg, rgba(255, 250, 235, 0.96), rgba(234, 243, 229, 0.82)) !important;
+}
+
+.tracking-page {
+  background:
+    radial-gradient(circle at 90% 7%, rgba(120, 152, 106, 0.18), transparent 22%),
+    radial-gradient(circle at 8% 6%, rgba(233, 185, 73, 0.16), transparent 24%),
+    linear-gradient(180deg, #fffaf0 0%, #f5edcf 100%) !important;
+}
+
+.tracking-page .daily-card {
+  border-color: rgba(120, 152, 106, 0.17) !important;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(236, 245, 232, 0.78)) !important;
+}
+
+.tracking-page .week-progress-card,
+.tracking-page .annual-chart-card {
+  border-color: rgba(120, 152, 106, 0.15) !important;
+  background: linear-gradient(145deg, rgba(255, 251, 238, 0.92), rgba(235, 244, 230, 0.82)) !important;
+}
+
+.profile-page {
+  background:
+    radial-gradient(circle at 92% 9%, rgba(120, 152, 106, 0.18), transparent 23%),
+    radial-gradient(circle at 7% 7%, rgba(233, 185, 73, 0.18), transparent 24%),
+    linear-gradient(180deg, #fffaf0 0%, #f5edcf 100%) !important;
+}
+
+.profile-page .dashboard-card {
+  border-color: rgba(120, 152, 106, 0.16) !important;
+  background: linear-gradient(145deg, rgba(255, 253, 248, 0.96), rgba(235, 244, 230, 0.88)) !important;
+  box-shadow: 0 14px 34px rgba(95, 127, 85, 0.08) !important;
+}
+
+.profile-page .account-card-top {
+  background:
+    radial-gradient(circle at 96% 10%, rgba(233, 185, 73, 0.12), transparent 24%),
+    linear-gradient(135deg, rgba(255, 253, 248, 0.98), rgba(228, 240, 222, 0.94)) !important;
 }
