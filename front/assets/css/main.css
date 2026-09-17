@@ -74,3 +74,8 @@ h5,
 h6 {
   @apply font-sora;
 }
+
+/* Citation du profil en écriture manuscrite */
+.profile-page .quote-card p {
+  font-family: "Caveat", cursive !important;
+}
