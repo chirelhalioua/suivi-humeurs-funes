@@ -10,20 +10,18 @@
 
         <!-- Menu desktop -->
         <div class="navbar-links">
-          <NuxtLink to="/" class="nav-link" active-class="nav-link-active">
-            Accueil
-          </NuxtLink>
           <template v-if="!isAuthenticated">
+            <NuxtLink to="/" class="nav-link" active-class="nav-link-active">Accueil</NuxtLink>
             <NuxtLink to="/login" class="nav-link" active-class="nav-link-active">Connexion</NuxtLink>
             <NuxtLink to="/register" class="nav-link" active-class="nav-link-active">Inscription</NuxtLink>
+            <NuxtLink to="/contact" class="nav-link" active-class="nav-link-active">Contact</NuxtLink>
           </template>
-          <template v-if="isAuthenticated">
-            <NuxtLink to="/profil" class="nav-link" active-class="nav-link-active">Votre profil</NuxtLink>
-            <NuxtLink to="/choisir-humeurs" class="nav-link" active-class="nav-link-active">Choix des Humeurs</NuxtLink>
-            <NuxtLink to="/suivi-humeurs" class="nav-link" active-class="nav-link-active">Suivi des Humeurs</NuxtLink>
+          <template v-else>
+            <NuxtLink to="/choisir-humeurs" class="nav-link" active-class="nav-link-active">Choisir</NuxtLink>
+            <NuxtLink to="/suivi-humeurs" class="nav-link" active-class="nav-link-active">Mon suivi</NuxtLink>
+            <NuxtLink to="/profil" class="nav-link" active-class="nav-link-active">Profil</NuxtLink>
             <button @click="logout" class="nav-link">Déconnexion</button>
           </template>
-          <NuxtLink to="/contact" class="nav-link" active-class="nav-link-active">Contact</NuxtLink>
         </div>
 
         <button @click="toggleDarkMode" class="theme-toggle">{{ isDarkMode ? "☀️" : "🌙" }}</button>
@@ -34,18 +32,18 @@
       </div>
 
       <div class="mobile-menu" :class="{ 'is-open': menuOpen }">
-        <NuxtLink to="/" class="mobile-link" @click="closeMenu">Accueil</NuxtLink>
         <template v-if="!isAuthenticated">
+          <NuxtLink to="/" class="mobile-link" @click="closeMenu">Accueil</NuxtLink>
           <NuxtLink to="/login" class="mobile-link" @click="closeMenu">Connexion</NuxtLink>
           <NuxtLink to="/register" class="mobile-link" @click="closeMenu">Inscription</NuxtLink>
+          <NuxtLink to="/contact" class="mobile-link" @click="closeMenu">Contact</NuxtLink>
         </template>
-        <template v-if="isAuthenticated">
-          <NuxtLink to="/profil" class="mobile-link" @click="closeMenu">Votre profil</NuxtLink>
-          <NuxtLink to="/choisir-humeurs" class="mobile-link" @click="closeMenu">Choix des Humeurs</NuxtLink>
-          <NuxtLink to="/suivi-humeurs" class="mobile-link" @click="closeMenu">Suivi des Humeurs</NuxtLink>
+        <template v-else>
+          <NuxtLink to="/choisir-humeurs" class="mobile-link" @click="closeMenu">Choisir mon humeur</NuxtLink>
+          <NuxtLink to="/suivi-humeurs" class="mobile-link" @click="closeMenu">Mon suivi</NuxtLink>
+          <NuxtLink to="/profil" class="mobile-link" @click="closeMenu">Profil</NuxtLink>
           <button @click="logout" class="mobile-link">Déconnexion</button>
         </template>
-        <NuxtLink to="/contact" class="mobile-link" @click="closeMenu">Contact</NuxtLink>
       </div>
     </nav>
 
