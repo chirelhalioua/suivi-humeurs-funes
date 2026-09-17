@@ -106,18 +106,27 @@ h6 {
 }
 
 .choose-mood-page .mood-experience {
-  border-color: rgba(120, 152, 106, 0.3) !important;
+  border-color: rgba(95, 127, 85, 0.42) !important;
+  border-top: 3px solid var(--funes-green-dark) !important;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.42), transparent 38%),
     linear-gradient(145deg, rgba(255, 253, 248, 0.98), rgba(232, 242, 227, 0.94)) !important;
   box-shadow:
     0 22px 48px rgba(44, 24, 16, 0.08),
-    0 8px 22px rgba(95, 127, 85, 0.11),
+    0 8px 22px rgba(95, 127, 85, 0.14),
     inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
 }
 
+.choose-mood-page .mood-kicker,
+.choose-mood-page .note-kicker {
+  color: #fffaf0 !important;
+  background: var(--funes-green-dark) !important;
+  border-radius: 999px;
+  padding: 0.3rem 0.58rem;
+}
+
 .choose-mood-page .mood-card {
-  border-color: rgba(120, 152, 106, 0.18) !important;
+  border-color: rgba(120, 152, 106, 0.22) !important;
   box-shadow:
     0 12px 28px rgba(44, 24, 16, 0.07),
     inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
@@ -127,8 +136,13 @@ h6 {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
+.choose-mood-page .quick-mood:hover {
+  border-color: var(--funes-green-dark) !important;
+  box-shadow: 0 8px 18px rgba(95, 127, 85, 0.16) !important;
+}
+
 .choose-mood-page .mood-note {
-  border-color: rgba(120, 152, 106, 0.24) !important;
+  border-color: rgba(95, 127, 85, 0.34) !important;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.35), transparent 45%),
     linear-gradient(145deg, rgba(255, 250, 235, 0.97), rgba(232, 242, 227, 0.88)) !important;
@@ -145,18 +159,26 @@ h6 {
     linear-gradient(180deg, #fffaf0 0%, #f5edcf 100%) !important;
 }
 
+.tracking-page .tracking-kicker {
+  color: #fffaf0 !important;
+  background: var(--funes-green-dark) !important;
+  border-radius: 999px;
+  padding: 0.3rem 0.58rem;
+}
+
 .tracking-page .daily-view,
 .tracking-page .weekly-view,
 .tracking-page .annual-view {
-  border-color: rgba(120, 152, 106, 0.2) !important;
+  border-color: rgba(95, 127, 85, 0.34) !important;
+  border-top: 3px solid var(--funes-green-dark) !important;
   box-shadow:
     0 20px 46px rgba(44, 24, 16, 0.07),
-    0 7px 20px rgba(95, 127, 85, 0.08),
+    0 7px 20px rgba(95, 127, 85, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
 }
 
 .tracking-page .daily-card {
-  border-color: rgba(120, 152, 106, 0.23) !important;
+  border-color: rgba(120, 152, 106, 0.28) !important;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.48), transparent 46%),
     linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(233, 243, 228, 0.86)) !important;
@@ -166,19 +188,29 @@ h6 {
 }
 
 .tracking-page .summary-card {
+  border-color: rgba(95, 127, 85, 0.22) !important;
   box-shadow:
     0 8px 20px rgba(44, 24, 16, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
 }
 
-.tracking-page .daily-wellbeing,
+.tracking-page .daily-wellbeing {
+  border-color: rgba(95, 127, 85, 0.38) !important;
+  border-left: 4px solid var(--funes-green-dark) !important;
+}
+
+.tracking-page .daily-wellbeing-icon {
+  background: var(--funes-green-dark) !important;
+  color: #fffaf0 !important;
+}
+
 .tracking-page .week-progress-card,
 .tracking-page .annual-chart-card,
 .tracking-page .annual-month-detail {
-  border-color: rgba(120, 152, 106, 0.22) !important;
+  border-color: rgba(95, 127, 85, 0.3) !important;
   box-shadow:
     0 12px 28px rgba(44, 24, 16, 0.05),
-    0 5px 14px rgba(95, 127, 85, 0.07),
+    0 5px 14px rgba(95, 127, 85, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.76) !important;
 }
 
@@ -190,14 +222,24 @@ h6 {
     linear-gradient(180deg, #fffaf0 0%, #f5edcf 100%) !important;
 }
 
+.profile-page .dashboard-kicker,
+.profile-page .card-kicker {
+  color: #fffaf0 !important;
+  background: var(--funes-green-dark) !important;
+  border-radius: 999px;
+  padding: 0.3rem 0.58rem;
+  display: inline-block;
+}
+
 .profile-page .dashboard-card {
-  border-color: rgba(120, 152, 106, 0.24) !important;
+  border-color: rgba(95, 127, 85, 0.34) !important;
+  border-top: 3px solid var(--funes-green-dark) !important;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.4), transparent 45%),
     linear-gradient(145deg, rgba(255, 253, 248, 0.98), rgba(233, 243, 228, 0.92)) !important;
   box-shadow:
     0 18px 40px rgba(44, 24, 16, 0.07),
-    0 7px 20px rgba(95, 127, 85, 0.09),
+    0 7px 20px rgba(95, 127, 85, 0.11),
     inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
 }
 
@@ -210,13 +252,24 @@ h6 {
 .profile-page .account-detail,
 .profile-page .tracking-summary > div {
   border-radius: 14px;
+  border: 1px solid rgba(95, 127, 85, 0.18);
   background: rgba(255, 255, 255, 0.42);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
+.profile-page .mini-action,
+.profile-page .secondary-action {
+  background: var(--funes-green-dark) !important;
+  border-color: var(--funes-green-dark) !important;
+  color: #fffaf0 !important;
+  box-shadow: 0 8px 18px rgba(95, 127, 85, 0.18) !important;
+}
+
 .profile-page .quote-card {
+  border: 1px solid rgba(95, 127, 85, 0.24) !important;
   box-shadow:
     0 18px 36px rgba(44, 24, 16, 0.15),
+    0 6px 18px rgba(95, 127, 85, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
 }
 
@@ -231,11 +284,17 @@ h6 {
   .tracking-page .daily-card:hover,
   .profile-page .dashboard-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(120, 152, 106, 0.38) !important;
+    border-color: var(--funes-green-dark) !important;
     box-shadow:
       0 18px 36px rgba(44, 24, 16, 0.08),
-      0 8px 22px rgba(95, 127, 85, 0.12),
+      0 8px 22px rgba(95, 127, 85, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+  }
+
+  .profile-page .mini-action:hover,
+  .profile-page .secondary-action:hover {
+    background: #4f6f46 !important;
+    transform: translateY(-1px);
   }
 }
 
@@ -254,9 +313,18 @@ h6 {
   .tracking-page .weekly-view,
   .tracking-page .annual-view,
   .profile-page .dashboard-card {
+    border-top-width: 2px !important;
     box-shadow:
       0 10px 24px rgba(44, 24, 16, 0.055),
-      0 4px 12px rgba(95, 127, 85, 0.065) !important;
+      0 4px 12px rgba(95, 127, 85, 0.075) !important;
+  }
+
+  .choose-mood-page .mood-kicker,
+  .choose-mood-page .note-kicker,
+  .tracking-page .tracking-kicker,
+  .profile-page .dashboard-kicker,
+  .profile-page .card-kicker {
+    padding: 0.24rem 0.48rem;
   }
 }
 
