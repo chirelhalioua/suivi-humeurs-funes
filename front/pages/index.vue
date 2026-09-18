@@ -189,7 +189,7 @@ const goToRegister = async () => {
 /* HERO */
 .hero-section{position:relative;min-height:78vh;display:flex;align-items:center;justify-content:center;padding:2.5rem 1.25rem;background-image:url('/background.jpg');background-size:cover;background-position:center;background-attachment:fixed;color:white;overflow:hidden}
 .hero-section:before{content:'';position:absolute;inset:0;background:linear-gradient(110deg,rgba(25,12,7,.78),rgba(44,24,16,.58),rgba(25,12,7,.72))}
-.hero-section:after{content:'';position:absolute;width:420px;height:420px;border-radius:50%;border:1px solid rgba(244,228,188,.18);right:-170px;top:-150px;box-shadow:0 0 0 55px rgba(244,228,188,.035)}
+.hero-section:after{display:none}
 .hero-content{position:relative;z-index:2;text-align:center;max-width:850px;width:100%}
 .hero-badge,.section-kicker{display:inline-flex;align-items:center;padding:.48rem 1rem;border-radius:999px;font-size:.72rem;font-weight:800;letter-spacing:.2em}
 .hero-badge{color:var(--cream);background:rgba(244,228,188,.12);border:1px solid rgba(244,228,188,.24);backdrop-filter:blur(8px);margin-bottom:1.4rem}
