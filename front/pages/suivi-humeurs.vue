@@ -416,7 +416,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import axios from "axios";
 
 const view = ref("daily");
@@ -454,12 +454,22 @@ const monthNames = [
 const monthShortNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc"];
 
 const dateKey = (date) => {
+  if (typeof date === "string") {
+    const calendarDate = date.match(/^(\d{4})-(\d{2})-(\d{2})(?:$|T)/);
+
+    if (calendarDate) {
+      return `${calendarDate[1]}-${calendarDate[2]}-${calendarDate[3]}`;
+    }
+  }
+
   const d = new Date(date);
   const year = d.getFullYear();
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+const lastKnownTodayKey = ref(dateKey(new Date()));
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("fr-FR", {
@@ -864,7 +874,37 @@ const whatsappShareLink = computed(
   () => `https://wa.me/?text=${fullText.value}`
 );
 
-onMounted(fetchMoodData);
+const refreshTrackingPage = async () => {
+  const currentTodayKey = dateKey(new Date());
+
+  // Si la page était restée ouverte sur l'ancien « aujourd'hui », passe au nouveau jour.
+  if (dateKey(selectedDate.value) === lastKnownTodayKey.value) {
+    selectedDate.value = new Date();
+  }
+
+  lastKnownTodayKey.value = currentTodayKey;
+  await fetchMoodData();
+};
+
+const handleVisibilityChange = () => {
+  if (document.visibilityState === "visible") {
+    refreshTrackingPage();
+  }
+};
+
+onMounted(() => {
+  selectedDate.value = new Date();
+  lastKnownTodayKey.value = dateKey(selectedDate.value);
+  fetchMoodData();
+
+  window.addEventListener("focus", refreshTrackingPage);
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("focus", refreshTrackingPage);
+  document.removeEventListener("visibilitychange", handleVisibilityChange);
+});
 </script>
 
 <style scoped>
