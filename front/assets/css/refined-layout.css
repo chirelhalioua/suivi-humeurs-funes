@@ -507,3 +507,303 @@
   color: var(--funes-green-dark) !important;
   box-shadow: none !important;
 }
+
+/* Thème sombre complet */
+body.dark-mode {
+  --dark-bg: #171412;
+  --dark-bg-soft: #1e1a17;
+  --dark-surface: #27221e;
+  --dark-surface-soft: #302a25;
+  --dark-surface-green: #263027;
+  --dark-text: #fff7e6;
+  --dark-muted: #cbbdaf;
+  --dark-border: rgba(244, 228, 188, 0.16);
+  --dark-gold: #f0c65c;
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .home-page,
+body.dark-mode .choose-mood-page,
+body.dark-mode .tracking-page,
+body.dark-mode .profile-page,
+body.dark-mode .contact-page,
+body.dark-mode .login-page,
+body.dark-mode .register-page,
+body.dark-mode .reset-password-page,
+body.dark-mode .new-password-page,
+body.dark-mode .terms {
+  background:
+    radial-gradient(circle at 88% 7%, rgba(120, 152, 106, 0.12), transparent 25%),
+    radial-gradient(circle at 8% 6%, rgba(233, 185, 73, 0.08), transparent 23%),
+    linear-gradient(180deg, #1c1815 0%, #141210 100%) !important;
+  color: var(--dark-text) !important;
+}
+
+/* Textes secondaires */
+body.dark-mode .home-page p,
+body.dark-mode .home-page small,
+body.dark-mode .choose-mood-page p,
+body.dark-mode .choose-mood-page small,
+body.dark-mode .tracking-page p,
+body.dark-mode .tracking-page small,
+body.dark-mode .profile-page p,
+body.dark-mode .profile-page small,
+body.dark-mode .contact-page p,
+body.dark-mode .login-page p,
+body.dark-mode .register-page p,
+body.dark-mode .reset-password-page p,
+body.dark-mode .new-password-page p,
+body.dark-mode .terms p,
+body.dark-mode .terms li {
+  color: var(--dark-muted) !important;
+}
+
+body.dark-mode .home-page h1,
+body.dark-mode .home-page h2,
+body.dark-mode .home-page h3,
+body.dark-mode .home-page h4,
+body.dark-mode .choose-mood-page h1,
+body.dark-mode .choose-mood-page h2,
+body.dark-mode .choose-mood-page h3,
+body.dark-mode .choose-mood-page h4,
+body.dark-mode .tracking-page h1,
+body.dark-mode .tracking-page h2,
+body.dark-mode .tracking-page h3,
+body.dark-mode .tracking-page h4,
+body.dark-mode .profile-page h1,
+body.dark-mode .profile-page h2,
+body.dark-mode .profile-page h3,
+body.dark-mode .profile-page h4,
+body.dark-mode .contact-page h1,
+body.dark-mode .contact-page h2,
+body.dark-mode .contact-page h3,
+body.dark-mode .login-page h1,
+body.dark-mode .register-page h1,
+body.dark-mode .reset-password-page h1,
+body.dark-mode .new-password-page h1,
+body.dark-mode .terms h1,
+body.dark-mode .terms h2 {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .home-page .section-kicker,
+body.dark-mode .choose-mood-page .mood-kicker,
+body.dark-mode .choose-mood-page .note-kicker,
+body.dark-mode .tracking-page .tracking-kicker,
+body.dark-mode .profile-page .dashboard-kicker,
+body.dark-mode .profile-page .card-kicker {
+  color: #b9d2ae !important;
+  border-bottom-color: rgba(240, 198, 92, 0.8) !important;
+}
+
+/* Accueil */
+body.dark-mode .home-page .concept-section,
+body.dark-mode .home-page .app-preview-section,
+body.dark-mode .home-page .mood-section,
+body.dark-mode .home-page .final-cta-section {
+  background: transparent !important;
+}
+
+body.dark-mode .home-page .concept-step,
+body.dark-mode .home-page .mood-row,
+body.dark-mode .home-page .preview-quote-card,
+body.dark-mode .home-page .preview-benefit,
+body.dark-mode .home-page .final-cta-card {
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2) !important;
+}
+
+body.dark-mode .home-page .concept-step-content,
+body.dark-mode .home-page .mood-content {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .home-page .preview-phone,
+body.dark-mode .home-page .preview-screen,
+body.dark-mode .home-page .preview-body,
+body.dark-mode .home-page .preview-mood-card,
+body.dark-mode .home-page .preview-track,
+body.dark-mode .home-page .preview-tabs,
+body.dark-mode .home-page .preview-emojis {
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface-soft) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .home-page .preview-benefit:hover {
+  background: var(--dark-surface-green) !important;
+}
+
+body.dark-mode .home-page .cta-button {
+  background: var(--dark-gold) !important;
+  color: #2c1810 !important;
+}
+
+/* Cartes des pages applicatives */
+body.dark-mode .choose-mood-page .mood-card,
+body.dark-mode .choose-mood-page .quick-mood,
+body.dark-mode .tracking-page .daily-card,
+body.dark-mode .tracking-page .summary-card,
+body.dark-mode .tracking-page .day-card,
+body.dark-mode .tracking-page .week-progress-card,
+body.dark-mode .tracking-page .annual-chart-card,
+body.dark-mode .tracking-page .share-section,
+body.dark-mode .profile-page .dashboard-card,
+body.dark-mode .profile-page .account-detail,
+body.dark-mode .profile-page .tracking-summary > div,
+body.dark-mode .contact-page .contact-card,
+body.dark-mode .contact-page .faq-item {
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18) !important;
+}
+
+body.dark-mode .choose-mood-page .quick-mood.active,
+body.dark-mode .tracking-page .day-card.today,
+body.dark-mode .tracking-page .annual-month-detail,
+body.dark-mode .tracking-page .daily-wellbeing,
+body.dark-mode .profile-page .account-card-top,
+body.dark-mode .profile-page .account-notice {
+  border-color: rgba(120, 152, 106, 0.38) !important;
+  background: var(--dark-surface-green) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .choose-mood-page .mood-note,
+body.dark-mode .tracking-page .daily-view,
+body.dark-mode .tracking-page .weekly-view,
+body.dark-mode .tracking-page .annual-view,
+body.dark-mode .profile-page .mood-card-main,
+body.dark-mode .profile-page .tracking-card {
+  background: transparent !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .tracking-page .view-toggle,
+body.dark-mode .tracking-page .nav-btn,
+body.dark-mode .tracking-page .social-icons {
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface-soft) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .tracking-page .view-toggle button {
+  color: var(--dark-muted) !important;
+}
+
+body.dark-mode .tracking-page .view-toggle button.active {
+  background: #66885c !important;
+  color: #fff !important;
+}
+
+body.dark-mode .tracking-page .month-bar-track,
+body.dark-mode .tracking-page .progress-line {
+  background: #4a4540 !important;
+}
+
+body.dark-mode .tracking-page .progress-line.active,
+body.dark-mode .tracking-page .progress-line.full {
+  background: #78986a !important;
+}
+
+body.dark-mode .tracking-page .wellbeing-action,
+body.dark-mode .tracking-page .social-icons a,
+body.dark-mode .profile-page .mini-action,
+body.dark-mode .profile-page .secondary-action {
+  border-color: var(--dark-border) !important;
+  background: #344231 !important;
+  color: var(--dark-text) !important;
+}
+
+/* Formulaires, authentification et modales */
+body.dark-mode .login-page .login-container,
+body.dark-mode .register-page .register-container,
+body.dark-mode .reset-password-page .reset-password-container,
+body.dark-mode .new-password-page .new-password-container,
+body.dark-mode .profile-page .modal-content,
+body.dark-mode .profile-page .password-modal,
+body.dark-mode .profile-page .password-form,
+body.dark-mode .contact-page .faq-answer {
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .login-page .form-input,
+body.dark-mode .register-page .form-input,
+body.dark-mode .reset-password-page .form-input,
+body.dark-mode .new-password-page input,
+body.dark-mode .profile-page .password-form input,
+body.dark-mode .choose-mood-page .mood-note textarea {
+  border-color: var(--dark-border) !important;
+  background: #1d1a17 !important;
+  background-color: #1d1a17 !important;
+  color: var(--dark-text) !important;
+  -webkit-text-fill-color: var(--dark-text) !important;
+  caret-color: var(--dark-gold) !important;
+}
+
+body.dark-mode .login-page .form-input::placeholder,
+body.dark-mode .register-page .form-input::placeholder,
+body.dark-mode .reset-password-page .form-input::placeholder,
+body.dark-mode .new-password-page input::placeholder,
+body.dark-mode .profile-page .password-form input::placeholder,
+body.dark-mode .choose-mood-page .mood-note textarea::placeholder {
+  color: #95887d !important;
+  -webkit-text-fill-color: #95887d !important;
+}
+
+body.dark-mode .login-page .form-input:-webkit-autofill,
+body.dark-mode .register-page .form-input:-webkit-autofill,
+body.dark-mode .reset-password-page .form-input:-webkit-autofill,
+body.dark-mode .new-password-page input:-webkit-autofill,
+body.dark-mode .profile-page .password-form input:-webkit-autofill {
+  -webkit-text-fill-color: var(--dark-text) !important;
+  box-shadow: 0 0 0 1000px #1d1a17 inset !important;
+}
+
+body.dark-mode .login-page .google-btn,
+body.dark-mode .register-page .google-btn,
+body.dark-mode .profile-page .cancel-btn {
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface-soft) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .login-page .form-label,
+body.dark-mode .register-page .form-label,
+body.dark-mode .reset-password-page .form-label,
+body.dark-mode .new-password-page label,
+body.dark-mode .profile-page label {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .contact-page .faq-question,
+body.dark-mode .contact-page .faq-answer {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .terms a,
+body.dark-mode .contact-page a,
+body.dark-mode .login-page a,
+body.dark-mode .register-page a,
+body.dark-mode .reset-password-page a,
+body.dark-mode .new-password-page a {
+  color: #b9d2ae !important;
+}
+
+@media (max-width: 680px) {
+  body.dark-mode .tracking-page .view-toggle,
+  body.dark-mode .tracking-page .nav-btn,
+  body.dark-mode .tracking-page .daily-card,
+  body.dark-mode .tracking-page .day-card,
+  body.dark-mode .tracking-page .annual-chart-card,
+  body.dark-mode .tracking-page .share-section {
+    background: var(--dark-surface) !important;
+  }
+}
