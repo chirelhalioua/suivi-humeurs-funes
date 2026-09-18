@@ -496,3 +496,14 @@
     padding: 1.4rem 1rem 2rem !important;
   }
 }
+
+/* Accueil : intitulés sans fond vert, typographie inchangée */
+.home-page .section-kicker {
+  padding: 0 0 0.28rem !important;
+  border: 0 !important;
+  border-bottom: 2px solid rgba(233, 185, 73, 0.72) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--funes-green-dark) !important;
+  box-shadow: none !important;
+}
